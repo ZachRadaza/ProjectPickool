@@ -1,0 +1,6 @@
+.user-page{
+    display: flex;
+    flex-direction: row;
+    max-width: 120ch;
+    margin: auto;
+}

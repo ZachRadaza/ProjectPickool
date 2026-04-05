@@ -1,0 +1,93 @@
+.container:has(.opened-club){
+    align-items: end;
+}
+
+.opened-club{
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 85vh;
+    gap: 1rem;
+    border-left: none;
+    border-right: none;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    justify-content: start;
+}
+
+.opened-club .banner{
+    display: flex;
+    width: 95%;
+    height: min(400px, 30vh);
+    border: 0.2rem solid var(--color-text);
+}
+
+.opened-club .banner img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    align-self: stretch;
+    justify-self: stretch;
+}
+
+.opened-club .width-bound{
+    display: flex;
+    flex-direction: column;
+    max-width: 110ch;
+    width: 100%;
+}
+
+.opened-club .content{
+    position: relative;
+    gap: 1rem;
+}
+
+.opened-club .content .modify-club-cont{
+    position: absolute;
+    top: 0px;
+    right: 1rem;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.opened-club .content .profile-pic{
+    position: absolute;
+    top: -50%;
+    left: 2rem;
+    border-radius: 999px;
+    border: 0.2rem solid var(--color-text);
+    width: max(100px, 25%);
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+.opened-club .content .headers{
+    width: 65%;
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.opened-club .content .club-attributes{
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+}
+
+.opened-club .content .desc{
+    padding: 1rem 0px;
+}
+
+.opened-club .club-tab-cont .tabs{
+    display: flex;
+    flex-direction: row;
+    align-self: center;
+}
+
+.opened-club .club-tab-cont .tab-content{
+    border-top: 0.2rem solid var(--color-text);
+}

@@ -1,0 +1,115 @@
+:root {
+    --color-primary: #22C55E;
+    --color-primary-hover: #16A34A;
+    --color-secondary: #FACC15;
+    --color-accent: #FB923C;
+    --color-red: #C1121F;
+    --color-bg: #F0FDF4;
+    --color-text: #052E16;
+
+    --font-heading: "Bebas Neue", sans-serif;
+    --font-body: "Inter", sans-serif;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html, body{
+    height: 100%; 
+    font-size: 16px;
+    background: var(--color-bg);
+    padding: 0px;
+    margin: 0px;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-family: var(--font-heading);
+    color: var(--color-text);
+    margin: 0px;
+    padding: 0px;
+    transition: all 100ms ease;
+}
+
+h1{ font-size: 5rem; }
+h2{ font-size: 4rem; }
+h3{ font-size: 3rem; }
+h4{ font-size: 2.5rem; }
+h5{ font-size: 2rem; }
+h6{ font-size: 1.5rem; }
+
+p{
+    font-family: var(--font-body);
+    color: var(--color-text);
+    max-width: 60ch;
+    padding: 0px; 
+    margin: 0px; 
+}
+
+input, textarea{
+    all: unset;
+    font-family: var(--font-body);
+    padding: 0.5rem;
+    border: 0.1rem solid var(--color-text);
+    background: var(--color-bg);
+    
+}
+
+input:placeholder-shown, textarea:placeholder-shown{
+    font-style: italic;
+}
+
+button{
+    all: unset;
+    font-family: var(--font-heading);
+    background: var(--color-primary);
+    border: 0.1rem solid var(--color-text);
+    padding: 0.3rem 0.5rem;
+    transition: background 100ms ease;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+button:hover{
+    background: var(--color-primary-hover);
+}
+
+button.ui{
+    background: transparent;
+    border: none;
+    font-family: var(--font-body);
+    color: var(--color-text);
+}
+
+button.ui:hover{
+    color: var(--color-primary);
+    background: transparent;
+}
+
+.input-pair{
+    border: 0.1rem solid var(--color-text);
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.input-pair input{
+    border: none;
+    padding: 0px;
+}
+
+.popups-cont{
+    position: absolute;
+    top: 0px;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.popups-cont > *{
+    pointer-events: auto;
+}

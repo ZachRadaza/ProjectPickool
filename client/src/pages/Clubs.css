@@ -1,0 +1,15 @@
+.club-cont{
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.club-cont .title{
+    margin: 1rem 3rem;
+}
+
+.club-cont .clubs{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1rem;
+}

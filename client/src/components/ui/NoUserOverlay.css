@@ -1,0 +1,24 @@
+.no-user-overlay{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background: rgba(0, 0, 0, 0.5) !important;
+    z-index: 50;
+}
+
+.no-user-overlay h3{
+    color: var(--color-secondary);
+}
+
+.no-user-overlay .sign-btns-cont{
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+}

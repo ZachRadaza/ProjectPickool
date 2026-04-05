@@ -1,0 +1,92 @@
+header{ 
+    position: sticky;
+    top: 0px;
+    padding: 1rem 2rem; 
+    border-bottom: 0.2rem solid var(--color-text);
+    background: var(--color-bg);
+    z-index: 100;
+}
+
+header nav{
+    display: flex;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0px;
+}
+
+header nav > div{
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+header .logo-section{
+    justify-content: flex-start;
+}
+
+header .logo-section .nav-link{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+header .logo-section .nav-link:hover .brand-title{
+    color: var(--color-primary);
+}
+
+header .nav-section{
+    justify-content: center;
+    flex-direction: row;
+    gap: 2rem;
+}
+
+header .nav-section .nav-link{
+    text-decoration: none;
+    border-bottom: 0.2rem solid transparent;
+    transition: border 100ms ease;
+}
+
+header .nav-section .nav-link:hover{
+    border-color: var(--color-accent);
+}
+
+header .nav-section .nav-link.active{
+    border-color: var(--color-text);
+}
+
+header .nav-section .nav-link:hover h5{
+    color: var(--color-accent);
+}
+
+header .profile-section{
+    justify-content: flex-end;
+}
+
+header .profile-section .nav-link{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    gap: 1rem;
+}
+
+header .profile-section img{
+    width: 2.5rem;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    border-radius: 999px;
+    border: 0.2rem solid var(--color-text);
+    object-fit: cover;
+    place-items: center;
+    transition: border 100ms ease;
+}
+
+header .profile-section .nav-link:hover h5{
+    color: var(--color-accent);
+}
+
+header .profile-section .nav-link:hover img{
+    border-color: var(--color-accent);
+}

@@ -1,0 +1,17 @@
+.level-chooser{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.level-chooser .drop-down{
+    position: absolute;
+    top: 100%;
+    display: none;
+    flex-direction: column;
+    width: 100%;
+}
+
+.level-chooser .drop-down.active{
+    display: flex;
+}

@@ -1,0 +1,25 @@
+.club-members-cont{
+    display: flex;
+    flex-direction: column;
+}
+
+.club-members-cont .dropdown-cont{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+}
+
+.club-members-cont .dropdown-cont button{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    z-index: 86;
+}
+
+.club-members-cont .dropdown{
+    display: flex;
+    flex-direction: column;
+    transition: height 200ms ease;
+    z-index: 85;
+}
