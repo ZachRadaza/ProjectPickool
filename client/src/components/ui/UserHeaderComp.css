@@ -5,6 +5,7 @@
     gap: 1rem;
     border: 0.1rem solid var(--color-text);
     background: var(--color-bg);
+    cursor: pointer;
 }
 
 .user-header-cont:hover{
@@ -18,6 +19,14 @@
     height: 3rem;
     object-fit: cover;
     aspect-ratio: 1 / 1;
+}
+
+.user-header-cont .user-body{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .user-header-cont .user-content{
@@ -35,4 +44,12 @@
 
 .user-header-cont .user-content .club-content h6{
     opacity: 0.7;
+}
+
+.user-header-cont .req-btns-cont{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
 }

@@ -1,15 +1,13 @@
-import type { RequestStatus } from "../lib/schemas.js";
+import type { Club_Requests, RequestStatus } from "../lib/schemas.js";
 import { supabase, supabaseAdmin } from "../lib/supabase.js";
 
 const clubRequestBody = `
-    id,
     user:users(
         id,
         username,
         profile_pic
     ),
     club_id,
-    status,
     created_at
 `;
 
@@ -26,7 +24,7 @@ export async function getAllRequests(){
 
 export async function getClubRequests(club_id: string){
     const { data, error } = await supabase
-        .from("club_members")
+        .from("club_requests")
         .select(clubRequestBody)
         .eq("club_id", club_id);
 
@@ -36,11 +34,52 @@ export async function getClubRequests(club_id: string){
     return data;
 }
 
+export async function getNumClubRequests(club_id: string){
+    const { count, error } = await supabase
+        .from("club_requests")
+        .select(clubRequestBody, { count: "exact", head: true })
+        .eq("club_id", club_id);
+
+    if(error)
+        throw new Error(error.message);
+
+    return count;
+}
+
 export async function getUserRequests(user_id: string){
     const { data, error } = await supabase
-        .from("club_members")
-        .select("*")
+        .from("club_requests")
+        .select(`
+            user:users(
+                id,
+                username,
+                profile_pic
+            ),
+            club:clubs(
+                id,
+                name,
+                profile_pic,
+                banner,
+                is_public,
+                location:locations(*)
+            ),
+            created_at
+        `)
         .eq("user_id", user_id);
+
+    if(error)
+        throw new Error(error.message);
+
+    return data;
+}
+
+export async function getUserClubRequest(user_id: string, club_id: string){
+    const { data, error } = await supabase
+        .from("club_requests")
+        .select("*")
+        .eq("user_id", user_id)
+        .eq("club_id", club_id)
+        .maybeSingle();
 
     if(error)
         throw new Error(error.message);
@@ -50,9 +89,10 @@ export async function getUserRequests(user_id: string){
 
 export async function addClubRequests(club_id: string, user_id: string){
     const { data, error } = await supabase
-        .from("club_members")
+        .from("club_requests")
         .insert([{ club_id, user_id }])
-        .select(clubRequestBody);
+        .select(clubRequestBody)
+        .single();
 
     if(error)
         throw new Error(error.message);
@@ -60,25 +100,12 @@ export async function addClubRequests(club_id: string, user_id: string){
     return data;
 }
 
-export async function updateClubRequests(id: string, status: RequestStatus){
+export async function deleteClubRequests(club_id: string, user_id: string){
     const { data, error } = await supabase
-        .from("club_members")
-        .update({ status: status })
-        .select(clubRequestBody)
-        .eq("id", id)
-        .single();
-
-    if(error)
-        throw new Error(error.message);
-
-    return data;
-}
-
-export async function deleteClubRequests(id: string){
-    const { data, error } = await supabase
-        .from("club_members")
+        .from("club_requests")
         .delete()
-        .eq("id", id)
+        .eq("user_id", user_id)
+        .eq("club_id", club_id)
         .select("*")
         .single();
 

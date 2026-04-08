@@ -3,7 +3,6 @@ import { ExtensionService } from "../../../utils/ExtensionService";
 import { wait } from "../../../utils/random";
 import "../popup.css";
 import "./SignActionPopup.css";
-import { useNavigate } from "react-router-dom";
 import CloseButton from "../../ui/buttons/CloseButton";
 
 const MessageType = {
@@ -25,7 +24,6 @@ export default function SignUpPopup({ isClosed, setIsClosed }: SignInPopupProp){
     const [password, setPassword] = useState<string>("");
     const [buttonContent, setButtonContent] = useState<string>("Login");
     const [valid, setValid] = useState<MessageType>(MessageType.NONE);
-    const navigate = useNavigate();
     
     function verifyInputs(){
         return (email && password);
@@ -48,7 +46,6 @@ export default function SignUpPopup({ isClosed, setIsClosed }: SignInPopupProp){
 
             setIsClosed(true);
 
-            navigate("/home");
             window.location.reload();
         } else {
             setValid(MessageType.INCORRECT);

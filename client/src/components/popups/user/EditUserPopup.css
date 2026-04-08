@@ -1,0 +1,75 @@
+.edit-user-popup .profile-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.edit-user-popup .profile-pic-cont{
+    position: relative;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 0.2rem solid var(--color-text);
+    overflow: hidden;
+    width: 250px;
+    height: auto;
+}
+
+.edit-user-popup .profile-pic-cont > *{
+    grid-area: 1 / 1;
+}
+
+.edit-user-popup .profile-pic-cont .input-cont{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    height: 100%;
+    width: 100%;
+}
+
+.edit-user-popup .profile-pic-cont input{
+    position: relative;
+    margin: auto;
+    width: 50%;
+}
+
+.edit-user-popup .profile-pic{
+    position: relative;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    place-items: center;
+    z-index: 5;
+}
+
+.edit-user-popup .line-input-cont{
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+    align-items: center;
+}
+
+.edit-user-popup .line-input-cont .tag{
+    opacity: 0.7;
+}
+
+.edit-user-popup .username{
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    text-align: center;
+    height: fit-content;
+    border: none;
+    border-bottom: 0.2rem solid var(--color-text);
+}
+
+.edit-user-popup .desc{
+    height: max-content;
+    border-color: var(--color-text);
+    width: 40ch;
+}
+

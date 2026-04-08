@@ -1,14 +1,15 @@
-import type { Clubs, UserClubs } from "../../../utils/schemas";
+import { type Clubs, type UserClubRequests, type UserClubs } from "../../utils/schemas";
 import "./ClubsComp.css";
 import { useNavigate } from "react-router-dom";
 
 type ClubsCompProp = {
     userClub: UserClubs | null;
+    userRequest?: UserClubRequests | null;
     club: Clubs;
     changeFavorite?: (club_id: string, is_favorite: boolean) => Promise<void>;
 }
 
-export default function ClubsComp({ userClub, club, changeFavorite }: ClubsCompProp){
+export default function ClubsComp({ userClub, club, changeFavorite, userRequest }: ClubsCompProp){
     const navigate = useNavigate();
 
     function openClub(){
@@ -17,7 +18,11 @@ export default function ClubsComp({ userClub, club, changeFavorite }: ClubsCompP
 
     return (
         <div 
-            className="club-comp-cont"
+            className={
+                `club-comp-cont ${userRequest 
+                    ? "waiting" : ""
+                }`
+            }
             onClick={ () => openClub() }
         >
             { userClub
@@ -42,6 +47,10 @@ export default function ClubsComp({ userClub, club, changeFavorite }: ClubsCompP
                 <div className="titles">
                     <h5 className="club-name">{ club?.name }</h5>
                     <h6 className="club-role">{ userClub?.role }</h6>
+                    { userRequest
+                        ? <h6 className="request">Waiting</h6>
+                        : <></>
+                    }
                 </div>
                 <div className="attributes">
                     <h6>{ club?.is_public ? "Public" : "Private"}</h6>

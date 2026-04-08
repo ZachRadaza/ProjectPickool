@@ -1,4 +1,4 @@
-import type { Club_Members, Club_Requests, Clubs, UserClubs, Users } from "./schemas";
+import type { Club_Members, Club_Requests, Clubs, UserClubRequests, UserClubs, UserHeader, Users } from "./schemas";
 import { supabase } from "./supabase";
 
 const apiUrl = "http://localhost:3000/api";
@@ -39,7 +39,7 @@ export const ExtensionService = {
             if(error)
                 return;
 
-            const req = await fetch(`${userApiUrl}/${data.user.id}`, {
+            const req = await fetch(`${userApiUrl}/header/${data.user.id}`, {
                 method: 'GET',
                 headers: { "Content-Type": "application/json" },
                 credentials: "include"
@@ -47,7 +47,26 @@ export const ExtensionService = {
 
             const res = await req.json();
 
-            const user: Users = res.data;
+            const user: UserHeader = res.data;
+
+            return user;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getUserHeader(user_id: string){
+        try{
+            const req = await fetch(`${userApiUrl}/header/${user_id}`, {
+                method: 'GET',
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const user: UserHeader = res.data;
 
             return user;
         } catch(error){
@@ -253,6 +272,7 @@ export const ExtensionService = {
             if(club.is_public) form.append("is_public", String(club.is_public));
             if(club.location) form.append("location", JSON.stringify(location));
             if(club.banner_file) form.append("banner_file", club.banner_file);
+            if(club.profile_pic_file  instanceof File) form.append("profile_pic_file", club.profile_pic_file);
 
             const req = await fetch(`${clubApiUrl}/`, {
                 method: "POST",
@@ -273,18 +293,19 @@ export const ExtensionService = {
         }
     },
 
-    async updateClub(id: string, club: Partial<Clubs>){
+    async updateClub(id: string, club: Partial<Clubs>, user_id: string){
         try{
             const form = new FormData();
 
+            form.append("user_id", user_id);
             if(club.name) form.append("name", club.name);
             if(club.description) form.append("description", club.description);
             if(club.level) form.append("level", club.level);
-            if(club.is_public) form.append("is_public", String(club.is_public));
+            if(club.is_public !== undefined) form.append("is_public", String(club.is_public));
             if(club.location) form.append("location", JSON.stringify(location));
-            if(club.profile_pic_file) form.append("profile_pic_file", club.profile_pic_file);
+            if(club.profile_pic_file  instanceof File) form.append("profile_pic_file", club.profile_pic_file);
             if(club.profile_pic_path) form.append("profile_pic_path", club.profile_pic_path);
-            if(club.banner_file) form.append("banner_file", club.banner_file);            
+            if(club.banner_file  instanceof File) form.append("banner_file", club.banner_file);            
             if(club.banner_path) form.append("banner_path", club.banner_path);
 
             const req = await fetch(`${clubApiUrl}/${id}`, {
@@ -303,11 +324,12 @@ export const ExtensionService = {
         }
     },
 
-    async deleteClub(id: string){
+    async deleteClub(club_id: string, user_id: string){
         try{
-            const req = await fetch(`${clubApiUrl}/${id}`, {
+            const req = await fetch(`${clubApiUrl}/${club_id}`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ user_id }),
                 credentials: "include"
             });
 
@@ -371,7 +393,26 @@ export const ExtensionService = {
 
             const res = await req.json();
 
-            const data: Club_Requests[] = res.data;
+            const data: UserClubRequests[] = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getUserClubRequest(user_id: string, club_id: string){
+        try{
+            const req = await fetch(`${clubRequestApiUrl}/users/${user_id}/${club_id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            
+            const data: Club_Requests = res.data;
 
             return data;
         } catch(error){
@@ -400,17 +441,17 @@ export const ExtensionService = {
         }
     },
 
-    async approveClubRequest(id: string){
+    async getNumClubRequests(club_id: string){
         try{
-            const req = await fetch(`${clubRequestApiUrl}/approve/${id}`, {
-                method: "PUT",
+            const req = await fetch(`${clubRequestApiUrl}/num/${club_id}`, {
+                method: "GET",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include"
             });
 
             const res = await req.json();
 
-            const data: Club_Requests = res.data;
+            const data: number = res.data;
 
             return data;
         } catch(error){
@@ -419,28 +460,9 @@ export const ExtensionService = {
         }
     },
 
-    async denyClubRequest(id: string){
+    async approveClubRequest(club_id: string, user_id: string){
         try{
-            const req = await fetch(`${clubRequestApiUrl}/deny/${id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include"
-            });
-
-            const res = await req.json();
-
-            const data: Club_Requests = res.data;
-
-            return data;
-        } catch(error){
-            console.error("error", error);
-            throw error;
-        }
-    },
-
-    async deleteClubRequest(id: string){
-        try{
-            const req = await fetch(`${clubRequestApiUrl}/${id}`, {
+            const req = await fetch(`${clubRequestApiUrl}/approve/${user_id}/${club_id}`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include"
@@ -449,6 +471,30 @@ export const ExtensionService = {
             const res = await req.json();
 
             const data: Club_Requests = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async denyClubRequest(club_id: string, user_id: string){
+        try{
+            console.log("user", user_id);
+            console.log("club", club_id);
+            const req = await fetch(`${clubRequestApiUrl}/deny/${user_id}/${club_id}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+            console.log("1");
+
+            const res = await req.json();
+            console.log("2")
+
+            const data: Club_Requests = res.data;
+            console.log("3");
 
             return data;
         } catch(error){
@@ -557,6 +603,25 @@ export const ExtensionService = {
     async getSingleClubMember(club_id: string, user_id: string){
         try{
             const req = await fetch(`${clubMemberApiUrl}/single/${club_id}/${user_id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const data: Club_Members = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getBasicClubMember(club_id: string, user_id: string){
+        try{
+            const req = await fetch(`${clubMemberApiUrl}/basic/${club_id}/${user_id}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include"

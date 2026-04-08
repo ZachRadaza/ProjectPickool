@@ -4,14 +4,16 @@ import * as clubRequestController from "../controllers/club_requests.controller.
 const clubRequestsRouter = Router();
 
 clubRequestsRouter.get("/", clubRequestController.getAllRequests);
+clubRequestsRouter.post("/", clubRequestController.addClubRequests);
 
-clubRequestsRouter.put("/approve/:id", clubRequestController.approveClubRequests);
-clubRequestsRouter.put("/deny/:id", clubRequestController.denyClubRequests);
+clubRequestsRouter.get("/num/:club_id", clubRequestController.getNumClubRequests)
 
-clubRequestsRouter.get("users/:user_id", clubRequestController.getClubRequests);
+clubRequestsRouter.delete("/approve/:user_id/:club_id", clubRequestController.approveClubRequests);
+clubRequestsRouter.delete("/deny/:user_id/:club_id", clubRequestController.denyClubRequests);
+
+clubRequestsRouter.get("/users/:user_id", clubRequestController.getUserRequests);
+clubRequestsRouter.get("/users/:user_id/:club_id", clubRequestController.getUserClubRequest)
 
 clubRequestsRouter.get("/:club_id", clubRequestController.getClubRequests);
-clubRequestsRouter.post("/:club_id", clubRequestController.addClubRequests);
-clubRequestsRouter.delete("/:id", clubRequestController.deleteClubRequests);
 
 export default clubRequestsRouter;

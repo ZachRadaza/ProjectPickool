@@ -4,21 +4,26 @@ import Footer from "../components/layout/footer";
 import SignUpPopup from "../components/popups/user/SignUpPopup";
 import SignInPopup from "../components/popups/user/SignInPopup";
 import { useState, useEffect } from "react";
-import type { Users } from "../utils/schemas";
+import type { UserHeader } from "../utils/schemas";
 import { ExtensionService } from "../utils/ExtensionService";
 import Loading from "../pages/Loading";
 import ErrorPage from "../pages/Error";
-import CreateClubPopup from "../components/popups/clubs/CreateClubPopup";
 import OpenedClubPopup from "../components/popups/clubs/OpenedClubPopup";
+import ModifyClubPopup from "../components/popups/clubs/ModifyClubPopup";
+import UserCardPopup from "../components/popups/user/UserCardPopup";
+import EditUserPopup from "../components/popups/user/EditUserPopup";
 
 export default function Layout(){
     const [closedSignIn, setClosedSignIn] = useState<boolean>(true);
     const [closedSignUp, setClosedSignUp] = useState<boolean>(true);
-    const [closedCreateClub, setClosedCreateClub] = useState<boolean>(true);
+    const [closedModifyClub, setClosedModifyClub] = useState<boolean>(true);
     const [closedOpenedClub, setClosedOpenedClub] = useState<boolean>(true);
+    const [closedUserCard, setClosedUserCard] = useState<boolean>(true);
+    const [closedEditUser, setClosedEditUser] = useState<boolean>(true);
 
-    const [user, setUser] = useState<Users | null>(null);
+    const [userHeader, setUserHeader] = useState<UserHeader | null>(null);
     const [club_id, setClubId] = useState<string | null>(null);
+    const [previewUserId, setPreviewUserId] = useState<string | null>(null);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -35,7 +40,7 @@ export default function Layout(){
                 const userFetch = await ExtensionService.getCurrentUser();
 
                 if(userFetch)
-                    setUser(userFetch);
+                    setUserHeader(userFetch);
 
                 setIsLoading(false);
             } catch(error){
@@ -50,15 +55,10 @@ export default function Layout(){
         setClubId(club);
     }, [searchParams.get("club")]);
 
-    async function updateUserInfo(id: string, user: Partial<Users>){
-        if(!user)
-            return;
-
-        const updatedUser = await ExtensionService.updateUser(id, user);
-
-        if(updatedUser)
-            setUser(updatedUser);
-    }
+    useEffect(() => {
+        const userCardId = searchParams.get("previewuser");
+        setPreviewUserId(userCardId);
+    }, [searchParams.get("previewuser")]);
 
     if(isLoading)
         return <Loading />
@@ -73,17 +73,37 @@ export default function Layout(){
                     isClosed={ closedOpenedClub } 
                     setIsClosed={ setClosedOpenedClub } 
                     club_id={ club_id } 
-                    user={ user }
-                    setIsEditClubClosed={ setClosedCreateClub }
+                    userHeader={ userHeader }
+                    setIsEditClubClosed={ setClosedModifyClub }
+                    setIsSignUpClosed={ setClosedSignUp }
+                />
+                <ModifyClubPopup 
+                    isClosed={ closedModifyClub } 
+                    setIsClosed={ setClosedModifyClub } 
+                    userHeader={ userHeader } 
+                    isEditing={ !closedOpenedClub }
+                    club_id={ club_id }
+                />
+                <UserCardPopup 
+                    isClosed={ closedUserCard } 
+                    setIsClosed={ setClosedUserCard } 
+                    userHeader={ userHeader } 
+                    userCardId={ previewUserId }
+                    club_id={ club_id }
+                />
+                <EditUserPopup
+                    isClosed={ closedEditUser }
+                    setIsClosed={ setClosedEditUser }
+                    userHeader={ userHeader }
+                    setUserHeader={ setUserHeader }
                 />
                 <SignInPopup isClosed={ closedSignIn } setIsClosed={ setClosedSignIn }/>
                 <SignUpPopup isClosed={ closedSignUp } setIsClosed={ setClosedSignUp }/>
-                <CreateClubPopup isClosed={ closedCreateClub } setIsClosed={ setClosedCreateClub } user={ user }/>
             </div>
             <div className="site-cont">
-                <Header user={ user }/>
+                <Header userHeader={ userHeader }/>
                 <main>
-                    <Outlet context={{ user, setClosedSignIn, setClosedSignUp, updateUserInfo, setClosedCreateClub }}/>
+                    <Outlet context={{ userHeader, setClosedSignIn, setClosedSignUp, setClosedModifyClub, setClosedEditUser }}/>
                 </main>
                 <Footer />
             </div>

@@ -1,12 +1,12 @@
 import { NavLink } from "react-router-dom";
-import type { Users } from "../../utils/schemas";
+import type { UserHeader } from "../../utils/schemas";
 import "./header.css";
 
 type HeaderProp = {
-    user: Users | null;
+    userHeader: UserHeader | null;
 };
 
-export default function Header({ user }: HeaderProp){
+export default function Header({ userHeader }: HeaderProp){
     const navClass = ({ isActive }: { isActive: boolean }) => isActive ? "nav-link active" : "nav-link";
 
     return (
@@ -26,9 +26,9 @@ export default function Header({ user }: HeaderProp){
                     <NavLink to="/about" className={ navClass }><h5>About</h5></NavLink>
                 </div>
                 <div className="profile-section">
-                    <NavLink to={ `/user/${user?.id || "guest"}` } className="nav-link">
-                        <h5>{ user?.username ?? "Guest" }</h5>
-                        <img src={ user?.profile_pic ?? import.meta.env.VITE_DEFAULT_PROFILE_PIC } />
+                    <NavLink to={ `/user/${userHeader?.id || "guest"}` } className="nav-link">
+                        <h5>{ userHeader?.username ?? "Guest" }</h5>
+                        <img src={ userHeader?.profile_pic ?? import.meta.env.VITE_DEFAULT_PROFILE_PIC } />
                     </NavLink>
                 </div>
             </nav>

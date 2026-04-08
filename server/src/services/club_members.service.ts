@@ -66,21 +66,29 @@ export async function getClubOwner(club_id: string){
 }
 
 export async function getSingleClubMember(club_id: string, user_id: string){
-    const { data, error } = await supabase
+    const { data } = await supabase
         .from("club_members")
         .select(clubMemberBody)
         .eq("user_id", user_id)
         .eq("club_id", club_id)
-        .single();
+        .maybeSingle();
 
-    if(error)
-        throw new Error(error.message);
+    return data;
+}
+
+export async function getBasicClubMember(club_id: string, user_id: string){
+    const { data } = await supabase
+        .from("club_members")
+        .select("*")
+        .eq("user_id", user_id)
+        .eq("club_id", club_id)
+        .maybeSingle();
 
     return data;
 }
 
 export async function getClubMembersNum(club_id: string){
-    const { data, error } = await supabase
+    const { count, error } = await supabase
         .from("club_members")
         .select("*", { count: "exact", head: true })
         .eq("club_id", club_id);
@@ -88,7 +96,7 @@ export async function getClubMembersNum(club_id: string){
     if(error)
         throw new Error(error.message);
 
-    return data;
+    return count;
 }
 
 export async function addClubMember(club_id: string, user_id: string, isOwner: boolean){

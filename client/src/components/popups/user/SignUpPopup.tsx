@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { ExtensionService } from "../../../utils/ExtensionService";
 import type { Users } from "../../../utils/schemas";
 import { wait } from "../../../utils/random";
@@ -10,8 +9,10 @@ import CloseButton from "../../ui/buttons/CloseButton";
 const MessageType = {
     NONE: "",
     SUCCESS: "Account Successfully Created",
-    INCORRECT: "Incorrect email or password",
-    EMPTY: "Please enter the fields"
+    INCORRECT: "Email or Password in Use",
+    EMPTY: "Please Enter All the Fields",
+    USERNAMELENGTH: "Username must be 5-20 Characters",
+    PASSWORDLENGTH: "Password must be atleast 5 Characters"
 } as const;
 
 type MessageType = (typeof MessageType)[keyof typeof MessageType];
@@ -27,7 +28,6 @@ export default function SignUpPopup({ isClosed, setIsClosed }: SignUpPopupProp )
     const [username, setUsername] = useState<string>("");
     const [buttonContent, setButtonContent] = useState<string>("Create Account");
     const [valid, setValid] = useState<MessageType>(MessageType.NONE);
-    const navigate = useNavigate();
 
     function verifyInputs(){
         return (email && password && username);
@@ -36,6 +36,16 @@ export default function SignUpPopup({ isClosed, setIsClosed }: SignUpPopupProp )
     async function btnClicked(){
         if(!verifyInputs()){
             setValid(MessageType.EMPTY);
+            return;
+        }
+
+        if(!(username.length >= 5 && username.length < 20)){
+            setValid(MessageType.USERNAMELENGTH);
+            return;
+        }
+
+        if(password.length < 5){
+            setValid(MessageType.PASSWORDLENGTH);
             return;
         }
 
@@ -55,7 +65,6 @@ export default function SignUpPopup({ isClosed, setIsClosed }: SignUpPopupProp )
             await wait(2000);
             setIsClosed(true);
 
-            navigate("/home");
             window.location.reload();
         } else {
             setValid(MessageType.INCORRECT);
@@ -70,8 +79,6 @@ export default function SignUpPopup({ isClosed, setIsClosed }: SignUpPopupProp )
         setPassword("");
         setUsername("");
         setValid(MessageType.NONE);
-
-        console.log("asdfasfd")
     }, [isClosed]);
 
     return (

@@ -37,6 +37,23 @@ export async function getUser(id: string){
     return data;
 }
 
+export async function getUserHeader(id: string){
+    const { data, error } = await supabase
+        .from("users")
+        .select(`
+            id,
+            username,
+            profile_pic    
+        `)
+        .eq("id", id)
+        .single();
+
+    if(error)
+        throw new Error(error.message);
+
+    return data;
+}
+
 export async function getUserClubs(id: string){
     const { data, error } = await supabase
         .from("club_members")
@@ -87,7 +104,8 @@ export async function deleteUser(id: string){
         .from("users")
         .delete()
         .eq("id", id)
-        .select("*");
+        .select("*")
+        .single();
 
     if(error)
         throw new Error(error.message);

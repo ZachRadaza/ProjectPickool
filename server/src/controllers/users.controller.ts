@@ -48,6 +48,32 @@ export async function getUser(req: Request, res: Response){
     }
 }
 
+export async function getUserHeader(req: Request, res: Response){
+    try{
+        const { id } = req.params;
+
+        if(!id || typeof id !== "string")
+            return res.status(400).json({
+                success: false,
+                error: 'user id required'
+            });
+
+        const user = await userService.getUserHeader(id);
+
+        res.status(200).json({
+            success: true,
+            data: user
+        });
+
+    } catch(error: any){
+        console.error("getUserHeader Error", error.message);
+        res.status(500).json({
+            success: false,
+            error: error.message || "Internal Server Error",
+        });
+    }
+}
+
 export async function getUserClubs(req: Request, res: Response){
     try{
         const { id } = req.params;
@@ -175,6 +201,11 @@ export async function deleteUser(req: Request, res: Response){
             });
 
         const deleted = await userService.deleteUser(id)
+
+        if(deleted.profile_pic_path){
+            storageService.deleteImage(deleted.profile_pic_path);
+            storageService.deleteDirectoryFromFilePath(deleted.profile_pic_path);
+        }
 
         res.status(200).json({
             success: true,

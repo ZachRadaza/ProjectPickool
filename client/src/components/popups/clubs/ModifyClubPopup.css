@@ -1,22 +1,22 @@
-.create-club{
+.modify-club{
     max-width: 600px;
 }
 
-.create-club .message{
+.modify-club .message{
     color: var(--color-red);
 }
 
-.create-club .image-edit{
+.modify-club .image-edit{
     display: grid;
     border: 0.2rem solid var(--color-text);
     overflow: hidden;
 }
 
-.create-club .image-edit > *{
+.modify-club .image-edit > *{
     grid-area: 1 / 1;
 }
 
-.create-club .input-cont{
+.modify-club .input-cont{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -26,17 +26,17 @@
     background: rgba(0, 0, 0, 0.3);
 }
 
-.create-club .input-cont input{
+.modify-club .input-cont input{
     width: 50%;
 }
 
-.create-club .banner{
+.modify-club .banner{
     width: 100%;
 }
 
-.create-club .banner .input-cont{ width: auto; }
+.modify-club .banner .input-cont{ width: auto; }
 
-.create-club .banner-crop{
+.modify-club .banner-crop{
     overflow: hidden;
     height: min(200px, 30vh);
     width: 100%;
@@ -45,7 +45,7 @@
     border: none;
 }
 
-.create-club .banner img{
+.modify-club .banner img{
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -53,7 +53,7 @@
     justify-self: stretch;
 }
 
-.create-club .profile-pic{
+.modify-club .profile-pic{
     position: absolute;
     top: -30%;
     left: 0.5rem;
@@ -62,21 +62,21 @@
     z-index: 78;
 }
 
-.create-club .profile-pic img{
+.modify-club .profile-pic img{
     width: 100%;
     height: auto;
     aspect-ratio: 1 / 1;
     object-fit: cover;
 }
 
-.create-club .content{
+.modify-club .content{
     position: relative;
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-.create-club .content .name{
+.modify-club .content .name{
     font-family: var(--font-heading);
     font-size: 2rem;
     border: none;
@@ -85,11 +85,11 @@
     border-bottom: 0.2rem solid var(--color-text);
 }
 
-.create-club .club-level{
+.modify-club .club-level{
     z-index: 80;
 }
 
-.create-club .content .is-public{
+.modify-club .content .is-public{
     display: grid;
     grid-template-rows: auto auto;
     grid-template-columns: 1;
@@ -97,17 +97,17 @@
     padding: 0px 1rem;
 }
 
-.create-club .content .btns-cont{
+.modify-club .content .btns-cont{
     display: flex;
     width: 100%;
     flex-direction: row;
 }
 
-.create-club .content .btns-cont button{
+.modify-club .content .btns-cont button{
     width: 100%;
     opacity: 0.5;
 }
 
-.create-club .content .btns-cont button.active{
+.modify-club .content .btns-cont button.active{
     opacity: 1;
 }

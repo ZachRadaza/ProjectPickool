@@ -93,7 +93,8 @@ export type Clubs = {
     banner_file?: string | null;
 };
 
-export type Club_Members = UserHeader & {
+export type Club_Members = {
+    user: UserHeader
     club_id: string;
     role: Role;
     is_favorite: boolean;
@@ -101,8 +102,16 @@ export type Club_Members = UserHeader & {
     is_level_approved: boolean;
 }
 
-export type Club_Requests = UserHeader & {
+export type Club_Requests = {
+    user: UserHeader;
     club_id: string
+    status: RequestStatus;
+}
+
+export type UserClubRequest = {
+    id: string;
+    user_id: string;
+    club: Clubs;
     status: RequestStatus;
 }
 

@@ -15,6 +15,21 @@
     justify-content: start;
 }
 
+.opened-club .more-options{
+    position: absolute;
+    top: 1.5rem;
+    right: 4rem;
+    width: 100px;
+}
+
+.opened-club .more-options-content{
+    position: relative;
+    bottom: 0px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
 .opened-club .banner{
     display: flex;
     width: 95%;

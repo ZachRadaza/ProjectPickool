@@ -104,6 +104,48 @@ export async function deleteImage(path: string): Promise<void> {
     }
 }
 
+export async function deleteDirectoryFromFilePath(filePath: string): Promise<void> {
+    const lastSlash = filePath.lastIndexOf("/");
+    if(lastSlash === -1)
+        throw new Error("Invalid file path");
+
+    const dirPath = filePath.substring(0, lastSlash);
+
+    // Only allow:
+    // clubs/{id}/file
+    // users/{id}/file
+    const isValidDir =
+        /^clubs\/[^/]+$/.test(dirPath) ||
+        /^users\/[^/]+$/.test(dirPath);
+
+    if(!isValidDir)
+        throw new Error(`Invalid directory path: ${dirPath}`);
+
+    const { data, error } = await supabaseAdmin
+        .storage
+        .from(BUCKET)
+        .list(dirPath, { limit: 1000 });
+
+    if(error)
+        throw new Error(`Failed to list directory: ${error.message}`);
+
+    if (!data || data.length === 0) return;
+
+    const filePaths = data
+        .filter((item) => item.name && item.id) // files only
+        .map((item) => `${dirPath}/${item.name}`);
+
+    if(filePaths.length === 0) return;
+
+    const { error: deleteError } = await supabaseAdmin
+        .storage
+        .from(BUCKET)
+        .remove(filePaths);
+
+    if(deleteError)
+        throw new Error(`Failed to delete directory: ${deleteError.message}`);
+}
+
 export function getFileExtension(fileName: string): string {
     const parts = fileName.split(".");
     return parts.length > 1 ? parts.pop()!.toLowerCase() : "jpg";

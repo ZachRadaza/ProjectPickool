@@ -130,7 +130,8 @@ export async function updateClub(req: Request, res: Response){
             location,
             level,
             profile_pic_path,
-            banner_path
+            banner_path,
+            user_id
          } = req.body;
 
         const files = req.files as {
@@ -140,10 +141,22 @@ export async function updateClub(req: Request, res: Response){
         const profile_pic_file = files.profile_pic_file?.[0];
         const banner_file = files.banner_file?.[0];
 
-        if(!id || typeof id !== "string")
+        if(!id || 
+            typeof id !== "string" ||
+            !user_id ||
+            typeof user_id !== "string"
+        )
             return res.status(400).json({
                 success: false,
                 error: "id required"
+            });
+
+        const editable = await clubMembersService.getSingleClubMember(id, user_id);
+
+        if(!editable || editable.role === "member")
+            return res.status(400).json({
+                success: false,
+                error: "no credentials to edit club"
             });
 
         let profilePic;
@@ -171,6 +184,10 @@ export async function updateClub(req: Request, res: Response){
         if(name) club.name = name;
         if(description) club.description = description;
         if(level) club.level = level;
+        if(profilePic) club.profile_pic = profilePic;
+        if(profilePicPath) club.profile_pic_path = profilePicPath;
+        if(banner) club.banner = banner;
+        if(bannerPath) club.banner_path = bannerPath;
 
         if(location && !location.id){
             const locationId = await locationService.locationExists(location);
@@ -195,14 +212,33 @@ export async function updateClub(req: Request, res: Response){
 export async function deleteClub(req: Request, res: Response){
     try{
         const { id } = req.params;
+        const { user_id } = req.body;
 
-        if(!id || typeof id !== "string")
+        if(!id || 
+            typeof id !== "string" ||
+            !user_id ||
+            typeof user_id !== "string"
+        )
             return res.status(400).json({
                 success: false,
                 error: "id required"
             });
 
+        const deletable = await clubMembersService.getSingleClubMember(id, user_id);
+
+        if(!deletable || deletable.role === "member")
+            return res.status(400).json({
+                success: false,
+                error: "no credentials to delete club"
+            });
+
         const data = await clubsService.deleteClub(id);
+
+        if(data.profile_pic_path) storageService.deleteImage(data.profile_pic_path);
+        if(data.banner_path) storageService.deleteImage(data.banner_file);
+
+        if(data.profile_pic_path || data.banner_path)
+            storageService.deleteDirectoryFromFilePath(data.profile_pic_path ?? data.banner_path);
 
         res.status(200).json({
             success: true,

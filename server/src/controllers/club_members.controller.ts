@@ -122,6 +122,35 @@ export async function getSingleClubMember(req: Request, res: Response){
     }
 }
 
+export async function getBasicClubMember(req: Request, res: Response){
+    try{
+        const { club_id, user_id } = req.params;
+
+        if(!club_id || 
+            typeof club_id !== "string" ||
+            !user_id || 
+            typeof user_id !== "string"
+        )
+            return res.status(400).json({
+                success: false,
+                error: "club id and user id required"
+            });
+
+        const data = await clubMemberService.getSingleClubMember(club_id, user_id);
+
+        res.status(200).json({
+            success: true,
+            data: data
+        });
+    } catch(error: any){
+        console.log("getSingleClubMembers error", error);
+        res.status(500).json({
+            success: false,
+            error: error
+        });
+    }
+}
+
 export async function getClubMembersNum(req: Request, res: Response){
     try{
         const { club_id } = req.params;

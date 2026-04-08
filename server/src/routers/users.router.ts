@@ -7,6 +7,7 @@ const usersRouter = Router();
 usersRouter.get("/", userController.getAllUser);
 usersRouter.post("/", userController.addUser);
 
+usersRouter.get("/header/:id", userController.getUserHeader);
 usersRouter.get("/clubs/:id", userController.getUserClubs)
 usersRouter.get("/:id", userController.getUser);
 usersRouter.put("/:id", upload.single("profile_pic_file"), userController.updateUser);

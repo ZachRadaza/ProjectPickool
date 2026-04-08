@@ -1,36 +1,37 @@
 import { useOutletContext, useNavigate } from "react-router-dom";
-import type { Club_Members, UserClubs, Users } from "../utils/schemas";
+import { type Club_Members, type UserClubRequests, type UserClubs, type UserHeader } from "../utils/schemas";
 import { useEffect, useState } from "react";
 import { ExtensionService } from "../utils/ExtensionService";
-import ClubsComp from "../components/pages/clubs/ClubsComp";
+import ClubsComp from "../components/ui/ClubsComp";
 import Loading from "./Loading";
 import ErrorPage from "./Error";
 import "./Clubs.css";
 import NoUserOverlay from "../components/ui/NoUserOverlay";
 
 type ClubsContext = {
-    user: Users | null;
-    setClosedCreateClub: (close:boolean) => void;
+    userHeader: UserHeader | null;
+    setClosedModifyClub: (close:boolean) => void;
     setClosedSignUp: (closed: boolean) => void;
     setClosedSignIn: (closed: boolean) => void;
 };
 
 export default function Clubs(){
     const { 
-        user, 
-        setClosedCreateClub,
+        userHeader, 
+        setClosedModifyClub,
         setClosedSignIn,
         setClosedSignUp 
     } = useOutletContext<ClubsContext>();
     
     const [userClubs, setUserClubs] = useState<UserClubs[]>([]);
+    const [userClubRequests, setUserClubRequests] = useState<UserClubRequests[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     const navigate = useNavigate();
 
     async function changeFavorite(club_id: string, is_favorite: boolean){
-        if(!user)
+        if(!userHeader)
             return;
 
         const updates: Partial<Club_Members> = {
@@ -47,7 +48,7 @@ export default function Clubs(){
             return newUserClubs;
         });
 
-        const data = await ExtensionService.updateClubMember(club_id, user.id!, updates);
+        const data = await ExtensionService.updateClubMember(club_id, userHeader.id, updates);
 
         if(!data)
             setError("Error is setting favorite");
@@ -58,7 +59,7 @@ export default function Clubs(){
 
         async function getUserClubs(){
             try{
-                if(!user){
+                if(!userHeader){
                     setIsLoading(false);
                     return;
                 }
@@ -66,22 +67,25 @@ export default function Clubs(){
                 setError(null);
                 setIsLoading(true);
 
-                const fetchedClubs: UserClubs[] = await ExtensionService.getUserClubs(user.id!);
+                const fetchedClubs: UserClubs[] = await ExtensionService.getUserClubs(userHeader.id);
+                const requestedClubs: UserClubRequests[] = await ExtensionService.getUserRequests(userHeader.id);
 
-                if(!fetchedClubs){
+                if(!fetchedClubs || !requestedClubs){
                     setError("Failed to Fetch User Clubs");
                     setIsLoading(false);
                     return;
                 }
 
                 setUserClubs(fetchedClubs);
+                setUserClubRequests(requestedClubs);
+
                 setIsLoading(false);
             } catch(error){
                 setError("please contact support");
                 setIsLoading(false);
             }
         }
-    }, [user]);
+    }, [userHeader]);
 
     if(isLoading)
         return <Loading />;
@@ -91,7 +95,7 @@ export default function Clubs(){
 
     return (
         <div className="club-cont">
-            { !user
+            { !userHeader
                 ? <NoUserOverlay setClosedSignIn={ setClosedSignIn } setClosedSignUp={ setClosedSignUp } />
                 : <></>
             }
@@ -108,9 +112,17 @@ export default function Clubs(){
                     ))
                     : <></>
                 }
+                { userClubRequests.map((userClubReq) => 
+                    <ClubsComp 
+                        userClub={ null }
+                        club={ userClubReq.club } 
+                        key={ userClubReq.club.id }
+                        userRequest={ userClubReq }
+                    />
+                )}
                 <button
                     className="create-club-btn"
-                    onClick={ () => setClosedCreateClub(false) }
+                    onClick={ () => setClosedModifyClub(false) }
                 >
                     Create Club
                 </button>

@@ -16,14 +16,6 @@ export const Level = {
 
 export type Level = (typeof Level)[keyof typeof Level];
 
-export const RequestStatus = {
-    WAITING: "waiting",
-    APPROVED: "approved",
-    DENIED: "denied"
-} as const;
-
-export type RequestStatus = (typeof RequestStatus)[keyof typeof RequestStatus];
-
 export const Sex = {
     MALE: "males",
     FEMALE: "female",
@@ -75,8 +67,8 @@ export type UserHeader = {
     profile_pic: string;
 }
 
-export type Club_Members = {
-    user: UserHeader;
+export type Club_Members_Basic = {
+    user_id?: string;
     club_id: string;
     role: Role;
     is_favorite: boolean;
@@ -84,9 +76,19 @@ export type Club_Members = {
     is_level_approved: boolean;
 }
 
-export type Club_Requests = UserHeader & {
+export type Club_Members = Club_Members_Basic & {
+    user: UserHeader;
+}
+
+export type Club_Requests = {
+    user?: UserHeader;
     club_id: string
-    status: RequestStatus;
+}
+
+export type UserClubRequests = {
+    id: string;
+    user_id: string;
+    club: Clubs;
 }
 
 export type Clubs = {

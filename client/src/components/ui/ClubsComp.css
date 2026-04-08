@@ -83,3 +83,11 @@
     flex-direction: row;
     justify-content: space-between;
 }
+
+.club-comp-cont.waiting .request{
+    color: var(--color-accent);
+}
+
+.club-comp-cont.denied .request{
+    color: var(--color-red);
+}
