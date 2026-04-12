@@ -1,0 +1,18 @@
+.button{
+    position: relative;
+    overflow: hidden;
+}
+
+.button .pickleball{
+    position: absolute;
+    color: var(--color-text);
+    width: 75%;
+    top: -10px;
+    right: 40%;
+    opacity: 0.08;
+    transition: transform 200ms ease;
+}
+
+.button:hover .pickleball{
+    transform: translateY(-50%);
+}

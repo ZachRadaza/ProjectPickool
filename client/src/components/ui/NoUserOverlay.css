@@ -14,7 +14,9 @@
 }
 
 .no-user-overlay h3{
-    color: var(--color-secondary);
+    color: var(--color-accent);
+    text-align: center;
+    padding: 1rem;
 }
 
 .no-user-overlay .sign-btns-cont{

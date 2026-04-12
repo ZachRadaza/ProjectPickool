@@ -581,6 +581,26 @@ export const ExtensionService = {
         }
     },
 
+    async getClubUnapproved(club_id: string){
+        try{
+            const req = await fetch(`${clubMemberApiUrl}/unapproved/${club_id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const data: Club_Members[] = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+
     async getClubMembersNum(club_id: string){
         try{
             const req = await fetch(`${clubMemberApiUrl}/num/${club_id}`, {

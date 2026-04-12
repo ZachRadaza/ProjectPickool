@@ -4,6 +4,7 @@ import { wait } from "../../../utils/random";
 import "../popup.css";
 import "./SignActionPopup.css";
 import CloseButton from "../../ui/buttons/CloseButton";
+import Button from "../../ui/buttons/Button";
 
 const MessageType = {
     NONE: "",
@@ -93,11 +94,10 @@ export default function SignUpPopup({ isClosed, setIsClosed }: SignInPopupProp){
                             placeholder="A winners passord"
                         />
                     </div>
-                    <button
-                        onClick={ () =>  btnClicked()}
-                    >
-                        { buttonContent }
-                    </button>
+                    <Button
+                        onBtnClick={ () =>  btnClicked() }
+                        content={ buttonContent }
+                    />
                 </div>
             </div>
         </div>

@@ -1,8 +1,10 @@
 .user-page{
     display: flex;
     flex-direction: row;
-    max-width: 120ch;
+    max-width: 150ch;
+    padding: 0px 1rem;
     margin: auto;
+    overflow-x: hidden;
 }
 
 .user-page .user-info-cont{
@@ -39,8 +41,44 @@
     z-index: 5;
 }
 
-.user-page .user-info-cont .btns{
-    display: none;
+.user-page .user-content-cont{
+    display: flex;
     flex-direction: column;
-    gap: 1rem;
+    padding: 1rem;
+    width: 100%;
+}
+
+.user-page .user-content-cont .tabs{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+.user-page .user-content-cont .tabs .content{
+    border-top: 0.1rem solid var(--color-text);
+    padding: 1rem;
+}
+
+@media (max-width: 768px){ 
+    .user-page{
+        flex-direction: column;
+        margin: auto;
+        align-items: center;
+        max-width: none;
+        padding: 1rem;
+    }
+
+    .user-page .user-info-cont{
+        max-width: none; 
+        padding: 1rem;
+    }
+
+    .user-page .user-info-cont .edit{
+        top: 1rem;
+        right: 1rem;
+    }
+
+    .user-page .user-info-cont .profile-pic{ width: min(80%, 300px);}
+
+    .user-page .user-content-cont{ width: auto; }
 }

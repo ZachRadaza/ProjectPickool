@@ -6,6 +6,7 @@ import CloseButton from "../../ui/buttons/CloseButton";
 import { ExtensionService } from "../../../utils/ExtensionService";
 import "./EditUserPopup.css";
 import "../popup.css";
+import Button from "../../ui/buttons/Button";
 
 type EditUserPopupProp = {
     userHeader: UserHeader | null;
@@ -62,6 +63,7 @@ export default function EditUserPopup({ userHeader, setUserHeader, isClosed, set
 
         setIsSaving(false);
         setUserHeader({ id: userData.id!, username: userData.username, profile_pic: userData.profile_pic ?? "" })
+        setIsClosed(true);
     }
 
 
@@ -107,6 +109,7 @@ export default function EditUserPopup({ userHeader, setUserHeader, isClosed, set
         content = <ErrorPage error={ error } />;
     else
         content = <>
+            <h4>Edit User</h4>
             <p className="error-message">{ error }</p>
             <div className="profile-header">
                 <div className="profile-pic-cont">
@@ -158,11 +161,10 @@ export default function EditUserPopup({ userHeader, setUserHeader, isClosed, set
                     rows={ 5 }
                 ></textarea>
             </div>
-            <button
-                onClick={ () => saveChanges() }
-            >
-                { isSaving ? "Saving Changes..." : "Save Changes" }
-            </button>
+            <Button
+                onBtnClick={ () => saveChanges() }
+                content={ isSaving ? "Saving Changes..." : "Save Changes" }
+            />
         </>;
 
     return (

@@ -1,7 +1,7 @@
 :root {
     --color-primary: #22C55E;
     --color-primary-hover: #16A34A;
-    --color-secondary: #FACC15;
+    --color-secondary: #14B8A6;
     --color-accent: #FB923C;
     --color-red: #C1121F;
     --color-bg: #F0FDF4;
@@ -49,13 +49,36 @@ p{
     margin: 0px; 
 }
 
+main{ 
+    position: relative; 
+    height: min-content;
+    overflow: hidden;
+    min-height: 100vh;
+}
+
+main > *{ 
+    z-index: 1; 
+    overflow: scroll;
+}
+
+.bg-icon{
+    position: absolute;
+    z-index: 0;
+    opacity: 0.08;
+    right: -30%;
+    height: 250vh;
+    z-index: 0;
+    pointer-events: none;
+    fill: var(--color-text);
+}
+
 input, textarea{
     all: unset;
     font-family: var(--font-body);
     padding: 0.5rem;
     border: 0.1rem solid var(--color-text);
     background: var(--color-bg);
-    
+    border-radius: 1rem;
 }
 
 input:placeholder-shown, textarea:placeholder-shown{
@@ -67,15 +90,17 @@ button{
     font-family: var(--font-heading);
     background: var(--color-primary);
     border: 0.1rem solid var(--color-text);
-    padding: 0.3rem 0.5rem;
-    transition: background 100ms ease;
+    padding: 0.3rem 0.8rem;
     font-size: 1.5rem;
     text-align: center;
+    border-radius: 1rem;
     cursor: pointer;
+    min-height: 1.8rem;
+    transition: background 200ms ease;
 }
 
 button:hover{
-    background: var(--color-primary-hover);
+    background: var(--color-accent);
 }
 
 button.ui{
@@ -83,6 +108,7 @@ button.ui{
     border: none;
     font-family: var(--font-body);
     color: var(--color-text);
+    line-height: 0;
 }
 
 button.ui:hover{
@@ -90,9 +116,21 @@ button.ui:hover{
     background: transparent;
 }
 
+button.bg{ 
+    background: var(--color-bg); 
+    border-radius: 999px; 
+    white-space: nowrap;
+}
+button.bg:hover{ background: var(--color-accent); }
+button.bg.active{ background: var(--color-primary); }
+
+button.red{ background: var(--color-red); }
+button.red:hover{ background: var(--color-accent); }
+
 .input-pair{
     border: 0.1rem solid var(--color-text);
-    padding: 0.5rem;
+    border-radius: 1rem;
+    padding: 0.7rem;
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
@@ -100,7 +138,35 @@ button.ui:hover{
 
 .input-pair input{
     border: none;
+    border-radius: 0px;
     padding: 0px;
+}
+
+.attribute-tag{
+    border: 0.1rem solid var(--color-text);
+    background: var(--color-primary);
+    font-size: 0.8rem;
+    padding: 0.3rem 0.5rem;
+    border-radius: 999px;
+    width: fit-content;
+}
+
+.attribute-tag.primary{
+    border-color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 20%, transparent);
+    color: var(--color-primary);
+}
+
+.attribute-tag.secondary{
+    border-color: var(--color-secondary);
+    background: color-mix(in srgb, var(--color-secondary) 10%, transparent);
+    color: var(--color-secondary);
+}
+
+.attribute-tag.accent{
+    border-color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 20%, transparent);
+    color: var(--color-accent);
 }
 
 .popups-cont{

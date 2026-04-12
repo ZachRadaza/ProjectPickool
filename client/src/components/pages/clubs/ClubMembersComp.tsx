@@ -3,8 +3,9 @@ import type { Club_Members } from "../../../utils/schemas";
 import { ExtensionService } from "../../../utils/ExtensionService";
 import Loading from "../../../pages/Loading";
 import ErrorPage from "../../../pages/Error";
-import UserHeaderComp from "../../ui/UserHeaderComp";
 import "./ClubMembersComp.css";
+import Button from "../../ui/buttons/Button";
+import UserHeaderMiniComp from "../../ui/UserHeaderMiniComp";
 
 type ClubMembersComp = {
     club_id: string | null;
@@ -86,55 +87,49 @@ export default function ClubMembersComp({ club_id }: ClubMembersComp){
     return (
         <div className="club-members-cont">     
             <div className="dropdown-cont owner">
-                <button
-                    onClick={ () => setOwnerOpened(!ownerOpened) }
-                >
-                    <h6>Owner</h6>
-                </button>
+                <Button 
+                    content="Owner"
+                    onBtnClick={ () => setOwnerOpened(!ownerOpened) }
+                />
                 <div 
-                    className="dropdown"
+                    className={ `dropdown ${ownerOpened ? "active" : ""}` }
                     ref={ ownerRef }
                     style={{ height: ownerHeight }}
                 >
-                    <UserHeaderComp userHeader={ owner?.user! } clubInfoHeader={ owner! }/> 
+                    <UserHeaderMiniComp userHeader={ owner?.user! } />
                 </div>
             </div>
             <div className="dropdown-cont admins">
-                <button
-                    onClick={ () => setAdminOpened(!adminsOpened) }
-                >
-                    <h6>Admins</h6>
-                    <p>({ admins.length })</p>
-                </button>
+                <Button
+                    content={ `Admins (${admins.length})` }
+                    onBtnClick={ () => setAdminOpened(!adminsOpened) }
+                />
                 { admins
                     ? <div 
-                        className="dropdown"
+                        className={ `dropdown ${adminsOpened ? "active" : ""}` }
                         ref={ adminRef }
                         style={{ height: adminHeight }}
                     >
                         { admins.map((admin) => 
-                            <UserHeaderComp userHeader={ admin?.user! } clubInfoHeader={ admin } key={ admin.user.id }/>
+                            <UserHeaderMiniComp userHeader={ admin.user } key={ admin.user.id } />
                         )}
                     </div>
                     : <></>
                 }
             </div>
             <div className="dropdown-cont members">
-                <button
-                    onClick={ () => setMembersOpened(!membersOpened) }
-                >
-                    <h6>Members</h6>
-                    <p>({ members.length })</p>
-                </button>
+                <Button
+                    onBtnClick={ () => setMembersOpened(!membersOpened) }
+                    content={ `Members (${members.length})` }
+                />
                 { members
                     ? <div 
-                        className="dropdown"
+                        className={ `dropdown ${membersOpened ? "active" : ""}` }
                         ref={ memberRef }
                         style={{ height: memberHeight }}
                     >
-                        
                         { members.map((member) => 
-                            <UserHeaderComp userHeader={ member?.user! } clubInfoHeader={ member } key={ member.user.id }/>
+                            <UserHeaderMiniComp userHeader={ member.user } key={ member.user.id } />
                         )}
                     </div>
                     : <></>

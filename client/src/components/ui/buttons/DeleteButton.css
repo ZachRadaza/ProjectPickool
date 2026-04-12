@@ -1,0 +1,18 @@
+.delete .delete-icon{
+    width: 1.5rem;
+    height: auto;
+    fill: var(--color-text);
+    transition: fill 100ms ease;
+}
+
+.delete:hover .delete-icon,
+.delete:active .delete-icon{
+    fill: var(--color-red);
+    animation: shake 200ms ease;
+}
+
+@keyframes shake{
+    0%, 100%{ transform: rotate(0); }
+    25%{ transform: rotate(8deg); }
+    75%{ transform: rotate(-8deg); }
+}

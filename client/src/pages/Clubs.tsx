@@ -7,6 +7,7 @@ import Loading from "./Loading";
 import ErrorPage from "./Error";
 import "./Clubs.css";
 import NoUserOverlay from "../components/ui/NoUserOverlay";
+import Button from "../components/ui/buttons/Button";
 
 type ClubsContext = {
     userHeader: UserHeader | null;
@@ -76,7 +77,10 @@ export default function Clubs(){
                     return;
                 }
 
-                setUserClubs(fetchedClubs);
+                setUserClubs(
+                    fetchedClubs.sort((a, b) => 
+                        (Number(a.is_favorite) - Number(b.is_favorite)) * -1)
+                );
                 setUserClubRequests(requestedClubs);
 
                 setIsLoading(false);
@@ -95,22 +99,21 @@ export default function Clubs(){
 
     return (
         <div className="club-cont">
-            { !userHeader
-                ? <NoUserOverlay setClosedSignIn={ setClosedSignIn } setClosedSignUp={ setClosedSignUp } />
-                : <></>
+            { !userHeader &&
+                <NoUserOverlay setClosedSignIn={ setClosedSignIn } setClosedSignUp={ setClosedSignUp } />
             }
             <h1 className="title">Clubs</h1>
             <div className="clubs">
-                { userClubs.length > 0
-                    ? ( userClubs.map((userClub) => 
+                { userClubs.length > 0 &&
+                    ( userClubs.map((userClub) => 
                         <ClubsComp 
                             userClub={ userClub } 
                             club={ userClub.club } 
                             changeFavorite={ changeFavorite }
                             key={ userClub.club.id}
+                            showFavorite={ true }
                         />
                     ))
-                    : <></>
                 }
                 { userClubRequests.map((userClubReq) => 
                     <ClubsComp 
@@ -120,18 +123,8 @@ export default function Clubs(){
                         userRequest={ userClubReq }
                     />
                 )}
-                <button
-                    className="create-club-btn"
-                    onClick={ () => setClosedModifyClub(false) }
-                >
-                    Create Club
-                </button>
-                <button
-                    className="search-club-btn"
-                    onClick={ () => navigate("/search") }
-                >
-                    Join Clubs
-                </button>
+                <Button content="Create Club" onBtnClick={ () => setClosedModifyClub(false) }/>
+                <Button content="Join Clubs" onBtnClick={ () => navigate("/search") } />
             </div>
         </div>
     );

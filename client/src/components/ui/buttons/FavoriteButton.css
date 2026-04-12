@@ -1,0 +1,10 @@
+.favorite .favorite-icon{
+    fill: var(--color-primary);
+    width: 1.5rem;
+    height: auto;
+    transition: fill 100ms ease;
+}
+
+.favorite:hover .favorite-icon{
+    fill: var(--color-accent);
+}

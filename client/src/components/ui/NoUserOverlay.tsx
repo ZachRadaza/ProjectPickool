@@ -1,3 +1,4 @@
+import Button from "./buttons/Button";
 import "./NoUserOverlay.css";
 
 type NoUserOverlayProp = {
@@ -10,22 +11,20 @@ export default function NoUserOverlay({ setClosedSignIn, setClosedSignUp}: NoUse
         <div className="no-user-overlay">
             <h3>We notice you dont have an account</h3>
             <div className="sign-btns-cont">
-                <button
-                    onClick={ () => {
+                <Button 
+                    onBtnClick={ () => {
                         setClosedSignUp(false);
                         setClosedSignIn(true)
-                    } }    
-                >
-                    Create Account
-                </button>
-                <button
-                    onClick={ () => {
+                    }}
+                    content="Create Account"
+                />
+                <Button
+                    onBtnClick={ () => {
                         setClosedSignIn(false);
                         setClosedSignUp(true);
-                    }}    
-                >
-                    Login
-                </button>                    
+                    }}
+                    content="Login"
+                />             
             </div>
         </div>
     );

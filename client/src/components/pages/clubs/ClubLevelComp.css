@@ -1,0 +1,38 @@
+.club-level-comp-cont{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.club-level-comp-cont .setting-area{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.club-level-comp-cont .setting-area .club-level-pair{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.club-level-comp-cont .approve-ratings{
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.club-level-comp-cont .unapproved-users{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 4rem);
+    width: 100%;
+    gap: 1rem;
+    padding: 1rem;
+}

@@ -31,3 +31,31 @@
     display: flex;
     flex-direction: row;
 }
+
+.user-card .request-cont button:first-child{
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.user-card .request-cont button:last-child{
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+@media (max-width: 480px){
+    .user-card .profile-header{
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .user-card .profile-header .headers-cont{
+        align-items: center;
+        gap: 0px;
+    }
+
+    .user-card .profile-header .headers-cont .additional-info{
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4rem;
+    }
+}

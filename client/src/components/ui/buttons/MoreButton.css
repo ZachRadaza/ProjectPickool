@@ -1,0 +1,11 @@
+.more .more-icon{
+    width: 2rem;
+    height: auto;
+    fill: var(--color-text);
+    transition: fill 100ms ease;
+}
+
+.more:hover .more-icon,
+.more:active .more-icon{
+    fill: var(--color-primary);
+}

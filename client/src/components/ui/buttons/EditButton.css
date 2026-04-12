@@ -1,0 +1,18 @@
+.edit .edit-icon{
+    fill: var(--color-text);
+    width: 1.5rem;
+    height: auto;
+    transition: fill 100ms ease;
+}
+
+.edit:hover .edit-icon,
+.edit:active .edit-icon{
+    fill: var(--color-secondary);
+    animation: move 200ms ease;
+}
+
+@keyframes move{
+    0%, 100%{ transform: translateX(0px); }
+    33%{ transform: translateX(2px); }
+    66%{ transform: translateX(-2px); }
+}

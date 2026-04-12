@@ -1,6 +1,7 @@
 import type { Club_Members, UserHeader } from "../../utils/schemas";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./UserHeaderComp.css";
+import Button from "./buttons/Button";
 
 type UserHeaderCompProp = {
     userHeader: UserHeader | null;
@@ -31,34 +32,31 @@ export default function UserHeaderComp({ userHeader, clubInfoHeader, isRequest, 
             />
             <div className="user-body">
                 <div className="user-content">
-                    <h6 className="name">{ userHeader?.username }</h6>
-                    { clubInfoHeader
-                        ? (
-                            <div className="club-content">
-                                <p className="role">{ clubInfoHeader.role }</p>
-                                <p className="level">{ clubInfoHeader.level }</p>
-                            </div> 
-                        ) : <></>
-                    }
+                    <div className="name-cont">
+                        <h6 className="name">{ userHeader?.username }</h6>
+                        { clubInfoHeader &&
+                            <p className="attribute-tag secondary">{ clubInfoHeader.level }</p>
+                        }
+                    </div>
+                    { clubInfoHeader && <h6 className="role">{ clubInfoHeader.role }</h6> }
                 </div>
                 { isRequest
                     ? <div className="req-btns-cont">
-                        <button
-                            onClick={ (e) => { 
-                                e.stopPropagation();
-                                if(approveClicked) approveClicked(); 
+                        <Button
+                            onBtnClick={ () => { 
+                                if(approveClicked) 
+                                    approveClicked(); 
                             }}
-                        >
-                            Approve
-                        </button>
-                        <button
-                            onClick={ (e) => { 
-                                e.stopPropagation();
-                                if(denyClicked) denyClicked(); 
+                            content="Approve"
+                        />
+                        <Button
+                            onBtnClick={ () => {
+                                if(denyClicked) 
+                                    denyClicked(); 
                             }}
-                        >
-                            Deny
-                        </button>
+                            content="Deny"
+                            additionalClasses="red"
+                        />
                     </div>
                     : <></>
                 }

@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
 }
 
 .edit-user-popup .profile-pic-cont{
@@ -12,7 +13,7 @@
     border-radius: 999px;
     border: 0.2rem solid var(--color-text);
     overflow: hidden;
-    width: 250px;
+    width: min(250px, 40%);
     height: auto;
 }
 
@@ -65,6 +66,7 @@
     height: fit-content;
     border: none;
     border-bottom: 0.2rem solid var(--color-text);
+    border-radius: 0px;
 }
 
 .edit-user-popup .desc{
@@ -73,3 +75,19 @@
     width: 40ch;
 }
 
+@media (max-width: 1024px){
+    .edit-user-popup .profile-header{
+        flex-direction: column;
+    }
+
+    .edit-user-popup .username{
+        font-size: 2rem;
+        padding: 0.3rem;
+    }
+
+    .edit-user-popup .line-input-cont{
+        margin: 0.5rem;
+    }
+
+    .edit-user-popup .desc{ width: 100%; }
+}

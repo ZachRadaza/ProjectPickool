@@ -1,4 +1,4 @@
-import type { Club_Members } from "../lib/schemas.js";
+import { Level, type Club_Members } from "../lib/schemas.js";
 import { supabase } from "../lib/supabase.js";
 
 const clubMemberBody = `
@@ -58,6 +58,20 @@ export async function getClubOwner(club_id: string){
         .eq("club_id", club_id)
         .eq("role", "owner")
         .single();
+
+    if(error)
+        throw new Error(error.message);
+
+    return data;
+}
+
+export async function getClubUnapproved(club_id: string){
+    const { data, error } = await supabase
+        .from("club_members")
+        .select(clubMemberBody)
+        .eq("club_id", club_id)
+        .eq("is_level_approved", false)
+        .neq("level", Level.UNSET);
 
     if(error)
         throw new Error(error.message);

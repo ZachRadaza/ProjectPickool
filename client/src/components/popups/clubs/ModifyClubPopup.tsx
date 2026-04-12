@@ -6,6 +6,8 @@ import { wait } from "../../../utils/random";
 import CloseButton from "../../ui/buttons/CloseButton";
 import LevelChooser from "../../ui/LevelChooser";
 import { useNavigate } from "react-router-dom";
+import Button from "../../ui/buttons/Button";
+import "../popup.css";
 
 type ModifyClubPopup = {
     userHeader: UserHeader | null;
@@ -159,7 +161,7 @@ export default function ModifyClubPopup({ isClosed, setIsClosed, userHeader, isE
                     </div>
                     <div className="banner-crop image-edit">
                         <img 
-                            src={club?.banner_file 
+                            src={ club?.banner_file 
                                 ? URL.createObjectURL(club.banner_file) 
                                 : ( club?.banner 
                                     ? club.banner
@@ -198,51 +200,49 @@ export default function ModifyClubPopup({ isClosed, setIsClosed, userHeader, isE
                         onChange={ (event) => setClub((club) => club ? {...club, name: event.target.value } : club) }
                         value={ club?.name ?? "" }
                     />
-                    <textarea
-                        className="desc"
-                        placeholder="Description of Club"
-                        onChange={ (event) => setClub((club) => club ? {...club, description: event.target.value } : club) }
-                        value={ club?.description ?? "" }
-                        rows={ 4 }
-                    ></textarea>
-                    <div className="is-public">
+                    <div className="inner-box">
+                        <textarea
+                            className="desc"
+                            placeholder="Description of Club"
+                            onChange={ (event) => setClub((club) => club ? {...club, description: event.target.value } : club) }
+                            value={ club?.description ?? "" }
+                            rows={ 4 }
+                        ></textarea>
                         <div className="club-level">
                             <h6>Choose Club Level:</h6>
                             <LevelChooser isPlayer={ false } level={ club?.level! } setLevel={ setClubLevel }/>
                         </div>
-                        <div className="club-privary">
-                            <h6>Choose Club Privacy</h6>
+                        <div className="club-privacy">
+                            <h6>Choose Club Privacy:</h6>
                             <div className="btns-cont">
-                                <button
-                                    className={ club?.is_public ? "active" : "" }
-                                    onClick={() => setClub((club) => club ? {...club, is_public: true } : club) }
-                                >
-                                    Public
-                                </button>
-                                <button
-                                    className={ !club?.is_public ? "active" : "" }
-                                    onClick={() => setClub((club) => club ? {...club, is_public: false } : club) }
-                                >
-                                    Private
-                                </button>
+                                <Button
+                                    additionalClasses={ club?.is_public ? "active" : "" }
+                                    onBtnClick={ () => setClub((club) => club ? {...club, is_public: true } : club) }
+                                    content="Public"
+                                />
+                                <Button
+                                    additionalClasses={!club?.is_public ? "active" : "" }
+                                    onBtnClick={ () => setClub((club) => club ? {...club, is_public: false } : club) }
+                                    content="Private"                
+                                />
                             </div>
-                            <p>
-                                { club?.is_public
-                                    ? "Club Posts, Events, and Members will be publically available. No request needed to join club." 
-                                    : "Request is needed to join the club. Club Posts, Events, and Members are only shown to members." 
-                                }
-                            </p>
                         </div>
+                        <p className="privacy-desc">
+                            { club?.is_public
+                                ? "Club Posts, Events, and Members will be publically available. No request needed to join club." 
+                                : "Request is needed to join the club. Club Posts, Events, and Members are only shown to members." 
+                            }
+                        </p>
+                        <Button
+                            content={ isEditing
+                                ? (isLoading ? "Saving Changes..." : "Save Changes")
+                                : (isLoading ? "Creating Club..." : "Create")
+                            }
+                            onBtnClick={ () => isEditing ? updateClub() : createClub() }
+                            additionalClasses="create-btn"
+                        />
                     </div>
                 </div>
-                <button
-                    onClick={ () => isEditing ? updateClub() : createClub() }
-                >
-                    { isEditing
-                        ? (isLoading ? "Saving Changes..." : "Save Changes")
-                        : (isLoading ? "Creating Club..." : "Create")
-                    }
-                </button>
             </div>
         </div>
     );

@@ -93,6 +93,31 @@ export async function getClubOwner(req: Request, res: Response){
     }
 }
 
+export async function getClubUnapproved(req: Request, res: Response){
+    try{
+        const { club_id } = req.params;
+
+        if(!club_id || typeof club_id !== "string")
+            return res.status(400).json({
+                success: false,
+                error: "club id required"
+            });
+
+        const data = await clubMemberService.getClubUnapproved(club_id);
+
+        res.status(200).json({
+            success: true,
+            data: data
+        });
+    } catch(error: any){
+        console.log("getClubUnapproved error", error);
+        res.status(500).json({
+            success: false,
+            error: error
+        });
+    }
+}
+
 export async function getSingleClubMember(req: Request, res: Response){
     try{
         const { club_id, user_id } = req.params;

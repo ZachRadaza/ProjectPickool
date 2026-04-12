@@ -4,3 +4,21 @@
     right: 1.5rem;
     z-index: 125;
 }
+
+.close .close-icon{
+    stroke: var(--color-text);
+    width: 2rem;
+    height: auto;
+    transition: transform 400ms ease, stroke 100ms ease;
+}
+
+.close:hover .close-icon{
+    stroke: var(--color-primary);
+    transform: rotate(90deg);
+}
+
+@media (max-width: 480px) {
+    .close{ 
+        right: 0rem; 
+    }
+}

@@ -11,15 +11,27 @@
 }
 
 .club-members-cont .dropdown-cont button{
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-    z-index: 86;
+    border: none;
+    border-radius: 0px;
+    border-bottom: 0.1rem solid var(--color-text);
+    background: var(--color-bg);
+    text-align: left;
+}
+
+.club-members-cont .dropdown-cont button:hover{
+    background: var(--color-accent);
 }
 
 .club-members-cont .dropdown{
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 4rem);
+    gap: 1rem;
+    place-items: center;
     transition: height 200ms ease;
+    padding: 0px 1rem;
     z-index: 85;
+}
+
+.club-members-cont .dropdown.active{
+    padding: 1rem 1rem;
 }

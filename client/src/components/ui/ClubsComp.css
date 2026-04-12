@@ -2,37 +2,48 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    border: 0.2rem solid var(--color-text);
+    border: 0.1rem solid var(--color-text);
+    border-radius: 3rem 3rem 1rem 1rem;
     background: var(--color-bg);
     gap: 0.5rem;
     padding: 1rem;
     transition: border 100ms ease;
     cursor: pointer;
-}
-
-.club-comp-cont:hover,
-.club-comp-cont:hover .banner, 
-.club-comp-cont:hover .profile-pic{
-    border-color: var(--color-primary);
+    overflow: hidden;
+    max-width: 400px;
 }
 
 .club-comp-cont:hover .titles .club-name{
-    color: var(--color-primary)
+    color: var(--color-primary);
 }
 
-.club-comp-cont .is-favorite{
+.club-comp-cont .club-icon{
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    left: 15%;
+    top: 100%;
+    width: 75%;
+    opacity: 0.08;
+    z-index: 0;
+    transition: top 400ms ease;
 }
 
-.club-comp-cont .is-favorite.active{
-    color: var(--color-accent);
+.club-comp-cont:hover .club-icon{
+    top: 45%
+}
+
+.club-comp-cont > *{ z-index: 1; }
+
+.club-comp-cont .favorite{
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 2;
 }
 
 .club-comp-cont .banner{
     overflow: hidden;
-    border: 0.2rem solid var(--color-text);
+    border: 0.1rem solid var(--color-text);
+    border-radius: 2rem 2rem 1rem 1rem;
     display: flex;
     place-items: center;
     transition: border 100ms ease;
@@ -56,10 +67,10 @@
 
 .club-comp-cont .profile-pic{
     position: absolute;
-    top: -30%;
+    top: -40%;
     left: 1rem;
     border-radius: 999px;
-    border: 0.2rem solid var(--color-text);
+    border: 0.1rem solid var(--color-text);
     width: 30%;
     height: auto;
     aspect-ratio: 1 / 1;
@@ -81,7 +92,13 @@
 .club-comp-cont .attributes{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.club-comp-cont .club-is-pub{
+    border-color: var(--color-secondary);
+    background: color-mix(in srgb, var(--color-secondary) 20%, transparent);
+    color: var(--color-secondary);
 }
 
 .club-comp-cont.waiting .request{
@@ -91,3 +108,4 @@
 .club-comp-cont.denied .request{
     color: var(--color-red);
 }
+

@@ -9,7 +9,8 @@ header{
 
 header nav{
     display: flex;
-    grid-template-columns: 1fr 1fr 1fr;
+    position: relative;
+    grid-template-columns: repeat(2, fit-content);
     gap: 0px;
 }
 
@@ -19,9 +20,8 @@ header nav > div{
     align-items: center;
 }
 
-header .logo-section{
-    justify-content: flex-start;
-}
+header nav > div:first-child{ justify-content: flex-start; }
+header nav > div:last-child{ justify-content: flex-end; }
 
 header .logo-section .nav-link{
     display: flex;
@@ -35,58 +35,111 @@ header .logo-section .nav-link:hover .brand-title{
     color: var(--color-primary);
 }
 
-header .nav-section{
-    justify-content: center;
+header .nav-section.burger, header .nav-section .close-menu { display: none; }
+
+header .nav-section button svg{
+    stroke: var(--color-text);
+    width: 1.5rem;
+    height: auto;
+    transition: stroke 100ms ease;
+}
+
+header .nav-section button:hover svg{ stroke: var(--color-accent); }
+
+header .nav-section.hidable{
+    justify-content: flex-end;
     flex-direction: row;
     gap: 2rem;
 }
 
-header .nav-section .nav-link{
+header .nav-section.hidable .nav-link{
     text-decoration: none;
     border-bottom: 0.2rem solid transparent;
-    transition: border 100ms ease;
+    opacity: 0.8;
+    transition: all 100ms ease;
 }
 
-header .nav-section .nav-link:hover{
+header .nav-section.hidable .nav-link:hover{
     border-color: var(--color-accent);
+    opacity: 1;
 }
 
-header .nav-section .nav-link.active{
+header .nav-section.hidable .nav-link.active{
     border-color: var(--color-text);
+    opacity: 1;
 }
 
-header .nav-section .nav-link:hover h5{
+header .nav-section.hidable .nav-link:hover h5{
     color: var(--color-accent);
 }
 
 header .profile-section{
-    justify-content: flex-end;
-}
-
-header .profile-section .nav-link{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     text-decoration: none;
     gap: 1rem;
+    border-bottom-color: transparent !important;
 }
+
+header .profile-section h5{ opacity: 0.8; }
 
 header .profile-section img{
     width: 2.5rem;
     height: auto;
     aspect-ratio: 1 / 1;
     border-radius: 999px;
-    border: 0.2rem solid var(--color-text);
+    border: 0.1rem solid var(--color-text);
     object-fit: cover;
     place-items: center;
     transition: border 100ms ease;
 }
 
-header .profile-section .nav-link:hover h5{
-    color: var(--color-accent);
+header .profile-section:hover{ border-bottom-color: transparent !important; }
+header .profile-section:hover h5{
+    border-bottom: 0.2rem solid var(--color-accent); 
+    color: var(--color-accent); 
+    opacity: 1;
+}
+header .profile-section:hover img{ border-color: var(--color-accent); }
+
+@media (max-width: 1024px){ 
+    header .nav-section.burger{ 
+        display: flex !important; 
+        width: min-content;
+    }
+    
+    header .nav-section.hidable{
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        top: 0px;
+        right: 0px;
+
+        flex-direction: column !important;
+        gap: 1rem !important;
+        background: var(--color-bg);
+        align-items: flex-end;
+        justify-content: flex-start !important;
+        padding: 1rem;
+        border-left: 0.2rem solid var(--color-text);
+
+        transform: translateX(100%);
+        transition: transform 400ms ease;
+    }
+
+    header .nav-section.hidable.active{ transform: translateX(0); }
+
+    header .nav-section.hidable .close-menu{ display: flex; }
+
+    header .nav-section.hidable .nav-link h5{
+        font-size: 3rem;
+    }
 }
 
-header .profile-section .nav-link:hover img{
-    border-color: var(--color-accent);
+@media (max-width: 640px){
+    header .logo-section .nav-link h4{
+        font-size: 2rem;
+    }
 }

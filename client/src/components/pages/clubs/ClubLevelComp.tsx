@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { Level, Role, type Club_Members, type Club_Members_Basic, type UserHeader } from "../../../utils/schemas";
 import LevelChooser from "../../ui/LevelChooser";
 import { ExtensionService } from "../../../utils/ExtensionService";
+import Button from "../../ui/buttons/Button";
+import "./ClubLevelComp.css";
+import Loading from "../../../pages/Loading";
+import ErrorPage from "../../../pages/Error";
+import UserHeaderMiniComp from "../../ui/UserHeaderMiniComp";
 
 type ClubLevelCompProp = {
     userHeader: UserHeader | null;
@@ -12,6 +17,10 @@ type ClubLevelCompProp = {
 export default function ClubLevelComp({ userHeader, userClubMember, club_id }: ClubLevelCompProp){
     const [level, setLevel] = useState<Level>(Level.BEGINNER);
     const [buttonMsg, setButtonMsg] = useState<string>("Request New Club Level");
+    const [unnapprovedUsers, setUnapprovedUsers] = useState<Club_Members[]>([]);
+
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
     async function reqNewLevel(){
         if(!userHeader || !userClubMember || !club_id)
@@ -43,24 +52,68 @@ export default function ClubLevelComp({ userHeader, userClubMember, club_id }: C
             setButtonMsg("Set New Level");
     }, [userClubMember]);
 
-    return (
-        <div>
-            <p>
-                { userClubMember?.is_level_approved && userClubMember.level === level
-                    ? "Your Club Level is approved"
-                    : "Club Level is not approved"
+    useEffect(() => {
+        getUnapprovedUsers();
+
+        async function getUnapprovedUsers(){
+            try{
+                if(!userClubMember || userClubMember.role === Role.MEMBER || !club_id){
+                    setIsLoading(false);
+                    return;
                 }
-            </p>
-            <LevelChooser 
-                isPlayer={ true } 
-                level={ level } 
-                setLevel={ (level: Level) => setLevel(level) }
-            />
-            <button
-                onClick={ () => reqNewLevel() }
-            >
-                { buttonMsg }
-            </button>
+
+                setIsLoading(true);
+
+                const unapproved = await ExtensionService.getClubUnapproved(club_id);
+
+                setUnapprovedUsers(unapproved ?? []);
+                setIsLoading(false);
+            } catch(error){
+                setIsLoading(false);
+                setError("Error in fetching Unapproved Users");
+            }
+        }
+    }, [club_id, userClubMember]);
+
+    if(isLoading)
+        return <Loading />;
+
+    if(error)
+        return <ErrorPage error={ error } />;
+
+    return (
+        <div className="club-level-comp-cont">
+            <div className="setting-area">
+                <h5 className="club-level-info">
+                    { userClubMember?.is_level_approved && userClubMember.level === level
+                        ? "Your Club Level is approved"
+                        : "Club Level is not approved"
+                    }
+                </h5>
+                <div className="club-level-pair">
+                    <h6>Club Level: </h6>
+                    <LevelChooser 
+                        isPlayer={ true } 
+                        level={ level } 
+                        setLevel={ (level: Level) => setLevel(level) }
+                    />
+                </div>
+                <Button
+                    onBtnClick={ () => reqNewLevel() }
+                    content={ buttonMsg }
+                    additionalClasses="req-new-level-btn"
+                />
+            </div>
+            { userClubMember?.role === Role.ADMIN || userClubMember?.role === Role.OWNER &&
+                <div className="approve-ratings">
+                    <h5 className="title">Approve Member Ratings</h5>
+                    <div className="unapproved-users">
+                        { unnapprovedUsers.map((unap) => 
+                            <UserHeaderMiniComp userHeader={ unap.user } key={ unap.user.id }/>
+                        )}
+                    </div>
+                </div>
+            }
         </div>
     );
 }

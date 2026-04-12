@@ -7,6 +7,8 @@ import { ExtensionService } from "../../../utils/ExtensionService";
 import { useNavigate } from "react-router-dom";
 import "./UserCardPopup.css";
 import "../popup.css";
+import Button from "../../ui/buttons/Button";
+import { capitalizeWords } from "../../../utils/random";
 
 type UserCardPopupProp = {
     userCardId: string | null;
@@ -236,81 +238,67 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, isClose
                 />
                 <div className="headers-cont">
                     <h4 className="username">{ userInCard?.username }</h4>
-                    { clubMember
-                        ? <div className="additional-info">
+                    { clubMember &&
+                        <div className="additional-info">
                             <h6>{ clubMember.role }</h6>
-                            <h6>{ clubMember.level }</h6>
+                            <p className="attribute-tag secondary">{ capitalizeWords(clubMember.level) }</p>
                         </div>
-                        : <></>
                     }
                 </div>
             </div>
-            <button
-                onClick={ () => navigate(`/user/${userCardId || "guest"}`)}
-            >
-                More Info    
-            </button>
-            { userClubMember?.role !== Role.MEMBER
-                ? <>
-                    { clubRequest
-                        ? <div className="request-cont">
-                            <button
-                                onClick={ () => approveUserRequest() }
-                            >
-                                Approve
-                            </button>
-                            <button
-                                onClick={ () => denyUserRequest() }
-                            >
-                                Deny
-                            </button>
-                        </div>
-                        : <></>
-                    }
-                    { !clubMember?.is_level_approved && clubMember?.level !== Level.UNSET && clubMember?.level
-                        ? <button
-                            className="approve-level"
-                            onClick={ () => approveLevel(true) }
-                        >
-                            Approve Level
-                        </button>
-                        :<></>
-                    }
-                    { userClubMember?.role === Role.OWNER && clubMember?.role === Role.ADMIN
-                        ? <> 
-                            <button
-                                onClick={ () => demoteAdmin() }
-                                className="demote-admin"
-                            >
-                                Demote Admin
-                            </button>
-                            <button
-                                onClick={ () => kickMember() }
-                                className="kick-member"
-                            >
-                                Kick Admin
-                            </button>
-                        </>
-                        : <></>
-                    }
-                    { clubMember?.role === Role.MEMBER
-                        ? <>
-                            <button
-                                className="set-admin"
-                                onClick={ () => setAdmin() }
-                            >
-                                Set to Admin
-                            </button>
-                            <button
-                                onClick={ () => kickMember() }
-                                className="kick-member"
-                            >
-                                Kick Member
-                            </button>
-                        </>
-                        : <></>
-                    }
-                </>:<></>
+            <Button
+                onBtnClick={ () => navigate(`/user/${userCardId || "guest"}`) }
+                content="More Info"
+            />
+            { userClubMember?.role !== Role.MEMBER &&
+                <>
+                { clubRequest &&
+                    <div className="request-cont">
+                        <Button
+                            onBtnClick={ () => approveUserRequest() }
+                            content="Approve"
+                        />
+                        <Button
+                            onBtnClick={ () => denyUserRequest() }
+                            content="Deny"
+                            additionalClasses="red"
+                        />
+                    </div>
+                }
+                { !clubMember?.is_level_approved && clubMember?.level !== Level.UNSET && clubMember?.level &&
+                    <Button 
+                        onBtnClick={ () => approveLevel(true) }
+                        content="Approve Level"
+                    />
+                }
+                { userClubMember?.role === Role.OWNER && clubMember?.role === Role.ADMIN &&
+                    <> 
+                        <Button 
+                            onBtnClick={ () => demoteAdmin() }
+                            content="Demote Admin"
+                            additionalClasses="red"
+                        />
+                        <Button
+                            onBtnClick={ () => kickMember() }
+                            additionalClasses="red"
+                            content="Kick Admin"
+                        />
+                    </>
+                }
+                { clubMember?.role === Role.MEMBER &&
+                    <>
+                        <Button
+                            onBtnClick={ () => setAdmin() }
+                            content="Set to Admin"
+                        />
+                        <Button 
+                            onBtnClick={ () => kickMember() }
+                            additionalClasses="red"
+                            content="Kick Member"
+                        />
+                    </>
+                }
+                </>
             }
         </>
 

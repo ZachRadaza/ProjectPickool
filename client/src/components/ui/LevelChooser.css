@@ -2,16 +2,45 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    width: fit-content;
+    min-width: 20ch;
+}
+
+.level-chooser .current{
+    position: relative;
+    z-index: 1;
+    transition: border-radius 100ms ease;
+}
+
+.level-chooser:has(.drop-down.active) .current{
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 
 .level-chooser .drop-down{
     position: absolute;
     top: 100%;
-    display: none;
-    flex-direction: column;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(-100%);
+    z-index: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 400ms ease, opacity 200ms ease;
 }
 
 .level-chooser .drop-down.active{
-    display: flex;
+    pointer-events: auto;
+    opacity: 1;
+    transform: translateY(0%);
+}
+
+.level-chooser .drop-down button{
+    border-radius: 0px;
+}
+
+.level-chooser .drop-down button:last-child{
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
 }

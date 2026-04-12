@@ -14,6 +14,10 @@ import DeleteButton from "../../ui/buttons/DeleteButton";
 import "../popup.css";
 import ClubRequestsComp from "../../pages/clubs/ClubRequestsComp";
 import ClubLevelComp from "../../pages/clubs/ClubLevelComp";
+import MoreButton from "../../ui/buttons/MoreButton";
+import Button from "../../ui/buttons/Button";
+import { capitalizeWords } from "../../../utils/random";
+import FavoriteButton from "../../ui/buttons/FavoriteButton";
 
 export const TabType = {
     EVENTS: "events",
@@ -59,6 +63,10 @@ export default function OpenedClubPopup({ userHeader, club_id, isClosed, setIsCl
 
     let content;
 
+    function tabClasses(tabType: TabType){
+        return `bg ${tabType === currentTab ? "active" : ""}`;
+    }
+
     function closeClubPopup(closed: boolean){
         setIsClosed(closed);
 
@@ -73,6 +81,20 @@ export default function OpenedClubPopup({ userHeader, club_id, isClosed, setIsCl
 
     function editClubBtn(){
         setIsEditClubClosed(false);
+    }
+
+    async function favoriteClubBtn(){
+        if(!club_id || !userHeader?.id)
+            return;
+
+        const is_favorite = !userClubMember?.is_favorite;
+
+        setUserClubMember((prev) => prev ? {...prev, is_favorite } : prev);
+        const fav = await ExtensionService.updateClubMember(club_id, userHeader?.id, { is_favorite });
+
+        if(!fav){
+            setError("Error in Favoriting Club");
+        }
     }
 
     async function leaveClub(){
@@ -142,6 +164,8 @@ export default function OpenedClubPopup({ userHeader, club_id, isClosed, setIsCl
 
                 setIsLoading(true);
 
+                await getClub();
+
                 const userClubMember: Club_Members = await ExtensionService.getSingleClubMember(club_id, userHeader.id);
 
                 if(!userClubMember){
@@ -162,6 +186,22 @@ export default function OpenedClubPopup({ userHeader, club_id, isClosed, setIsCl
                 setIsLoading(false);
             }
         }
+        
+        async function getClub(){
+            if(!club_id)
+                return;
+
+            setIsClosed(false);
+
+            const data: Clubs = await ExtensionService.getClub(club_id);
+
+            if(!data){
+                setError("Error occured in opening club");
+                setIsLoading(false);
+            }
+
+            setClub(data);
+        }
 
         async function getRequestNum(club_id: string){
             const reqs = await ExtensionService.getNumClubRequests(club_id);
@@ -178,63 +218,30 @@ export default function OpenedClubPopup({ userHeader, club_id, isClosed, setIsCl
         }
     }, [requested, userHeader, club_id]);
 
-    useEffect(() => {
-        getClub();
-
-        async function getClub(){
-            try{
-                if(!club_id){
-                    setIsClosed(true);
-                    return;
-                }
-
-                setIsLoading(true);
-                setIsClosed(false);
-
-                const data: Clubs = await ExtensionService.getClub(club_id);
-
-                if(!data){
-                    setError("Error occured in opening club");
-                    setIsLoading(false);
-                }
-
-                setClub(data);
-
-                setIsLoading(false);
-            } catch(error){
-                setError("Error occured in opening club");
-                setIsLoading(false);
-            }
-        }
-    }, [club_id]);
-
     if(isLoading)
         content = <Loading />
     else if(error)
         content = <ErrorPage error={ error } />
     else 
         content = <>
-            <CloseButton setIsClosed={ closeClubPopup } />
-            <div
-                className="more-options ui"
-                onClick={ () => setMoreOptions(!moreOptions) }
-            >
-                More
-                { moreOptions &&
-                    <div className="more-options-content">
-                        <button
-                            onClick={ () => navigator.clipboard.writeText(window.location.href) }
-                        >
-                            Copy Club Links
-                        </button>
-                        <button>Report Club</button>
-                        { userClubMember?.role !== Role.OWNER &&
-                            <button
-                                onClick={ () => leaveClub() }
-                            >Leave Club</button>
-                        }
-                    </div>
-                }
+            <div className="top-right-cont">
+                <div className="more-cont">
+                    <MoreButton onBtnClick={ () => setMoreOptions(!moreOptions) }/>
+                    { moreOptions &&
+                        <div className="more-options-content">
+                            <Button 
+                                onBtnClick={ () => navigator.clipboard.writeText(window.location.href) }
+                                content="Copy Club Links"
+                            />
+                            <Button
+                                onBtnClick={ () => leaveClub() }
+                                additionalClasses="red"
+                                content="Leave Club"
+                            />
+                        </div>
+                    }
+                </div>
+                <CloseButton setIsClosed={ closeClubPopup } />
             </div>
             <div className="banner">
                 <img
@@ -243,12 +250,20 @@ export default function OpenedClubPopup({ userHeader, club_id, isClosed, setIsCl
                 />
             </div>
             <div className="content width-bound">
-                { (userClubMember?.role === Role.OWNER || userClubMember?.role === Role.ADMIN) &&
-                    <div className="modify-club-cont">
-                        <EditButton action={ editClubBtn } />
-                        <DeleteButton action={ deleteClubBtn } />
-                    </div> 
-                }
+                <div className="modify-club-cont">
+                    { (userClubMember?.role === Role.OWNER || userClubMember?.role === Role.ADMIN) &&
+                        <>
+                            <EditButton onBtnClick={ editClubBtn } />
+                            <DeleteButton onBtnClick={ deleteClubBtn } />
+                        </>
+                    }
+                    { userClubMember &&
+                        <FavoriteButton
+                            onBtnClick={ () => favoriteClubBtn() }
+                            isFavorite={ userClubMember.is_favorite }
+                        />
+                    }
+                </div> 
                 <img 
                     className="profile-pic"
                     src={ club?.profile_pic ?? import.meta.env.VITE_DEFAULT_CLUB_PIC }
@@ -257,8 +272,8 @@ export default function OpenedClubPopup({ userHeader, club_id, isClosed, setIsCl
                 <div className="headers">
                     <h3 className="club-name">{ club ? club.name : "na" }</h3>
                     <div className="club-attributes">
-                        <h6>{ club?.is_public ? "Public" : "Private" }</h6>
-                        <h6>{ club?.level }</h6>
+                        <p className="attribute-tag secondary">{ club?.is_public ? "Public" : "Private" }</p>
+                        <p className="attribute-tag secondary">{ capitalizeWords(club?.level) }</p>
                     </div>
                     <p className="desc">
                         { club?.description }
@@ -276,24 +291,34 @@ export default function OpenedClubPopup({ userHeader, club_id, isClosed, setIsCl
             </div>
             <div className="club-tab-cont width-bound">
                 <div className="tabs">
-                    <button onClick={ () => setCurrentTab(TabType.EVENTS) }>
-                        Events
-                    </button>
-                    <button onClick={ () => setCurrentTab(TabType.POSTS) }>
-                        Posts
-                    </button>
-                    <button onClick={ () => setCurrentTab(TabType.MEMBERS) }>
-                        Members
-                    </button>
+                    <Button
+                        onBtnClick={ () => setCurrentTab(TabType.EVENTS) }
+                        content="Events"
+                        additionalClasses={ tabClasses(TabType.EVENTS) }
+                    />
+                    <Button
+                        onBtnClick={ () => setCurrentTab(TabType.POSTS) }
+                        content="Posts"
+                        additionalClasses={ tabClasses(TabType.POSTS) }
+                    />
+                    <Button
+                        onBtnClick={ () => setCurrentTab(TabType.MEMBERS) }
+                        content="Members"
+                        additionalClasses={ tabClasses(TabType.MEMBERS) }
+                    />
                     { (userClubMember?.role === Role.OWNER || userClubMember?.role === Role.ADMIN) &&
-                        <button onClick={ () => setCurrentTab(TabType.REQUESTS) }>
-                            Requests ({ numRequests })
-                        </button>
+                        <Button
+                            onBtnClick={ () => setCurrentTab(TabType.REQUESTS) }
+                            content={ `Requests (${numRequests})` }
+                            additionalClasses={ tabClasses(TabType.REQUESTS) }              
+                        />
                     }
                     { userClubMember?.role &&
-                        <button onClick={ () => setCurrentTab(TabType.LEVEL) }>
-                            Club Level
-                        </button>
+                        <Button
+                            onBtnClick={ () => setCurrentTab(TabType.LEVEL) }
+                            content="Club Level"
+                            additionalClasses={ tabClasses(TabType.LEVEL) }
+                        />
                     }
                 </div>
                 <div className="tab-content">

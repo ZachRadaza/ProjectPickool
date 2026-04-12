@@ -1,0 +1,28 @@
+.user-header-mini-cont{
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.user-header-mini-cont .profile-pic{
+    border: 0.1rem solid var(--color-text);
+    border-radius: 999px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    place-items: center;
+    width: 4rem;
+    height: auto;
+    transition: border 100ms ease;
+}
+
+.user-header-mini-cont:hover .profile-pic{
+    border-color: var(--color-accent);
+}
+
+.user-header-mini-cont .role{
+    opacity: 0.7;
+    font-size: 1.2rem;
+}
