@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
 import { Level, Role, type Club_Members, type Club_Members_Basic, type UserHeader } from "../../../utils/schemas";
-import LevelChooser from "../../ui/LevelChooser";
+import LevelChooser from "../../ui/choosers/LevelChooser";
 import { ExtensionService } from "../../../utils/ExtensionService";
 import Button from "../../ui/buttons/Button";
 import "./ClubLevelComp.css";
 import Loading from "../../../pages/Loading";
 import ErrorPage from "../../../pages/Error";
-import UserHeaderMiniComp from "../../ui/UserHeaderMiniComp";
+import UserHeaderMiniComp from "../../ui/core/UserHeaderMiniComp";
 
 type ClubLevelCompProp = {
     userHeader: UserHeader | null;
     userClubMember: Club_Members | null;
     club_id: string | null;
+    setUserClubMember: (clubMember: Club_Members) => void;
 };
 
-export default function ClubLevelComp({ userHeader, userClubMember, club_id }: ClubLevelCompProp){
+export default function ClubLevelComp({ userHeader, userClubMember, club_id, setUserClubMember }: ClubLevelCompProp){
     const [level, setLevel] = useState<Level>(Level.BEGINNER);
     const [buttonMsg, setButtonMsg] = useState<string>("Request New Club Level");
     const [unnapprovedUsers, setUnapprovedUsers] = useState<Club_Members[]>([]);
@@ -38,6 +39,8 @@ export default function ClubLevelComp({ userHeader, userClubMember, club_id }: C
             setButtonMsg("Failed to Send");
             return;
         }
+
+        setUserClubMember(updatedMem);
 
         if(is_level_approved)
             setButtonMsg("New Level Set");
@@ -106,12 +109,16 @@ export default function ClubLevelComp({ userHeader, userClubMember, club_id }: C
             </div>
             { userClubMember?.role === Role.ADMIN || userClubMember?.role === Role.OWNER &&
                 <div className="approve-ratings">
-                    <h5 className="title">Approve Member Ratings</h5>
-                    <div className="unapproved-users">
-                        { unnapprovedUsers.map((unap) => 
-                            <UserHeaderMiniComp userHeader={ unap.user } key={ unap.user.id }/>
-                        )}
-                    </div>
+                    { unnapprovedUsers.length > 0 &&
+                        <>
+                            <h5 className="title">Approve Member Ratings</h5>
+                            <div className="unapproved-users">
+                                { unnapprovedUsers.map((unap) => 
+                                    <UserHeaderMiniComp userHeader={ unap.user } key={ unap.user.id }/>
+                                )}
+                            </div>
+                        </>
+                    }
                 </div>
             }
         </div>

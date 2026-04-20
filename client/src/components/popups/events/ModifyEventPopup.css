@@ -1,0 +1,123 @@
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.modify-event{
+    gap: 2rem;
+    min-width: min(80%, 800px);
+}
+
+.modify-event .message{ color: var(--color-red); }
+
+.modify-event .choosers{ z-index: 5; }
+
+.modify-event .name-cont{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.modify-event .name-cont h5{ white-space: nowrap;}
+
+.modify-event .name-cont input{
+    border-radius: 0px;
+    border: none;
+    border-bottom: 0.1rem solid var(--color-text);
+    font-size: 2rem;
+    font-family: var(--font-heading);
+    padding-bottom: 0.3rem;
+    line-height: auto;
+    text-align: center;
+}
+
+.modify-event .desc-cont{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.modify-event .desc-cont h6{ opacity: 0.7; }
+.modify-event .desc-cont textarea{ width: 100%; }
+
+.modify-event .additional-info{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 1fr);
+    place-items: start;
+    gap: 1rem;
+    width: 100%;
+}
+
+.modify-event .additional-info > *{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 1fr;
+}
+
+.modify-event .additional-info .recurring{ z-index: 6; }
+
+.modify-event .additional-info .numbers-cont input{
+    width: 100px;
+}
+
+.modify-event .switches-cont{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    place-items: start;
+    gap: 1rem;
+    width: 100%;
+    place-items: center;
+}
+
+.modify-event .switches-cont .switch{
+    display: flex;
+    flex-direction: row;
+}
+
+.modify-event .switches-cont .switch button:first-child{
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.modify-event .switches-cont .switch button:last-child{
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.modify-event .switches-cont .switch button{ 
+    background: color-mix(in srgb, var(--color-primary) 20%, transparent); 
+    white-space: nowrap;
+}
+.modify-event .switches-cont .switch button:hover{ background: color-mix(in srgb, var(--color-accent) 20%, transparent); }
+
+.modify-event .switches-cont .switch button.active{ background: var(--color-primary); }
+.modify-event .switches-cont .switch button.active:hover{ background: var(--color-accent); }
+
+@media (max-width: 640px){
+    .modify-event .switches-cont{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .modify-event .additional-info{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .modify-event .additional-info .time-cont{
+        grid-column: span 2;
+        place-self: center;
+    }
+}
+
+@media (max-width: 480px){
+    .modify-event .name-cont{
+        flex-direction: column;
+        gap: 0px;
+    }
+}

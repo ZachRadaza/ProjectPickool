@@ -136,10 +136,8 @@ header .profile-section:hover img{ border-color: var(--color-accent); }
     header .nav-section.hidable .nav-link h5{
         font-size: 3rem;
     }
-}
 
-@media (max-width: 640px){
-    header .logo-section .nav-link h4{
-        font-size: 2rem;
+    header .profile-section h5{
+        font-size: 3rem;
     }
 }

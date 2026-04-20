@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Level, Role, type Club_Members, type Club_Members_Basic, type Club_Requests, type UserHeader } from "../../../utils/schemas";
+import { Level, Role, type Club_Members, type Club_Members_Basic, type Club_Requests, type Players, type UserHeader } from "../../../utils/schemas";
 import CloseButton from "../../ui/buttons/CloseButton";
 import Loading from "../../../pages/Loading";
 import ErrorPage from "../../../pages/Error";
@@ -13,15 +13,17 @@ import { capitalizeWords } from "../../../utils/random";
 type UserCardPopupProp = {
     userCardId: string | null;
     club_id: string | null;
+    event_id: string | null;
     userHeader: UserHeader| null;
     isClosed: boolean;
     setIsClosed: (close: boolean) => void;
 };
 
-export default function UserCardPopup({ userHeader, userCardId, club_id, isClosed, setIsClosed }: UserCardPopupProp){
+export default function UserCardPopup({ userHeader, userCardId, club_id, event_id, isClosed, setIsClosed }: UserCardPopupProp){
     const [userInCard, setUserInCard] = useState<UserHeader | null>(null);
     const [clubMember, setClubMember] = useState<Club_Members_Basic | null>(null);
     const [clubRequest, setUserClubRequests] = useState<Club_Requests | null>(null);
+    const [player, setPlayer] = useState<Players | null>(null);
     const [userClubMember, setUserClubMember] = useState<Club_Members_Basic | null>(null);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -88,6 +90,39 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, isClose
         }
 
         setUserClubRequests(null);
+    }
+
+    async function removePlayer(){
+        if(!userCardId || !event_id)
+            return;
+
+        const removed = await ExtensionService.deletePlayer(event_id, userCardId);
+
+        if(!removed){
+            setError("Error in Removing PLayer from event");
+            return;
+        }
+
+        setPlayer(null);
+    }
+
+    async function approvePlayer(approved: boolean){
+        if(!userCardId || !event_id)
+            return;
+
+        const updates: Partial<Players> = { approved };
+
+        const updatedPlayer = await ExtensionService.updatePlayer(event_id, userCardId, updates);
+
+        if(!updatedPlayer){
+            setError("Error in Player Update");
+            return;
+        }
+
+        if(approved)
+            setPlayer(updatedPlayer);
+        else
+            setPlayer(null);
     }
 
     async function setAdmin(){
@@ -174,6 +209,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, isClose
                     await getclubMember();
 
                 await getUserClubMember();
+                await getplayer();
                 setIsLoading(false);
             } catch(error){
                 setError("Error in Fetching Profile Info");
@@ -223,6 +259,20 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, isClose
                 setIsLoading(false);
             }
         }
+
+        async function getplayer(){
+            try{
+                if(!userCardId || !event_id)
+                    return;
+
+                const player = await ExtensionService.getPlayer(event_id, userCardId);
+
+                setPlayer(player ?? null);
+            } catch(error){
+                setError("Error in Fetching Profile Info");
+                setIsLoading(false);
+            }
+        }
     }, [userCardId, userHeader, club_id]);
 
     if(isLoading)
@@ -237,10 +287,10 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, isClose
                     src={ userInCard?.profile_pic ?? import.meta.env.VITE_DEFAULT_PROFILE_PIC }
                 />
                 <div className="headers-cont">
-                    <h4 className="username">{ userInCard?.username }</h4>
+                    <h3 className="username">{ userInCard?.username }</h3>
                     { clubMember &&
                         <div className="additional-info">
-                            <h6>{ clubMember.role }</h6>
+                            <h5 className="role">{ clubMember.role }</h5>
                             <p className="attribute-tag secondary">{ capitalizeWords(clubMember.level) }</p>
                         </div>
                     }
@@ -250,7 +300,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, isClose
                 onBtnClick={ () => navigate(`/user/${userCardId || "guest"}`) }
                 content="More Info"
             />
-            { userClubMember?.role !== Role.MEMBER &&
+            { (userClubMember?.role === Role.OWNER || userClubMember?.role === Role.ADMIN) &&
                 <>
                 { clubRequest &&
                     <div className="request-cont">
@@ -270,6 +320,24 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, isClose
                         onBtnClick={ () => approveLevel(true) }
                         content="Approve Level"
                     />
+                }
+                { player && (player.approved === false
+                    ? <>
+                        <Button
+                            onBtnClick={ () => approvePlayer(true) }
+                            content="Approve Event Request"
+                        />
+                        <Button 
+                            onBtnClick={ () => approvePlayer(false) }
+                            content="Deny Event Request"
+                            additionalClasses="red"
+                        />
+                    </>
+                    : <Button 
+                            onBtnClick={ () => removePlayer() }
+                            content="Remove Player"
+                            additionalClasses="red"
+                    />)
                 }
                 { userClubMember?.role === Role.OWNER && clubMember?.role === Role.ADMIN &&
                     <> 

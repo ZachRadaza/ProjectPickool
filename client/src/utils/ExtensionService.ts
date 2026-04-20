@@ -1,4 +1,4 @@
-import type { Club_Members, Club_Requests, Clubs, UserClubRequests, UserClubs, UserHeader, Users } from "./schemas";
+import type { Club_Members, Club_Requests, Clubs, Events, Players, UserClubRequests, UserClubs, UserHeader, Users } from "./schemas";
 import { supabase } from "./supabase";
 
 const apiUrl = "http://localhost:3000/api";
@@ -6,6 +6,8 @@ const userApiUrl = `${apiUrl}/users`;
 const clubApiUrl = `${apiUrl}/clubs`;
 const clubRequestApiUrl = `${apiUrl}/clubrequests`;
 const clubMemberApiUrl = `${apiUrl}/clubmembers`;
+const eventApiUrl = `${apiUrl}/events`;
+const playerApiUrl = `${apiUrl}/players`;
 
 export const ExtensionService = {
 
@@ -660,10 +662,10 @@ export const ExtensionService = {
 
     async addClubMember(club_id: string, user_id: string){
         try{
-            const req = await fetch(`${clubMemberApiUrl}/${club_id}`, {
+            const req = await fetch(`${clubMemberApiUrl}/`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ user_id }),
+                body: JSON.stringify({ user_id, club_id }),
                 credentials: "include"
             });
 
@@ -680,10 +682,10 @@ export const ExtensionService = {
 
     async updateClubMember(club_id: string, user_id: string, updates: Partial<Club_Members>){
         try{
-            const req = await fetch(`${clubMemberApiUrl}/${club_id}`, {
+            const req = await fetch(`${clubMemberApiUrl}/${club_id}/${user_id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ user_id, updates }),
+                body: JSON.stringify({ updates }),
                 credentials: "include"
             });
 
@@ -700,10 +702,9 @@ export const ExtensionService = {
 
     async deleteClubMember(club_id: string, user_id: string){
         try{
-            const req = await fetch(`${clubMemberApiUrl}/${club_id}`, {
+            const req = await fetch(`${clubMemberApiUrl}/${club_id}/${user_id}`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ user_id }),
                 credentials: "include"
             });
 
@@ -716,5 +717,279 @@ export const ExtensionService = {
             console.error("error", error);
             throw error;
         }
-    }
+    },
+
+    // EVENTS
+
+    async getAllEvents(){
+        try{
+            const req = await fetch(`${eventApiUrl}/`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const data: Events[] = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getEvent(id: string){
+        try{
+            const req = await fetch(`${eventApiUrl}/${id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const data: Events = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getClubEvents(club_id: string){
+        try{
+            const req = await fetch(`${eventApiUrl}/clubs/${club_id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const data: Events[] = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getPossibleUserEvents(user_id: string){
+        try{
+            const req = await fetch(`${eventApiUrl}/user/${user_id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const data: Events[] = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async addEvent(event: Events){
+        try{
+            const req = await fetch(`${eventApiUrl}/`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ event }),
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const data: Events = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async updateEvent(event_id: string, event: Partial<Events>){
+        try{
+            const req = await fetch(`${eventApiUrl}/${event_id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ event }),
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const data: Events = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async deleteEvent(event_id: string){
+        try{
+            const req = await fetch(`${eventApiUrl}/${event_id}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const data: Events = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    // PLAYERS
+
+    async getAllPlayers(){
+        try{
+            const req = await fetch(`${playerApiUrl}/`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const data: Players[] = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getPlayer(event_id: string, user_id: string){
+        try{
+            const req = await fetch(`${playerApiUrl}/${event_id}/${user_id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const data: Players = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getEventPlayers(event_id: string){
+        try{
+            const req = await fetch(`${playerApiUrl}/events/${event_id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const data: Players[] = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getUserPlayers(user_id: string){
+        try{
+            const req = await fetch(`${playerApiUrl}/user/${user_id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const data: Players[] = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async addPlayer(event_id: string, user_id: String, approved: boolean){
+        try{
+            const req = await fetch(`${playerApiUrl}/`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ event_id, user_id, approved }),
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const data: Players = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async updatePlayer(event_id: string, user_id: string, updates: Partial<Players>){
+        try{
+            const req = await fetch(`${playerApiUrl}/${event_id}/${user_id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ updates }),
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const data: Players = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async deletePlayer(event_id: string, user_id: string){
+        try{
+            const req = await fetch(`${playerApiUrl}/${event_id}/${user_id}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const data: Players = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
 };

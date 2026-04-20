@@ -1,0 +1,30 @@
+.dropdown-btn{
+    border: none;
+    border-radius: 0px;
+    background: var(--color-bg);
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    transition: all 100ms ease;
+    align-items: center;
+}
+
+.dropdown-btn:hover{
+    color: var(--color-accent);
+    background: var(--color-bg);
+}
+
+.dropdown-btn .arrow{
+    width: clamp(0.95rem, 0.8rem + 0.4vw, 1.1rem);
+    height: auto;
+    fill: var(--color-text);
+    transition: all 100ms ease;
+}
+
+.dropdown-btn:hover .arrow{
+    fill: var(--color-accent);
+}
+
+.dropdown-btn.active .arrow{
+    transform: rotate(-90deg);
+}

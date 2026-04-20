@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Level } from "../../utils/schemas";
-import "./LevelChooser.css";
-import Button from "./buttons/Button";
+import { Level } from "../../../utils/schemas";
+import "./Chooser.css";
+import Button from "../buttons/Button";
 
 type LevelChooserProp = {
     isPlayer: boolean;
@@ -18,7 +18,7 @@ export default function LevelChooser({ isPlayer, level, setLevel }: LevelChooser
     }
 
     return (
-        <div className="level-chooser">
+        <div className="chooser">
             <Button content={ level } onBtnClick={ () => setIsDropdownOpen(!isDropdownOpen) } additionalClasses="current"/>
             <div className={`drop-down ${isDropdownOpen ? "active" : ""}`}>
                 <button onClick={ () => dropdownClicked(Level.BEGINNER) }>Beginner</button>

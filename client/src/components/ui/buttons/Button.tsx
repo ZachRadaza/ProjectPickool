@@ -4,16 +4,18 @@ type ButtonProp = {
     content: string;
     onBtnClick: () => void;
     additionalClasses?: string;
+    isDisabled?: boolean;
 }
 
-export default function Button({ content, onBtnClick, additionalClasses }: ButtonProp){
+export default function Button({ content, onBtnClick, additionalClasses, isDisabled }: ButtonProp){
     return (
         <button
             className={ `button ${additionalClasses}` }
             onClick={ (e) => {
                 e.stopPropagation();
-                onBtnClick() 
+                onBtnClick();
             }}
+            disabled={ isDisabled ?? false }
         >
             { content }
             <svg className="pickleball" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 125" fill="currentColor">

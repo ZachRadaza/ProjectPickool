@@ -192,4 +192,8 @@
         min-height: min(200px, 30vh);
         max-height: min(200px, 30vh);
     }
+
+    .opened-club .content .headers{
+        padding-top: 1rem;
+    }
 }

@@ -203,8 +203,7 @@ export async function getClubMembersNum(req: Request, res: Response){
 
 export async function addClubMember(req: Request, res: Response){
     try{
-        const { club_id } = req.params;
-        const { user_id } = req.body;
+        const { user_id, club_id } = req.body;
 
         if(!club_id || typeof club_id !== "string")
             return res.status(400).json({
@@ -235,8 +234,8 @@ export async function addClubMember(req: Request, res: Response){
 
 export async function updateClubMember(req: Request, res: Response){
     try{
-        const { club_id } = req.params;
-        const { user_id, updates} = req.body;
+        const { club_id, user_id } = req.params;
+        const { updates } = req.body;
 
         if(!club_id || typeof club_id !== "string")
             return res.status(400).json({
@@ -267,8 +266,7 @@ export async function updateClubMember(req: Request, res: Response){
 
 export async function deleteClubMember(req: Request, res: Response){
     try{
-        const { club_id } = req.params;
-        const { user_id } = req.body;
+        const { club_id, user_id } = req.params;
 
         if(!club_id || typeof club_id !== "string")
             return res.status(400).json({

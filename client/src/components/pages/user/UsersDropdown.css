@@ -1,0 +1,27 @@
+.users-dropdown-cont{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    border-bottom: 0.1rem solid var(--color-text);
+    height: max-content;
+}
+
+.users-dropdown-cont .dropdown{
+    display: flex;
+    flex-direction: column;
+    transition: height 200ms ease;
+}
+
+.users-dropdown-cont .dropdown.mini{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(3rem, 5rem));
+    gap: 1rem;
+    place-items: center;
+    transition: height 200ms ease;
+    padding: 0px 1rem;
+}
+
+.users-dropdown-cont .dropdown.mini.active{
+    padding: 0.3rem 1rem;
+}

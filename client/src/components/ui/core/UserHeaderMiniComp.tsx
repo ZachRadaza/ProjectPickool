@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import type { UserHeader } from "../../utils/schemas";
+import type { UserHeader } from "../../../utils/schemas";
 import ".//UserHeaderMiniComp.css";
 
 type UserHeaderMiniCompProp = {

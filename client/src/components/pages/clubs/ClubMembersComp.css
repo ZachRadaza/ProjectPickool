@@ -2,36 +2,3 @@
     display: flex;
     flex-direction: column;
 }
-
-.club-members-cont .dropdown-cont{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    overflow: hidden;
-}
-
-.club-members-cont .dropdown-cont button{
-    border: none;
-    border-radius: 0px;
-    border-bottom: 0.1rem solid var(--color-text);
-    background: var(--color-bg);
-    text-align: left;
-}
-
-.club-members-cont .dropdown-cont button:hover{
-    background: var(--color-accent);
-}
-
-.club-members-cont .dropdown{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 4rem);
-    gap: 1rem;
-    place-items: center;
-    transition: height 200ms ease;
-    padding: 0px 1rem;
-    z-index: 85;
-}
-
-.club-members-cont .dropdown.active{
-    padding: 1rem 1rem;
-}

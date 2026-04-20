@@ -2,7 +2,7 @@ import { useOutletContext, useNavigate } from "react-router-dom";
 import { type Club_Members, type UserClubRequests, type UserClubs, type UserHeader } from "../utils/schemas";
 import { useEffect, useState } from "react";
 import { ExtensionService } from "../utils/ExtensionService";
-import ClubsComp from "../components/ui/ClubsComp";
+import ClubsComp from "../components/ui/core/ClubsComp";
 import Loading from "./Loading";
 import ErrorPage from "./Error";
 import "./Clubs.css";

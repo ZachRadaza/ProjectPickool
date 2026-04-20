@@ -1,23 +1,22 @@
-.level-chooser{
+.chooser{
     position: relative;
     display: flex;
     flex-direction: column;
-    width: fit-content;
-    min-width: 20ch;
+    min-width: 15ch;
 }
 
-.level-chooser .current{
+.chooser .current{
     position: relative;
     z-index: 1;
     transition: border-radius 100ms ease;
 }
 
-.level-chooser:has(.drop-down.active) .current{
+.chooser:has(.drop-down.active) .current{
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
 }
 
-.level-chooser .drop-down{
+.chooser .drop-down{
     position: absolute;
     top: 100%;
     width: 100%;
@@ -30,17 +29,17 @@
     transition: transform 400ms ease, opacity 200ms ease;
 }
 
-.level-chooser .drop-down.active{
+.chooser .drop-down.active{
     pointer-events: auto;
     opacity: 1;
     transform: translateY(0%);
 }
 
-.level-chooser .drop-down button{
+.chooser .drop-down button{
     border-radius: 0px;
 }
 
-.level-chooser .drop-down button:last-child{
+.chooser .drop-down button:last-child{
     border-bottom-left-radius: 1rem;
     border-bottom-right-radius: 1rem;
 }

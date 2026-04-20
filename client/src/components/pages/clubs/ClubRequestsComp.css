@@ -1,0 +1,9 @@
+.club-reqs-cont{
+    display: flex;
+    flex-direction: column;
+}
+
+.club-reqs-cont .no-reqs{
+    text-align: center;
+    padding: 2rem;
+}

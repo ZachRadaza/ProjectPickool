@@ -18,7 +18,7 @@ export type Level = (typeof Level)[keyof typeof Level];
 
 export const Sex = {
     MALE: "males",
-    FEMALE: "female",
+    FEMALE: "females",
     MIXED: "mixed"
 } as const;
 
@@ -107,6 +107,12 @@ export type Clubs = {
     banner_file?: File | null;
 };
 
+export type ClubHeader = {
+    id: string | null;
+    name: string;
+    profile_pic?: string | null;
+}
+
 export type UserClubs = {
     role: Role;
     is_favorite: boolean;
@@ -116,27 +122,35 @@ export type UserClubs = {
 }
 
 export type Events = {
-    id: string;
-    club_id: string;
-    date: Date;
-    location: Location;
-    price: number;
-    description: string;
-    banner: string;
-    is_auto_approved: string;
-    is_public: string;
+    id?: string | null;
+    name: string;
+    club_id?: string;
+    club?: ClubHeader;
+    start_time: string;
+    end_time: string;
+    location?: Location | null;
+    price: number | null;
+    description?: string | null;
+    is_auto_approve: boolean;
+    is_tournament: boolean;
     is_dupr: boolean;
     is_singles: boolean;
     sex: Sex;
-    level: string;
-    max_players: number;
+    level: Level;
+    max_players: number | null;
     recurring: Recurring;
 }
 
-export type Players = Club_Members & {
+export type Players = {
+    user: UserHeader | null;
     event_id: string;
-    position: number;
+    approved: boolean;
 };
+
+export type EventPlayer = {
+    event: Events;
+    player: Players | null;
+}
 
 export type Posts = {
     id: string;

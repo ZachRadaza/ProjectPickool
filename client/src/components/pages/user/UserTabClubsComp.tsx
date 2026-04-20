@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { UserClubs, Users } from "../../../utils/schemas";
-import ClubsComp from "../../ui/ClubsComp";
+import ClubsComp from "../../ui/core/ClubsComp";
 import { ExtensionService } from "../../../utils/ExtensionService";
 import Loading from "../../../pages/Loading";
 import ErrorPage from "../../../pages/Error";

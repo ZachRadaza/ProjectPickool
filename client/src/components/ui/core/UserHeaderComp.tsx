@@ -1,21 +1,25 @@
-import type { Club_Members, UserHeader } from "../../utils/schemas";
+import type { Club_Members, UserHeader } from "../../../utils/schemas";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./UserHeaderComp.css";
-import Button from "./buttons/Button";
+import Button from "../buttons/Button";
 
 type UserHeaderCompProp = {
     userHeader: UserHeader | null;
     clubInfoHeader?: Club_Members | null;
     isRequest?: boolean;
+    disableBtns?: boolean;
     approveClicked?: () => void;
     denyClicked?: () => void;
 };
 
-export default function UserHeaderComp({ userHeader, clubInfoHeader, isRequest, approveClicked, denyClicked }: UserHeaderCompProp){
+export default function UserHeaderComp({ userHeader, clubInfoHeader, isRequest, disableBtns, approveClicked, denyClicked }: UserHeaderCompProp){
     const navigate = useNavigate();
     const location = useLocation();
 
     function openUserProfile(){
+        if(disableBtns)
+            return;
+
         const params = new URLSearchParams(location.search);
         params.set("previewuser", userHeader?.id ?? "");
         navigate(`${location.pathname}?${params.toString()}`);
@@ -48,6 +52,7 @@ export default function UserHeaderComp({ userHeader, clubInfoHeader, isRequest, 
                                     approveClicked(); 
                             }}
                             content="Approve"
+                            isDisabled={ disableBtns }
                         />
                         <Button
                             onBtnClick={ () => {

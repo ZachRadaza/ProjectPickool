@@ -1,0 +1,19 @@
+.calendar-comp-cont{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.calendar-comp-cont .tabs{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.calendar-comp-cont .events-list-cont,
+.calendar-comp-cont .events-on-date
+{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}

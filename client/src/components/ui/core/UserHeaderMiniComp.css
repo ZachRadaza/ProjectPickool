@@ -7,22 +7,18 @@
     cursor: pointer;
 }
 
+.user-header-mini-cont > *{ transition: all 100ms ease; }
+
 .user-header-mini-cont .profile-pic{
     border: 0.1rem solid var(--color-text);
     border-radius: 999px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
     place-items: center;
-    width: 4rem;
+    width: clamp(3rem, 8vw, 5rem);
     height: auto;
-    transition: border 100ms ease;
 }
 
-.user-header-mini-cont:hover .profile-pic{
-    border-color: var(--color-accent);
-}
+.user-header-mini-cont:hover .profile-pic{ border-color: var(--color-accent); }
 
-.user-header-mini-cont .role{
-    opacity: 0.7;
-    font-size: 1.2rem;
-}
+.user-header-mini-cont:hover .name{ color: var(--color-accent); }

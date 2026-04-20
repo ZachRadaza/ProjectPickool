@@ -26,7 +26,7 @@ export type RequestStatus = (typeof RequestStatus)[keyof typeof RequestStatus];
 
 export const Sex = {
     MALE: "males",
-    FEMALE: "female",
+    FEMALE: "females",
     MIXED: "mixed"
 } as const;
 
@@ -81,7 +81,7 @@ export type Clubs = {
     id?: string | null;
     name: string;
     description?: string;
-    level: string;
+    level: Level;
     location?: Location | null;
     location_id?: string | null;
     is_public: boolean;
@@ -92,6 +92,12 @@ export type Clubs = {
     banner_path?: string | null;
     banner_file?: string | null;
 };
+
+export type ClubHeader = {
+    id: string | null;
+    name: string;
+    profile_pic?: string | null;
+}
 
 export type Club_Members = {
     user: UserHeader
@@ -116,26 +122,29 @@ export type UserClubRequest = {
 }
 
 export type Events = {
-    id: string;
-    club_id: string;
-    date: Date;
-    location: Location;
+    id?: string | null;
+    name: string;
+    club_id?: string;
+    club?: ClubHeader;
+    start_time: string;
+    end_time: string;
+    location?: Location | null;
     price: number;
-    description: string;
-    banner: string;
-    is_auto_approved: string;
-    is_public: string;
+    description?: string | null;
+    is_auto_approve: boolean;
+    is_tournament: boolean;
     is_dupr: boolean;
     is_singles: boolean;
     sex: Sex;
-    level: string;
+    level: Level;
     max_players: number;
     recurring: Recurring;
 }
 
-export type Players = Club_Members & {
+export type Players = {
+    user: UserHeader;
     event_id: string;
-    position: number;
+    approved: boolean;
 };
 
 export type Posts = {

@@ -4,7 +4,7 @@ import { ExtensionService } from "../../../utils/ExtensionService";
 import { Level, type Clubs, type UserHeader } from "../../../utils/schemas";
 import { wait } from "../../../utils/random";
 import CloseButton from "../../ui/buttons/CloseButton";
-import LevelChooser from "../../ui/LevelChooser";
+import LevelChooser from "../../ui/choosers/LevelChooser";
 import { useNavigate } from "react-router-dom";
 import Button from "../../ui/buttons/Button";
 import "../popup.css";

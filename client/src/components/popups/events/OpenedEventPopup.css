@@ -1,0 +1,95 @@
+.opened-event .headers{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.opened-event .headers .date{
+    opacity: 0.7;
+}
+
+.opened-event .headers .tags{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+.opened-event .event-actions-cont{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    width: 100%;
+}
+
+.opened-event .host-club{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.opened-event .host-club .club{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+    width: fit-content;
+    margin: 0.3rem 1rem;
+}
+
+.opened-event .host-club .club .profile-pic{
+    border-radius: 999px;
+    width: clamp(3rem, 8vw, 5rem);
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border: 0.1rem solid var(--color-text);
+}
+
+.opened-event .host-club .club > *{ transition: all 100ms ease; }
+.opened-event .host-club .club:hover .profile-pic{ border-color: var(--color-accent); }
+.opened-event .host-club .club:hover .name{ color: var(--color-accent); }
+
+.opened-event .info{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.opened-event .info .info-line{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}
+
+.opened-event .info .info-line svg{
+    width: 2.5rem;
+    height: auto;
+    fill: var(--color-text);
+    color: var(--color-text);
+}
+
+.opened-event .info .info-line .line{
+    display: flex;
+    flex-direction: column;
+}
+
+.opened-event .desc-cont{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+}
+
+.opened-event .approved-cont,
+.opened-event .not-approved-cont{
+    width: 100%;
+}
+
+.opened-event .cant-join-message{
+    opacity: 0.7;
+    font-style: italic;
+}

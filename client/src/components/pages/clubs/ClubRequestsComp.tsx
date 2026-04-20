@@ -3,7 +3,8 @@ import type { Club_Requests } from "../../../utils/schemas";
 import Loading from "../../../pages/Loading";
 import ErrorPage from "../../../pages/Error";
 import { ExtensionService } from "../../../utils/ExtensionService";
-import UserHeaderComp from "../../ui/UserHeaderComp";
+import UserHeaderComp from "../../ui/core/UserHeaderComp";
+import "./ClubRequestsComp.css";
 
 type ClubRequestsCompProp = {
     club_id: string | null;
@@ -83,16 +84,19 @@ export default function ClubRequestsComp({ club_id, setNumRequests }: ClubReques
 
     return (
         <div className="club-reqs-cont">
-            { requests?.map((req) =>
-                <UserHeaderComp 
-                    key={ req.user?.id } 
-                    userHeader={ req.user! } 
-                    clubInfoHeader={ null } 
-                    isRequest={ true }
-                    approveClicked={ () => approveUserRequest(req.user?.id!) }
-                    denyClicked={ () => denyUserRequest(req.user?.id!) }
-                />
-            )}
+            { requests && requests.length > 0
+            ? <>{ requests?.map((req) =>
+                    <UserHeaderComp 
+                        key={ req.user?.id } 
+                        userHeader={ req.user! } 
+                        clubInfoHeader={ null } 
+                        isRequest={ true }
+                        approveClicked={ () => approveUserRequest(req.user?.id!) }
+                        denyClicked={ () => denyUserRequest(req.user?.id!) }
+                    />
+            )}</>
+            :<h6 className="no-reqs">No Club Requests</h6>
+            }
         </div>
     );
 }

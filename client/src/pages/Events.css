@@ -1,0 +1,14 @@
+.events-cont{
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    gap: 1rem;
+}
+
+.events-cont .title{
+    margin: 1rem 3rem;
+}
+
+@media (max-width: 1024px) {
+    .events-cont .title{ margin: 0px; }
+}
