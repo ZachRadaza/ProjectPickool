@@ -10,7 +10,7 @@ export async function getAllClubMembers(req: Request, res: Response){
             data: data
         });
     } catch(error: any){
-        console.log("getAllClubMembers error", error);
+        console.error("getAllClubMembers error", error);
         res.status(500).json({
             success: false,
             error: error
@@ -35,7 +35,7 @@ export async function getClubMembers(req: Request, res: Response){
             data: data
         });
     } catch(error: any){
-        console.log("getClubMembers error", error);
+        console.error("getClubMembers error", error);
         res.status(500).json({
             success: false,
             error: error
@@ -60,7 +60,7 @@ export async function getClubAdmins(req: Request, res: Response){
             data: data
         });
     } catch(error: any){
-        console.log("getClubMembers error", error);
+        console.error("getClubMembers error", error);
         res.status(500).json({
             success: false,
             error: error
@@ -85,7 +85,7 @@ export async function getClubOwner(req: Request, res: Response){
             data: data
         });
     } catch(error: any){
-        console.log("getClubMembers error", error);
+        console.error("getClubMembers error", error);
         res.status(500).json({
             success: false,
             error: error
@@ -110,7 +110,7 @@ export async function getClubUnapproved(req: Request, res: Response){
             data: data
         });
     } catch(error: any){
-        console.log("getClubUnapproved error", error);
+        console.error("getClubUnapproved error", error);
         res.status(500).json({
             success: false,
             error: error
@@ -139,7 +139,7 @@ export async function getSingleClubMember(req: Request, res: Response){
             data: data
         });
     } catch(error: any){
-        console.log("getSingleClubMembers error", error);
+        console.error("getSingleClubMembers error", error);
         res.status(500).json({
             success: false,
             error: error
@@ -168,7 +168,7 @@ export async function getBasicClubMember(req: Request, res: Response){
             data: data
         });
     } catch(error: any){
-        console.log("getSingleClubMembers error", error);
+        console.error("getSingleClubMembers error", error);
         res.status(500).json({
             success: false,
             error: error
@@ -193,7 +193,7 @@ export async function getClubMembersNum(req: Request, res: Response){
             data: data
         });
     } catch(error: any){
-        console.log("getClubMembersNum error", error);
+        console.error("getClubMembersNum error", error);
         res.status(500).json({
             success: false,
             error: error
@@ -224,7 +224,7 @@ export async function addClubMember(req: Request, res: Response){
             data: data
         });
     } catch(error: any){
-        console.log("addClubMember error", error);
+        console.error("addClubMember error", error);
         res.status(500).json({
             success: false,
             error: error
@@ -256,7 +256,7 @@ export async function updateClubMember(req: Request, res: Response){
             data: data
         });
     } catch(error: any){
-        console.log("updateClubMember error", error);
+        console.error("updateClubMember error", error);
         res.status(500).json({
             success: false,
             error: error
@@ -287,7 +287,7 @@ export async function deleteClubMember(req: Request, res: Response){
             data: data
         });
     } catch(error: any){
-        console.log("deleteClubMember error", error);
+        console.error("deleteClubMember error", error);
         res.status(500).json({
             success: false,
             error: error

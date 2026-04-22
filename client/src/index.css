@@ -38,7 +38,7 @@ h2{ font-size: clamp(1.8rem, 4vw, 4rem); }
 h3{ font-size: clamp(1.5rem, 3vw, 3rem); }
 h4{ font-size: clamp(1.3rem, 2.5vw, 2.5rem); }
 h5{ font-size: clamp(1.2rem, 2vw, 2rem); }
-h6{ font-size: clamp(1rem, 1.5vw, 1.5rem); }
+h6{ font-size: clamp(1.1rem, 1.5vw, 1.5rem); }
 
 p{
     font-family: var(--font-body);
@@ -47,9 +47,13 @@ p{
     font-weight: 500;
     padding: 0px; 
     margin: 0px; 
-    font-size: clamp(0.95rem, 0.8rem + 0.4vw, 1.1rem);
+    font-size: clamp(0.8rem, 0.8rem + 0.4vw, 1rem);
     height: min-content;
 }
+
+a{ color: var(--color-secondary); }
+a:hover{ color: var(--color-accent); }
+a:visited{ background-color: color-mix(in srgb, var(--color-accent) 50%, transparent); }
 
 main{ 
     position: relative; 
@@ -81,7 +85,7 @@ input, textarea{
     border: 0.1rem solid var(--color-text);
     background: var(--color-bg);
     border-radius: 1rem;
-    font-size: clamp(0.95rem, 0.8rem + 0.4vw, 1.1rem);
+    font-size: clamp(0.8rem, 0.8rem + 0.4vw, 1rem);
 }
 
 input:placeholder-shown, textarea:placeholder-shown{
@@ -94,7 +98,7 @@ button{
     background: var(--color-primary);
     border: 0.1rem solid var(--color-text);
     padding: 0.3rem 0.8rem;
-    font-size: clamp(1rem, 1.5vw, 1.5rem);;
+    font-size: clamp(1rem, 1.5vw, 1.5rem);
     text-align: center;
     border-radius: 1rem;
     cursor: pointer;

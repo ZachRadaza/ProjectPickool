@@ -43,7 +43,8 @@ export async function getUserHeader(id: string){
         .select(`
             id,
             username,
-            profile_pic    
+            profile_pic,
+            location:locations(*)
         `)
         .eq("id", id)
         .single();

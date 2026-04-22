@@ -1,0 +1,29 @@
+.icon-comp-cont{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    margin: 0.5rem 0px;
+}
+
+.icon-comp-cont svg{
+    fill: var(--color-text);
+    color: var(--color-text);
+    stroke: var(--color-text);
+    width: 2.5rem;
+    height: auto;
+    flex-shrink: 0;
+}
+
+.icon-comp-cont .right-side{
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.icon-comp-cont .right-side .bottom{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-width: 0;
+}

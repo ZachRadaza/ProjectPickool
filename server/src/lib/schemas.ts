@@ -53,10 +53,10 @@ export type LikeType = (typeof LikeType)[keyof typeof LikeType];
 
 export type Locations = {
     id?: string | null;
-    name: string;
+    name?: string;
     latitude: number;
     longitude: number;
-    location_id: number;
+    address?: string;
 }
 
 export type Users = {
@@ -66,7 +66,7 @@ export type Users = {
     profile_pic?: string | null;
     profile_pic_path: string | null;
     phone?: string | null;
-    location?: Location | null;
+    location?: Locations | null;
     location_id?: string | null;
     description?: string | null;
 };
@@ -82,7 +82,7 @@ export type Clubs = {
     name: string;
     description?: string;
     level: Level;
-    location?: Location | null;
+    location?: Locations | null;
     location_id?: string | null;
     is_public: boolean;
     profile_pic?: string | null;
@@ -97,6 +97,7 @@ export type ClubHeader = {
     id: string | null;
     name: string;
     profile_pic?: string | null;
+    location: Locations | null;
 }
 
 export type Club_Members = {
@@ -128,7 +129,8 @@ export type Events = {
     club?: ClubHeader;
     start_time: string;
     end_time: string;
-    location?: Location | null;
+    location?: Locations | null;
+    location_id?: string | null;
     price: number;
     description?: string | null;
     is_auto_approve: boolean;

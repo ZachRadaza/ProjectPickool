@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import * as eventService from "../services/events.service.js";
 import type { Events } from "../lib/schemas.js";
+import * as locationService from "../services/location.service.js";
 
 export async function getAllEvents(req: Request, res: Response){
     try{
@@ -79,11 +80,17 @@ export async function getPossibleUserEvents(req: Request, res: Response){
                 error: "Event id required"
             });
 
-        const events = await eventService.getPossibleUserEvents(user_id);
+        const eventsClub = await eventService.getPossibleUserClubEvents(user_id);
+        const eventsLoc = await eventService.getPossibleUserLocationEvents(user_id);
+        const events = [...eventsClub, ...eventsLoc];
+
+        const uniqueEvents = Array.from(
+            new Map(events.map(e => [e.id, e])).values()
+        );
 
         res.status(200).json({
             success: true,
-            data: events
+            data: uniqueEvents
         });
     } catch(error: any){
         console.error("getAllPossibleEvents Error: ", error.message);
@@ -94,9 +101,89 @@ export async function getPossibleUserEvents(req: Request, res: Response){
     }
 }
 
+export async function getNearbyUserEvents(req: Request, res: Response){
+    try{
+        const { user_id } = req.params;
+
+        if(!user_id || typeof user_id !== "string")
+            return res.status(400).json({
+                success: false,
+                error: "Event id required"
+            });
+
+        const events = await eventService.getPossibleUserLocationEvents(user_id);
+
+        res.status(200).json({
+            success: true,
+            data: events
+        });
+    } catch(error: any){
+        console.error("getNearUserEvents Error: ", error.message);
+        res.status(500).json({
+            success: false,
+            error: error.message || "Internal Server error"
+        });
+    }
+}
+
+export async function getQueryEvents(req: Request, res: Response){
+    try{
+        const { query } = req.params;
+
+        if(!query || typeof query !== "string")
+            return res.status(400).json({
+                success: false,
+                error: "Event name required"
+            });
+
+        const events = await eventService.getQueryEvents(query);
+
+        res.status(200).json({
+            success: true,
+            data: events
+        });
+    } catch(error: any){
+        console.error("getNearUserEvents Error: ", error.message);
+        res.status(500).json({
+            success: false,
+            error: error.message || "Internal Server error"
+        });
+    }
+}
+
+export async function getQueryNearbyEvents(req: Request, res: Response){
+    try{
+        const { user_id, query } = req.params;
+
+        if(!query || 
+            typeof query !== "string" ||
+            !user_id || 
+            typeof user_id !== "string"
+        )
+            return res.status(400).json({
+                success: false,
+                error: "Event name and user id required"
+            });
+
+        const events = await eventService.getQueryNearbyEvents(user_id, query);
+
+        res.status(200).json({
+            success: true,
+            data: events
+        });
+    } catch(error: any){
+        console.error("getNearUserEvents Error: ", error.message);
+        res.status(500).json({
+            success: false,
+            error: error.message || "Internal Server error"
+        });
+    }
+}
+
 export async function addEvent(req: Request, res: Response){
     try{
         const { event } = req.body;
+        const { location, ...eventNoLoc } = event;
 
         if(!event || validateEventBody(event))
             return res.status(400).json({
@@ -104,7 +191,14 @@ export async function addEvent(req: Request, res: Response){
                 error: "event body must have valid values"
             });
 
-        const addedEvent = await eventService.addEvent(event);
+        let eventUpdatedLoc = { ...eventNoLoc };
+
+        if(location && !location.id){
+            const locationNew = await locationService.locationExists(location);
+            eventUpdatedLoc = { ...eventNoLoc,  location_id: locationNew.id };
+        }
+
+        const addedEvent = await eventService.addEvent(eventUpdatedLoc);
 
         res.status(200).json({
             success: true,
@@ -124,6 +218,8 @@ export async function updateEvent(req: Request, res: Response){
         const { id } = req.params;
         const { event } = req.body;
 
+        const { location, ...eventNoLoc } = event;
+
         if(!id || typeof id !== "string")
             return res.status(400).json({
                 success: false,
@@ -136,7 +232,14 @@ export async function updateEvent(req: Request, res: Response){
                 error: "event body must have valid values"
             });
 
-        const updatedEvent = await eventService.updateEvent(id, event);
+        let eventUpdatedLoc = { ...eventNoLoc };
+
+        if(location && !location.id){
+            const locationNew = await locationService.locationExists(location);
+            eventUpdatedLoc = { ...eventNoLoc,  location_id: locationNew.id };
+        }
+
+        const updatedEvent = await eventService.updateEvent(id, eventUpdatedLoc);
 
         res.status(200).json({
             success: true,

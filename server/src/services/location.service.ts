@@ -26,29 +26,31 @@ export async function getLocation(id: string){
 }
 
 export async function locationExists(location: Locations){
-    let { data, error } = await supabase
+    const { data: getData, error: getError } = await supabase
         .from("locations")
         .select("*")
         .eq("longitude", location.longitude)
         .eq("latitude", location.latitude)
-        .single();
+        .limit(1);
 
-    if(error)
-        throw new Error(error.message);
+    if(getError)
+        throw new Error(getError.message);
 
-    if(!data)
-        data = await addLocation(location);
+    if(getData.length > 0)
+        return getData[0];
 
-    return data;
+    const addData = await addLocation(location);
+
+    return addData;
 }
 
 export async function addLocation(location: Locations){
     const { data, error } = await supabase
         .from("locations")
-        .insert([location])
+        .insert([ location ])
         .select("*")
         .single();
-    
+
     if(error)
         throw new Error(error.message);
 

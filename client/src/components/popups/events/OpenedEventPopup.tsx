@@ -12,6 +12,10 @@ import Button from "../../ui/buttons/Button";
 import EditButton from "../../ui/buttons/EditButton";
 import DeleteButton from "../../ui/buttons/DeleteButton";
 import UsersDropdown from "../../pages/user/UsersDropdown";
+import LocationIconComp from "../../ui/icons/LocationIconComp";
+import DateIconComp from "../../ui/icons/DateIconComp";
+import PriceIconComp from "../../ui/icons/PriceIconComp";
+import EventInfoIconComp from "../../ui/icons/EventInfoIconComp";
 
 type OpenedEventPopupProp = {
     isClosed: boolean;
@@ -248,47 +252,26 @@ export default function OpenedEventPopup({ isClosed, setIsClosed, event_id, setC
                     />
                 </div>
             }
-            <div className="info">
-                <div className="info-line">
-                    <svg viewBox="-0.5 0 15 15" xmlns="http://www.w3.org/2000/svg">
-                        <path fillRule="evenodd" d="M61,154.006845 C61,153.45078 61.4499488,153 62.0068455,153 L73.9931545,153 C74.5492199,153 75,153.449949 75,154.006845 L75,165.993155 C75,166.54922 74.5500512,167 73.9931545,167 L62.0068455,167 C61.4507801,167 61,166.550051 61,165.993155 L61,154.006845 Z M62,157 L74,157 L74,166 L62,166 L62,157 Z M64,152.5 C64,152.223858 64.214035,152 64.5046844,152 L65.4953156,152 C65.7740451,152 66,152.231934 66,152.5 L66,153 L64,153 L64,152.5 Z M70,152.5 C70,152.223858 70.214035,152 70.5046844,152 L71.4953156,152 C71.7740451,152 72,152.231934 72,152.5 L72,153 L70,153 L70,152.5 Z" transform="translate(-61 -152)"/>
-                    </svg>
-                    <div className="lines">
-                        <h6>
-                            { new Date(event?.start_time!).toLocaleDateString(undefined, {
-                                weekday: "short",
-                                month: "short",
-                                day: "numeric",
-                            })}
-                        </h6>
-                        <p className="times">{
-                            `${ event?.start_time ? new Date(event.start_time).toLocaleTimeString([], {
-                                hour: "2-digit",
-                                minute: "2-digit"
-                            }) : "" } - ${ event?.end_time ? new Date(event.end_time).toLocaleTimeString([], {
-                                hour: "2-digit",
-                                minute: "2-digit"
-                            }) : "" }`}
-                        </p>
-                    </div>
+            { event && 
+                <div className="icons">
+                    <DateIconComp 
+                        startTime={ event?.start_time } 
+                        endTime={ event?.end_time } 
+                        name={ event.name }
+                        description={ event.description }
+                        address={ event.location?.address }
+                    />
+                    <EventInfoIconComp 
+                        isDUPR={ event?.is_dupr } 
+                        isSingles={ event?.is_singles } 
+                        isTournament={ event?.is_tournament } 
+                        level={ event?.level }
+                        sex={ event?.sex }
+                    />
+                    <LocationIconComp location={ event?.location ?? null } />
+                    <PriceIconComp price={ event?.price } />
                 </div>
-                <div className="info-line">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1.6 -3.2 35.2 43.2">
-                        <path d="M5.99,28.46l-.81,.81c-.3,.3-.78,.3-1.08,0l-1.37-1.37c-.3-.3-.3-.78,0-1.08l.85-.85c.08-.08,.2-.08,.28,0l3.52-3.52,2.17,2.17-3.52,3.52s.06,.22-.04,.32Z"/>
-                        <path d="M28.05,15.49l-6.42,6.42c-1.58,1.58-3.96,1.86-5.82,.84h0c-2.73-.99-4.14,.42-4.14,.42l-.37,.37c-.21,.21-.55,.21-.77,0l-2.07-2.07c-.21-.21-.21-.55,0-.77l.37-.37s1.41-1.42,.42-4.14h0c-1.02-1.86-.74-4.25,.84-5.82l6.42-6.42c1.92-1.92,5.03-1.92,6.95,0l4.6,4.6c1.92,1.92,1.92,5.03,0,6.95Z"/>
-                    </svg>
-                    <div className="lines">
-                        <h6>{event?.is_singles ? "Singles" : "Doubles"} { event?.is_tournament ? "Tournament" : "Casual" }</h6>
-                        <p>{ event?.is_dupr ? "DUPR •" : "" } { capitalizeWords(event?.sex) } • { capitalizeWords(event?.level) }</p>
-                    </div>
-                </div>
-                <div className="info-line">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M21 12.692 11.308 3H3v8.308L12.692 21ZM9.923 9.923a1.958 1.958 0 1 1 0-2.769 1.957 1.957 0 0 1 0 2.769Z"/>
-                    </svg>
-                    <h6>{ event?.price === 0 ? "Free" : `₱${event?.price}` }</h6>
-                </div>
-            </div>
+            }
             { event?.description &&
                 <div className="desc-cont">
                     <h6>Description</h6>

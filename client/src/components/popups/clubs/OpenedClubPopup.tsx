@@ -18,6 +18,7 @@ import MoreButton from "../../ui/buttons/MoreButton";
 import Button from "../../ui/buttons/Button";
 import { capitalizeWords } from "../../../utils/random";
 import FavoriteButton from "../../ui/buttons/FavoriteButton";
+import LocationIconComp from "../../ui/icons/LocationIconComp";
 
 export const TabType = {
     EVENTS: "events",
@@ -208,7 +209,6 @@ export default function OpenedClubPopup({
                 setError("Error occured in opening club");
                 setIsLoading(false);
             }
-
             setClub(data);
         }
 
@@ -262,8 +262,8 @@ export default function OpenedClubPopup({
                 <div className="modify-club-cont">
                     { (userClubMember?.role === Role.OWNER || userClubMember?.role === Role.ADMIN) &&
                         <>
-                            <EditButton onBtnClick={ editClubBtn } />
                             <DeleteButton onBtnClick={ deleteClubBtn } />
+                            <EditButton onBtnClick={ editClubBtn } />
                         </>
                     }
                     { userClubMember &&
@@ -284,6 +284,7 @@ export default function OpenedClubPopup({
                         <p className="attribute-tag secondary">{ club?.is_public ? "Public" : "Private" }</p>
                         <p className="attribute-tag secondary">{ capitalizeWords(club?.level) }</p>
                     </div>
+                    <LocationIconComp location={ club?.location ?? null } />
                     <p className="desc">
                         { club?.description }
                     </p>

@@ -263,6 +263,60 @@ export const ExtensionService = {
         }
     },
 
+    async getNearbyClubs(user_id: string){
+        try{
+            const req = await fetch(`${clubApiUrl}/near/${user_id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Clubs[] = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getQueryClubs(query: string){
+        try{
+            const req = await fetch(`${clubApiUrl}/query/${query}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Clubs[] = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getQueryNearbyClubs(user_id: string, query: string){
+        try{
+            const req = await fetch(`${clubApiUrl}/querynear/${user_id}/${query}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Clubs[] = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
     async addClub(club: Clubs, owner_id: string){
         try{
             const form = new FormData();
@@ -272,7 +326,7 @@ export const ExtensionService = {
             if(club.description) form.append("description", club.description);
             if(club.level) form.append("level", club.level);
             if(club.is_public) form.append("is_public", String(club.is_public));
-            if(club.location) form.append("location", JSON.stringify(location));
+            if(club.location) form.append("location", JSON.stringify(club.location));
             if(club.banner_file) form.append("banner_file", club.banner_file);
             if(club.profile_pic_file  instanceof File) form.append("profile_pic_file", club.profile_pic_file);
 
@@ -304,7 +358,7 @@ export const ExtensionService = {
             if(club.description) form.append("description", club.description);
             if(club.level) form.append("level", club.level);
             if(club.is_public !== undefined) form.append("is_public", String(club.is_public));
-            if(club.location) form.append("location", JSON.stringify(location));
+            if(club.location) form.append("location", JSON.stringify(club.location));
             if(club.profile_pic_file  instanceof File) form.append("profile_pic_file", club.profile_pic_file);
             if(club.profile_pic_path) form.append("profile_pic_path", club.profile_pic_path);
             if(club.banner_file  instanceof File) form.append("banner_file", club.banner_file);            
@@ -781,6 +835,63 @@ export const ExtensionService = {
     async getPossibleUserEvents(user_id: string){
         try{
             const req = await fetch(`${eventApiUrl}/user/${user_id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const data: Events[] = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getNearUserEvents(user_id: string){
+        try{
+            const req = await fetch(`${eventApiUrl}/near/${user_id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const data: Events[] = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getQueryEvents(query: string){
+        try{
+            const req = await fetch(`${eventApiUrl}/query/${query}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+
+            const data: Events[] = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getQueryNearUserEvents(user_id: string, query: string){
+        try{
+            const req = await fetch(`${eventApiUrl}/querynear/${user_id}/${query}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include"

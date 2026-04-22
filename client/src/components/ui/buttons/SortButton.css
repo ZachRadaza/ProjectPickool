@@ -1,0 +1,9 @@
+.sort-btn{
+    padding: 0.2rem 0.8rem;
+}
+
+.sort-btn svg{
+    width: 1rem;
+    height: auto;
+    stroke: var(--color-text);
+}

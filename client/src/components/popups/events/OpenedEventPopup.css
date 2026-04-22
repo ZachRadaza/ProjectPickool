@@ -51,30 +51,10 @@
 .opened-event .host-club .club:hover .profile-pic{ border-color: var(--color-accent); }
 .opened-event .host-club .club:hover .name{ color: var(--color-accent); }
 
-.opened-event .info{
+.opened-event .icons{
     display: flex;
     flex-direction: column;
-    gap: 1rem;
     width: 100%;
-}
-
-.opened-event .info .info-line{
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    align-items: center;
-}
-
-.opened-event .info .info-line svg{
-    width: 2.5rem;
-    height: auto;
-    fill: var(--color-text);
-    color: var(--color-text);
-}
-
-.opened-event .info .info-line .line{
-    display: flex;
-    flex-direction: column;
 }
 
 .opened-event .desc-cont{

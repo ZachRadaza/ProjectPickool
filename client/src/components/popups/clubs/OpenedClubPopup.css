@@ -180,11 +180,15 @@
     }
 
     .opened-club .content .profile-pic{ 
-        top: -55%;
+        top: -40%;
         left: 1rem;
     }
 
-    .opened-club .content .modify-club-cont{ gap: 0rem; }
+    .opened-club .content .modify-club-cont{ 
+        gap: 0.5rem; 
+        flex-direction: column-reverse;
+        right: 0px;
+    }
 
     .opened-club .banner{
         display: flex;

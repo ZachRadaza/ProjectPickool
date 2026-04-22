@@ -44,9 +44,11 @@ export const LikeType = {
 export type LikeType = (typeof LikeType)[keyof typeof LikeType];
 
 export type Locations = {
-    name: string;
+    id?: string | null;
+    name?: string;
     latitude: number;
     longitude: number;
+    address?: string;
 }
 
 export type Users = {
@@ -57,7 +59,7 @@ export type Users = {
     profile_pic_file?: File | null;
     profile_pic_path?: string | null;
     phone?: string | null;
-    location?: Location | null;
+    location?: Locations | null;
     description?: string | null;
 };
 
@@ -65,6 +67,7 @@ export type UserHeader = {
     id: string;
     username: string;
     profile_pic: string;
+    location?: Locations | null;
 }
 
 export type Club_Members_Basic = {
@@ -96,7 +99,7 @@ export type Clubs = {
     name: string;
     description?: string;
     level: Level;
-    location?: Location | null;
+    location?: Locations | null;
     location_id?: string | null;
     is_public: boolean;
     profile_pic?: string | null;
@@ -128,7 +131,8 @@ export type Events = {
     club?: ClubHeader;
     start_time: string;
     end_time: string;
-    location?: Location | null;
+    location?: Locations | null;
+    location_id?: string | null;
     price: number | null;
     description?: string | null;
     is_auto_approve: boolean;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Level, Recurring, Sex, type Events, type UserHeader } from "../../../utils/schemas";
+import { Level, Recurring, Sex, type Events, type Locations, type UserHeader } from "../../../utils/schemas";
 import CloseButton from "../../ui/buttons/CloseButton";
 import "../popup.css";
 import Loading from "../../../pages/Loading";
@@ -10,6 +10,7 @@ import LevelChooser from "../../ui/choosers/LevelChooser";
 import RecurringChooser from "../../ui/choosers/RecurringChooser";
 import SexChooser from "../../ui/choosers/SexChooser";
 import "./ModifyEventPopup.css";
+import LocationInput from "../../ui/inputs/LocationInput";
 
 type ModifyEventPopup = {
     userHeader: UserHeader | null;
@@ -62,9 +63,8 @@ export default function ModifyEventPopup({ isClosed, setIsClosed, userHeader, is
         } else 
             setMessage("");
 
-        const updates: Partial<Events> = {};
+        const updates: Partial<Events> = { name: event.name };
 
-        if(event.name !== eventCopy?.name) updates.name = event.name; 
         if(event.description !== eventCopy?.description) updates.description = event.description;
         if(event.start_time !== eventCopy?.start_time) updates.start_time = event.start_time;
         if(event.end_time !== eventCopy?.end_time) updates.end_time = event.end_time;
@@ -77,6 +77,14 @@ export default function ModifyEventPopup({ isClosed, setIsClosed, userHeader, is
         if(event.is_dupr !== eventCopy?.is_dupr) updates.is_dupr = event.is_dupr;
         if(event.is_singles !== eventCopy?.is_singles) updates.is_singles = event.is_singles;
         if(event.is_tournament !== eventCopy?.is_tournament) updates.is_tournament = event.is_tournament;
+
+        if(
+            JSON.stringify(event?.location) !== JSON.stringify(eventCopy?.location) &&
+            event?.location
+        )
+            updates.location = event?.location;
+
+        console.log(updates);
 
         const updated = await ExtensionService.updateEvent(event_id, updates);
 
@@ -175,6 +183,7 @@ export default function ModifyEventPopup({ isClosed, setIsClosed, userHeader, is
                     };
 
                     setEvent(eventNew);
+                    setEventCopy({ ...eventNew });
                 } else {
                     const eventData = await ExtensionService.getEvent(event_id);
 
@@ -184,8 +193,8 @@ export default function ModifyEventPopup({ isClosed, setIsClosed, userHeader, is
                     }
 
                     setEvent(eventData);
+                    setEventCopy({ ...eventData });
                 }
-                setEventCopy(event ? { ...event } : event);
                 setIsLoading(false);
             } catch(error){
                 setIsLoading(false);
@@ -289,6 +298,21 @@ export default function ModifyEventPopup({ isClosed, setIsClosed, userHeader, is
                             const value = e.target.value;
                             setEvent((ev) => ev ? { ...ev, max_players: value === "" ? null : Number(e.target.value) } : ev) 
                         }}
+                    />
+                </div>
+                <div className="loc">
+                    <h6>Event Location</h6>
+                    <LocationInput 
+                        locationName={ event?.location?.name || "" }
+                        onSelect={(loc) => setEvent((event) => {
+                            const location: Locations = {
+                                longitude: loc.longitude,
+                                latitude: loc.latitude,
+                                address: loc.address,
+                                name: loc.name
+                            }
+                            return event ? { ...event, location } : event
+                        })}
                     />
                 </div>
                 <div className="choosers">

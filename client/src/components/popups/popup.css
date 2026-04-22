@@ -29,7 +29,7 @@
     height: auto;
     max-height: calc(100vh - 5rem);
     overflow-y: scroll;
-    scrollbar-width: none;
+    scrollbar-width: thin;
     width: fit-content;
     transition: transform 400ms ease-in-out;
 }

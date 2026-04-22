@@ -1,0 +1,9 @@
+.filter-btn{
+    padding: 0.2rem 0.8rem;
+}
+
+.filter-btn svg{
+    width: 1rem;
+    height: auto;
+    stroke: var(--color-text);
+}

@@ -111,14 +111,14 @@ export async function addUser(req: Request, res: Response){
         }
 
         const location = user.location;
-        let userUpdatedLoc = user;
+        let userUpdatedLoc = {...user};
 
         if(location && !user.location.id){
-            const locationId = await locationService.locationExists(location);
-            userUpdatedLoc = { ...user,  location_id: locationId };
+            const locationNew = await locationService.locationExists(location);
+            userUpdatedLoc = { ...user,  location_id: locationNew.id };
         }
 
-        const addedUser = await userService.addUser(user);
+        const addedUser = await userService.addUser(userUpdatedLoc);
 
         res.status(200).json({
             success: true,
@@ -171,8 +171,8 @@ export async function updateUser(req: Request, res: Response){
         if(profilePicPath) updatedUser.profile_pic_path = profilePicPath;
 
         if(location && !location.id){
-            const locationId = await locationService.locationExists(location);
-            updatedUser.location_id = locationId;
+            const locationNew = await locationService.locationExists(JSON.parse(location));
+            updatedUser.location_id = locationNew.id;
         }
 
         const data = await userService.updateUser(id, updatedUser);

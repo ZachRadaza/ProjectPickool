@@ -47,6 +47,86 @@ export async function getClub(req: Request, res: Response){
     }
 }
 
+export async function getNearbyClubs(req: Request, res: Response){
+    try{
+        const { user_id } = req.params;
+
+        if(!user_id || typeof user_id !== "string")
+            return res.status(400).json({
+                success: false,
+                error: "id required"
+            });
+
+        const data = await clubsService.getNearbyClubs(user_id);
+
+        res.status(200).json({
+            success: true,
+            data: data
+        });
+    } catch(error){
+        console.error("getNearbyClubs error", error);
+        res.status(500).json({
+            success: false,
+            error: error
+        });
+    }
+}
+
+export async function getQueryClubs(req: Request, res: Response){
+    try{
+        const { query } = req.params;
+
+        if(!query || typeof query !== "string")
+            return res.status(400).json({
+                success: false,
+                error: "query required"
+            });
+
+        const data = await clubsService.getQueryClubs(query);
+
+        res.status(200).json({
+            success: true,
+            data: data
+        });
+    } catch(error){
+        console.error("getNearbyClubs error", error);
+        res.status(500).json({
+            success: false,
+            error: error
+        });
+    }
+}
+
+export async function getQueryNearbyClubs(req: Request, res: Response){
+    try{
+        const { user_id, query } = req.params;
+
+        if(
+            !user_id || 
+            typeof user_id !== "string" ||
+            !query || 
+            typeof query !== "string"
+        )
+            return res.status(400).json({
+                success: false,
+                error: "id required"
+            });
+
+        const data = await clubsService.getQueryNearbyClubs(user_id, query);
+
+        res.status(200).json({
+            success: true,
+            data: data
+        });
+    } catch(error){
+        console.error("getNearbyClubs error", error);
+        res.status(500).json({
+            success: false,
+            error: error
+        });
+    }
+}
+
 export async function addClub(req: Request, res: Response){
     try{
         const { 
@@ -75,8 +155,8 @@ export async function addClub(req: Request, res: Response){
         let club: Clubs = { name, level, is_public: is_public_bool };
 
         if(location && !location.id){
-            const locationId = await locationService.locationExists(location);
-            club.location_id = locationId;
+            const locationNew = await locationService.locationExists(JSON.parse(location));
+            club.location_id = locationNew.id;
         }
 
         if(description) club.description = description;
@@ -84,10 +164,10 @@ export async function addClub(req: Request, res: Response){
         const clubRaw = await clubsService.addClub(club);
 
         const id = clubRaw.id;
-        let profile_pic;
-        let profile_pic_path;
-        let banner;
-        let banner_path;
+        let profile_pic = null;
+        let profile_pic_path = null;
+        let banner = null;
+        let banner_path = null;
 
         await clubMembersService.addClubMember(id, owner_id, true);
 
@@ -100,10 +180,10 @@ export async function addClub(req: Request, res: Response){
         if(banner_file){
             const upload = await storageService.uploadClubBanner(banner_file, id);
             banner_path = upload.path;
-            banner = upload.publicUrl;       
+            banner = upload.publicUrl;
         }
 
-        const updatedClub: Clubs = { ...clubRaw, banner_path, banner, profile_pic, profile_pic_path };
+        const updatedClub: Partial<Clubs> = { banner_path, banner, profile_pic, profile_pic_path };
 
         const data = await clubsService.updateClub(id, updatedClub);
 
@@ -190,8 +270,8 @@ export async function updateClub(req: Request, res: Response){
         if(bannerPath) club.banner_path = bannerPath;
 
         if(location && !location.id){
-            const locationId = await locationService.locationExists(location);
-            club.location_id = locationId;
+            const locationNew = await locationService.locationExists(JSON.parse(location));
+            club.location_id = locationNew.id;
         }
 
         const data = await clubsService.updateClub(id, club);
@@ -235,7 +315,7 @@ export async function deleteClub(req: Request, res: Response){
         const data = await clubsService.deleteClub(id);
 
         if(data.profile_pic_path) storageService.deleteImage(data.profile_pic_path);
-        if(data.banner_path) storageService.deleteImage(data.banner_file);
+        if(data.banner_path) storageService.deleteImage(data.banner_path);
 
         if(data.profile_pic_path || data.banner_path)
             storageService.deleteDirectoryFromFilePath(data.profile_pic_path ?? data.banner_path);

@@ -69,9 +69,9 @@
     border-radius: 0px;
 }
 
-.edit-user-popup .desc{
+.edit-user-popup .line-input-cont .desc,
+.edit-user-popup .line-input-cont .loc{
     height: max-content;
-    border-color: var(--color-text);
     width: 40ch;
 }
 
@@ -90,4 +90,16 @@
     }
 
     .edit-user-popup .desc{ width: 100%; }
+}
+
+@media (max-width: 480px) {
+    .edit-user-popup .line-input-cont{
+        width: 100%;
+    }
+
+    .edit-user-popup .line-input-cont .desc,
+    .edit-user-popup .line-input-cont .loc{
+        height: max-content;
+        width: 100%;
+    }
 }

@@ -1,3 +1,4 @@
+import type { Events } from "../lib/schemas.js";
 import { supabase, supabaseAdmin } from "../lib/supabase.js";
 
 const eventBody = `
@@ -10,7 +11,7 @@ const eventBody = `
     ),
     start_time,
     end_time,
-    location_id,
+    location:locations(*),
     price,
     description,
     is_auto_approve,
@@ -59,7 +60,7 @@ export async function getClubEvents(club_id: string){
     return data;
 }
 
-export async function getPossibleUserEvents(user_id: string){
+export async function getPossibleUserClubEvents(user_id: string){
     const { data: clubData, error: clubError } = await supabase
         .from("club_members")
         .select("club_id")
@@ -82,6 +83,54 @@ export async function getPossibleUserEvents(user_id: string){
         throw new Error(eventError.message);
 
     return eventData;
+}
+
+export async function getPossibleUserLocationEvents(user_id: string){
+    const { data, error } = await supabase.rpc("get_nearby_events", {
+        p_user_id: user_id,
+        p_radius_km: 10
+    });
+
+    if(error) 
+        throw new Error(error.message);
+
+    return data;
+}
+
+export async function getQueryEvents(query: string){
+    if(!query.trim()) 
+        return [];
+
+    const { data, error } = await supabase
+        .from("events")
+        .select(eventBody)
+        .ilike("name", `%${query}%`)
+        .limit(50);
+
+    if(error)
+        throw new Error(error.message);
+
+    return data;
+}
+
+export async function getQueryNearbyEvents(user_id: string, query: string){
+    if(!query.trim())
+        return [];
+
+    const { data, error } = await supabase.rpc("get_nearby_events", {
+        p_user_id: user_id,
+        p_radius_km: 20
+    });
+
+    if(error)
+        throw new Error(error.message);
+
+    if(!data)
+        return [];
+
+    const filtered = data.filter((event: Events) => event.name.toLowerCase().includes(query.toLowerCase()));
+
+    return filtered;
 }
 
 export async function addEvent(event: Event){

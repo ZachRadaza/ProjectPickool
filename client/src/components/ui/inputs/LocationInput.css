@@ -1,0 +1,25 @@
+.location-input-cont{
+    border: 0.1rem solid var(--color-text);
+    border-radius: 1rem;
+    overflow: hidden;
+    width: 100%;
+}
+
+.location-input-cont input{
+    width: 100%;
+    padding: 0.3rem 0.8rem 0.3rem 2rem;
+    font-size: clamp(0.8rem, 0.8rem + 0.4vw, 1rem);
+    font-family: var(--font-body);
+    background: var(--color-bg);
+    border: none;
+}
+
+.location-input-cont input:focus{
+    outline: none;
+    border: none;
+}
+
+.location-input-cont input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}

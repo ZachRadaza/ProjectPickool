@@ -1,0 +1,27 @@
+.search-input-cont{
+    display: flex;
+    flex-direction: row;
+    border: 0.1rem solid var(--color-text);
+    border-radius: 1.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--color-bg);
+}
+
+.search-input-cont .search-input{
+    border: none;
+    border-radius: 0;
+    padding: 0px;
+    width: 100%;
+}
+
+.search-input-cont .search-icon{
+    width: 1.5rem;
+    height: auto;
+    stroke: var(--color-text);
+    cursor: pointer;
+    transition: all 100ms ease;
+}
+
+.search-input-cont .search-icon:hover{
+    stroke: var(--color-accent);
+}

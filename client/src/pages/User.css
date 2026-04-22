@@ -41,6 +41,13 @@
     z-index: 5;
 }
 
+.user-page .user-info-cont .content .side-content{
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0px;
+    width: 100%;
+}
+
 .user-page .user-content-cont{
     display: flex;
     flex-direction: column;
@@ -71,6 +78,7 @@
     .user-page .user-info-cont{
         max-width: none; 
         padding: 1rem;
+        width: 90vw;
     }
 
     .user-page .user-info-cont .edit{
@@ -78,7 +86,11 @@
         right: 1rem;
     }
 
-    .user-page .user-info-cont .profile-pic{ width: min(80%, 300px);}
+    .user-page .user-info-cont .content{
+        width: 100%;
+    }
 
-    .user-page .user-content-cont{ width: auto; }
+    .user-page .user-info-cont .content .side-content{ width: 100%; }
+
+    .user-page .user-info-cont .profile-pic{ width: min(80%, 300px);}
 }

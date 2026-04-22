@@ -1,7 +1,13 @@
 .user-tab-club-cont{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1rem;
     padding: 1rem;
     width: auto;
+}
+
+@media (max-width: 640px) {
+    .user-tab-club-cont{
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
 }

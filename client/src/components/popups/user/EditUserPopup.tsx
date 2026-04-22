@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { UserHeader, Users } from "../../../utils/schemas";
+import type { Locations, UserHeader, Users } from "../../../utils/schemas";
 import Loading from "../../../pages/Loading";
 import ErrorPage from "../../../pages/Error";
 import CloseButton from "../../ui/buttons/CloseButton";
@@ -7,6 +7,7 @@ import { ExtensionService } from "../../../utils/ExtensionService";
 import "./EditUserPopup.css";
 import "../popup.css";
 import Button from "../../ui/buttons/Button";
+import LocationInput from "../../ui/inputs/LocationInput";
 
 type EditUserPopupProp = {
     userHeader: UserHeader | null;
@@ -53,6 +54,8 @@ export default function EditUserPopup({ userHeader, setUserHeader, isClosed, set
         if(userTemp?.profile_pic_file instanceof File)
             updatedUser.profile_pic_file = userTemp.profile_pic_file;
 
+        console.log(updatedUser);
+
         const userData = await ExtensionService.updateUser(userHeader.id, updatedUser);
 
         if(!userData){
@@ -66,6 +69,12 @@ export default function EditUserPopup({ userHeader, setUserHeader, isClosed, set
         setIsClosed(true);
     }
 
+    useEffect(() => {
+        if(!isClosed)
+            return;
+
+        setError(null);
+    }, [isClosed]);
 
     useEffect(() => {
         if(!user?.profile_pic_file) 
@@ -77,7 +86,8 @@ export default function EditUserPopup({ userHeader, setUserHeader, isClosed, set
     }, [user?.profile_pic_file]);
 
     useEffect(() => {
-        getUser();
+        if(!isClosed)
+            getUser();
 
         async function getUser(){
             try{
@@ -101,7 +111,7 @@ export default function EditUserPopup({ userHeader, setUserHeader, isClosed, set
                 setError("Error in Getting User");
             }
         }
-    }, [userHeader]);
+    }, [userHeader, isClosed]);
 
     if(isLoading)
         content = <Loading/>;
@@ -160,6 +170,22 @@ export default function EditUserPopup({ userHeader, setUserHeader, isClosed, set
                     )}
                     rows={ 5 }
                 ></textarea>
+            </div>
+            <div className="loc-cont line-input-cont">
+                <h6 className="tag">Location</h6>
+                <LocationInput 
+                    additionalClasses="loc"
+                    locationName={ userTemp?.location?.name || "" }
+                    onSelect={(loc) => setUserTemp((user) => {
+                        const location: Locations = {
+                            longitude: loc.longitude,
+                            latitude: loc.latitude,
+                            address: loc.address,
+                            name: loc.name
+                        }
+                        return user ? { ...user, location } : user
+                    })}
+                />
             </div>
             <Button
                 onBtnClick={ () => saveChanges() }

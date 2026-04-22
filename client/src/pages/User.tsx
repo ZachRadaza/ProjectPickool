@@ -10,6 +10,7 @@ import EditButton from "../components/ui/buttons/EditButton";
 import UserTabClubsComp from "../components/pages/user/UserTabClubsComp";
 import UserTabPostsComp from "../components/pages/user/UserTabPostsComp";
 import Button from "../components/ui/buttons/Button";
+import LocationIconComp from "../components/ui/icons/LocationIconComp";
 
 export const TabType = {
     CLUBS: "clubs",
@@ -101,15 +102,9 @@ export default function User(){
 
     return (
         <div className="user-page">
-            { !userHeader
-                ? <NoUserOverlay setClosedSignIn={ setClosedSignIn } setClosedSignUp={ setClosedSignUp } />
-                : <></>
-            }
+            { !userHeader && <NoUserOverlay setClosedSignIn={ setClosedSignIn } setClosedSignUp={ setClosedSignUp } /> }
             <div className="user-info-cont">
-                { isSelf 
-                    ? <EditButton onBtnClick={ () => setClosedEditUser(false) } />
-                    : <></>
-                }
+                { isSelf && <EditButton onBtnClick={ () => setClosedEditUser(false) } /> }
                 <div className="content">
                     <img 
                         className="profile-pic" 
@@ -118,11 +113,10 @@ export default function User(){
                     <h4 className="username">{ openedUser?.username }</h4>
                     <p className="desc">{ openedUser?.description }</p>
                     <div className="side-content">
+                        <LocationIconComp location={ openedUser?.location ?? null }/>
                     </div>
                 </div>
-                { isSelf 
-                    ? <Button content={ !isLoggingOut ? "Log Out" : "Loggin Out" } onBtnClick={ logoutClicked }/> : <></>
-                }
+                { isSelf && <Button content={ !isLoggingOut ? "Log Out" : "Loggin Out" } onBtnClick={ logoutClicked }/> }
             </div>
             <div className="user-content-cont">
                 <div className="tabs">

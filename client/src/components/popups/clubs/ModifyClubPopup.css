@@ -56,10 +56,10 @@
 
 .modify-club .profile-pic{
     position: absolute;
-    top: -25%;
-    left: 0.5rem;
+    top: -17%;
+    left: 2rem;
     border-radius: 999px;
-    width: 30%;
+    width: max(100px, 25%);
     z-index: 78;
 }
 
@@ -97,23 +97,18 @@
     align-self: center;
 }
 
-.modify-club .content .club-level{
-    z-index: 80;
+.modify-club .content .rows-layout{
     display: flex;
     flex-direction: row;
-    margin: 0px auto;
     align-items: center;
     justify-content: center;
     gap: 1rem;
 }
 
-.modify-club .content .club-privacy{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    gap: 1rem;
+.modify-club .content .rows-layout h6{ white-space: nowrap; }
+
+.modify-club .content .club-level{
+    z-index: 80;
 }
 
 .modify-club .content .club-privacy .btns-cont{
@@ -152,12 +147,23 @@
     text-align: center;
 }
 
-@media (max-width: 640px){ .modify-club .profile-pic{ top: -20%; } }
-@media (max-width: 640px){ .modify-club .profile-pic{ top: -15%; } }
-@media (max-width: 380px){ 
+@media (max-width: 640px){ 
+    .modify-club .profile-pic{ 
+        top: -15%; 
+        left: 0.5rem;
+    } 
+
+    .modify-club .content .club-loc{
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+    }
+}
+
+@media (max-width: 420px){ 
     .modify-club .profile-pic{ 
         top: -15%;
-        width: 40%;
+        left: 1.5rem;
     } 
 
     .modify-club .content .name{ width: auto; margin: auto; margin-top: 3rem; }

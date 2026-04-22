@@ -44,7 +44,7 @@ export default function ClubsComp({ userClub, club, changeFavorite, userRequest,
                     <img className="profile-pic" src={ club?.profile_pic || import.meta.env.VITE_DEFAULT_CLUB_PIC } />
                     <div className="titles">
                         <h5 className="club-name">{ club?.name }</h5>
-                        <h6 className="club-role">{ userClub?.role }</h6>
+                        <h6 className="club-role">{ userClub?.role ?? "_" }</h6>
                         { userRequest && <p className="attribute-tag accent">Requested</p> }
                     </div>
                 </div>

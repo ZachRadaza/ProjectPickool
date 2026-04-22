@@ -1,13 +1,14 @@
 import "./ModifyClubPopup.css";
 import { useEffect, useState, useRef } from "react";
 import { ExtensionService } from "../../../utils/ExtensionService";
-import { Level, type Clubs, type UserHeader } from "../../../utils/schemas";
+import { Level, type Clubs, type Locations, type UserHeader } from "../../../utils/schemas";
 import { wait } from "../../../utils/random";
 import CloseButton from "../../ui/buttons/CloseButton";
 import LevelChooser from "../../ui/choosers/LevelChooser";
 import { useNavigate } from "react-router-dom";
 import Button from "../../ui/buttons/Button";
 import "../popup.css";
+import LocationInput from "../../ui/inputs/LocationInput";
 
 type ModifyClubPopup = {
     userHeader: UserHeader | null;
@@ -69,6 +70,12 @@ export default function ModifyClubPopup({ isClosed, setIsClosed, userHeader, isE
         if(club.banner_path) updatedClub.banner_path = club.banner_path;
         if(club.profile_pic_file) updatedClub.profile_pic_file = club.profile_pic_file;
         if(club.profile_pic_path) updatedClub.profile_pic_path = club.profile_pic_path;
+
+        if(
+            JSON.stringify(club?.location) !== JSON.stringify(clubCopy?.location) &&
+            club?.location
+        )
+            updatedClub.location = club?.location;
 
         const data = await ExtensionService.updateClub(club.id!, updatedClub, userHeader.id);
 
@@ -208,11 +215,11 @@ export default function ModifyClubPopup({ isClosed, setIsClosed, userHeader, isE
                             value={ club?.description ?? "" }
                             rows={ 4 }
                         ></textarea>
-                        <div className="club-level">
+                        <div className="club-level rows-layout">
                             <h6>Choose Club Level:</h6>
                             <LevelChooser isPlayer={ false } level={ club?.level! } setLevel={ setClubLevel }/>
                         </div>
-                        <div className="club-privacy">
+                        <div className="club-privacy rows-layout">
                             <h6>Choose Club Privacy:</h6>
                             <div className="btns-cont">
                                 <Button
@@ -233,6 +240,21 @@ export default function ModifyClubPopup({ isClosed, setIsClosed, userHeader, isE
                                 : "Request is needed to join the club. Club Posts, Events, and Members are only shown to members." 
                             }
                         </p>
+                        <div className="club-loc rows-layout">
+                            <h6>Choose Club Location:</h6>
+                            <LocationInput
+                                locationName={ club?.location?.name || "" }
+                                onSelect={(loc) => setClub((club) => {
+                                    const location: Locations = {
+                                        longitude: loc.longitude,
+                                        latitude: loc.latitude,
+                                        address: loc.address,
+                                        name: loc.name
+                                    }
+                                    return club ? { ...club, location } : club
+                                })}
+                            />
+                        </div>
                         <Button
                             content={ isEditing
                                 ? (isLoading ? "Saving Changes..." : "Save Changes")
