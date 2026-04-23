@@ -33,7 +33,6 @@ export type TabType = (typeof TabType)[keyof typeof TabType];
 type  OpenedClubPopupProp= {
     userHeader: UserHeader | null;
     club_id: string | null;
-    isClosed: boolean;
     setIsClosed: (closed: boolean) => void;
     setIsEditClubClosed: (close: boolean) => void;
     setIsSignUpClosed: (close: boolean) => void;
@@ -43,7 +42,6 @@ type  OpenedClubPopupProp= {
 export default function OpenedClubPopup({ 
     userHeader, 
     club_id, 
-    isClosed, 
     setIsClosed, 
     setIsEditClubClosed, 
     setIsSignUpClosed, 
@@ -154,13 +152,6 @@ export default function OpenedClubPopup({
 
         setRequested(true);
     }
-
-    useEffect(() => {
-        if(isClosed) return;
-        setIsLoading(true);
-        setError(null);
-        setCurrentTab(TabType.EVENTS);
-    }, [isClosed]);
 
     useEffect(() => {
         getUserClubMember();
@@ -338,10 +329,8 @@ export default function OpenedClubPopup({
         </>;
 
     return (
-        <div className="container">
-            <div className={`popup opened-club ${isClosed ? "closed" : ""}`}>
-                { content }
-            </div>
+        <div className="popup opened-club max-width">
+            { content }
         </div>
     );
 }

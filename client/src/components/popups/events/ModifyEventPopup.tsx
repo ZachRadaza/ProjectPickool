@@ -14,14 +14,13 @@ import LocationInput from "../../ui/inputs/LocationInput";
 
 type ModifyEventPopup = {
     userHeader: UserHeader | null;
-    isClosed: boolean;
     setIsClosed: (close: boolean) => void;
     isEditing: boolean;
     club_id: string | null;
     event_id: string | null;
 };
 
-export default function ModifyEventPopup({ isClosed, setIsClosed, userHeader, isEditing, club_id, event_id }: ModifyEventPopup){
+export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, club_id, event_id }: ModifyEventPopup){
     const [event, setEvent] = useState<Events | null>(null);
     const [eventCopy, setEventCopy] = useState<Events | null>(null);
     const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -135,19 +134,7 @@ export default function ModifyEventPopup({ isClosed, setIsClosed, userHeader, is
     }
 
     useEffect(() => {
-        if(isClosed)
-            return;
-
-        setEvent(null);
-        setIsLoading(true);
-        setIsSaving(false);
-        setError(null);
-        setMessage("");
-    }, [isClosed])
-
-    useEffect(() => {
-        if(!isClosed)
-            getEvent();
+        getEvent();
 
         async function getEvent(){
             try{
@@ -201,7 +188,7 @@ export default function ModifyEventPopup({ isClosed, setIsClosed, userHeader, is
                 setError("Error in Modifying Event");
             }
         }
-    }, [event_id, isClosed]);
+    }, [event_id]);
 
     if(isLoading)
         content = <Loading />;
@@ -392,11 +379,9 @@ export default function ModifyEventPopup({ isClosed, setIsClosed, userHeader, is
         </>;
 
     return (
-        <div className="container">
-            <div className={ `popup modify-event ${isClosed ? "closed" : ""}`}>
-                <CloseButton setIsClosed={ setIsClosed } />
-                { content }
-            </div>
+        <div className="popup modify-event">
+            <CloseButton setIsClosed={ setIsClosed } />
+            { content }
         </div>
     );
 }

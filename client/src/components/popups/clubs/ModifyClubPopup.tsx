@@ -12,13 +12,12 @@ import LocationInput from "../../ui/inputs/LocationInput";
 
 type ModifyClubPopup = {
     userHeader: UserHeader | null;
-    isClosed: boolean;
     setIsClosed: (close: boolean) => void;
     isEditing: boolean;
     club_id: string | null;
 };
 
-export default function ModifyClubPopup({ isClosed, setIsClosed, userHeader, isEditing, club_id }: ModifyClubPopup){
+export default function ModifyClubPopup({ setIsClosed, userHeader, isEditing, club_id }: ModifyClubPopup){
     const [club, setClub] = useState<Clubs>();
     const [clubCopy, setClubCopy] = useState<Clubs | null>(null);
 
@@ -89,17 +88,6 @@ export default function ModifyClubPopup({ isClosed, setIsClosed, userHeader, isE
     }
 
     useEffect(() => {
-        if(!isClosed)
-            return;
-
-        bannerRef.current!.value = "";
-        profileRef.current!.value = "";
-
-        setMessage("");
-        setisLoading(false);
-    }, [isClosed]);
-
-    useEffect(() => {
         getClub()
 
         async function getClub(){
@@ -149,121 +137,119 @@ export default function ModifyClubPopup({ isClosed, setIsClosed, userHeader, isE
     }, [club?.profile_pic_file]);
 
     return (
-        <div className="container">
-            <div className={ `popup modify-club ${isClosed ? "closed" : ""}`}>
-                <CloseButton setIsClosed={ setIsClosed } />
-                <h3>{ isEditing ? "Edit Club" : "Create a Club" }</h3>
-                <p className="message">{ message }</p>
-                <div className="banner image-edit">
+        <div className="popup modify-club">
+            <CloseButton setIsClosed={ setIsClosed } />
+            <h3>{ isEditing ? "Edit Club" : "Create a Club" }</h3>
+            <p className="message">{ message }</p>
+            <div className="banner image-edit">
+                <div className="input-cont">
+                    <input 
+                        type="file"
+                        className="image"
+                        onChange={(event) => {
+                            const file = event.target.files?.[0] ?? null;
+                            setClub((club) => club ? {...club, banner_file: file} : club);
+                        }}
+                        ref={ bannerRef }
+                    />
+                </div>
+                <div className="banner-crop image-edit">
+                    <img 
+                        src={ club?.banner_file 
+                            ? URL.createObjectURL(club.banner_file) 
+                            : ( club?.banner 
+                                ? club.banner
+                                : import.meta.env.VITE_DEFAULT_CLUB_BANNER) 
+                        }
+                        alt="Club Banner"    
+                    />
+                </div>
+            </div>
+            <div className="content">
+                <div className="profile-pic image-edit">
                     <div className="input-cont">
                         <input 
                             type="file"
                             className="image"
-                            onChange={(event) => {
+                            onChange={ (event) => {
                                 const file = event.target.files?.[0] ?? null;
-                                setClub((club) => club ? {...club, banner_file: file} : club);
+                                setClub((club) => club ? {...club, profile_pic_file: file} : club);
                             }}
-                            ref={ bannerRef }
+                            ref={ profileRef }
                         />
                     </div>
-                    <div className="banner-crop image-edit">
-                        <img 
-                            src={ club?.banner_file 
-                                ? URL.createObjectURL(club.banner_file) 
-                                : ( club?.banner 
-                                    ? club.banner
-                                    : import.meta.env.VITE_DEFAULT_CLUB_BANNER) 
-                            }
-                            alt="Club Banner"    
-                        />
-                    </div>
-                </div>
-                <div className="content">
-                    <div className="profile-pic image-edit">
-                        <div className="input-cont">
-                            <input 
-                                type="file"
-                                className="image"
-                                onChange={ (event) => {
-                                    const file = event.target.files?.[0] ?? null;
-                                    setClub((club) => club ? {...club, profile_pic_file: file} : club);
-                                }}
-                                ref={ profileRef }
-                            />
-                        </div>
-                        <img 
-                            src={club?.profile_pic_file 
-                                ? URL.createObjectURL(club.profile_pic_file) 
-                                : ( club?.profile_pic 
-                                    ? club.profile_pic
-                                    : import.meta.env.VITE_DEFAULT_CLUB_PIC) 
-                            }                            
-                            alt="Club Profile Picture"
-                        />
-                    </div>
-                    <input 
-                        placeholder="Name of Club"
-                        className="name"
-                        onChange={ (event) => setClub((club) => club ? {...club, name: event.target.value } : club) }
-                        value={ club?.name ?? "" }
+                    <img 
+                        src={club?.profile_pic_file 
+                            ? URL.createObjectURL(club.profile_pic_file) 
+                            : ( club?.profile_pic 
+                                ? club.profile_pic
+                                : import.meta.env.VITE_DEFAULT_CLUB_PIC) 
+                        }                            
+                        alt="Club Profile Picture"
                     />
-                    <div className="inner-box">
-                        <textarea
-                            className="desc"
-                            placeholder="Description of Club"
-                            onChange={ (event) => setClub((club) => club ? {...club, description: event.target.value } : club) }
-                            value={ club?.description ?? "" }
-                            rows={ 4 }
-                        ></textarea>
-                        <div className="club-level rows-layout">
-                            <h6>Choose Club Level:</h6>
-                            <LevelChooser isPlayer={ false } level={ club?.level! } setLevel={ setClubLevel }/>
-                        </div>
-                        <div className="club-privacy rows-layout">
-                            <h6>Choose Club Privacy:</h6>
-                            <div className="btns-cont">
-                                <Button
-                                    additionalClasses={ club?.is_public ? "active" : "" }
-                                    onBtnClick={ () => setClub((club) => club ? {...club, is_public: true } : club) }
-                                    content="Public"
-                                />
-                                <Button
-                                    additionalClasses={!club?.is_public ? "active" : "" }
-                                    onBtnClick={ () => setClub((club) => club ? {...club, is_public: false } : club) }
-                                    content="Private"                
-                                />
-                            </div>
-                        </div>
-                        <p className="privacy-desc">
-                            { club?.is_public
-                                ? "Club Posts, Events, and Members will be publically available. No request needed to join club." 
-                                : "Request is needed to join the club. Club Posts, Events, and Members are only shown to members." 
-                            }
-                        </p>
-                        <div className="club-loc rows-layout">
-                            <h6>Choose Club Location:</h6>
-                            <LocationInput
-                                locationName={ club?.location?.name || "" }
-                                onSelect={(loc) => setClub((club) => {
-                                    const location: Locations = {
-                                        longitude: loc.longitude,
-                                        latitude: loc.latitude,
-                                        address: loc.address,
-                                        name: loc.name
-                                    }
-                                    return club ? { ...club, location } : club
-                                })}
+                </div>
+                <input 
+                    placeholder="Name of Club"
+                    className="name"
+                    onChange={ (event) => setClub((club) => club ? {...club, name: event.target.value } : club) }
+                    value={ club?.name ?? "" }
+                />
+                <div className="inner-box">
+                    <textarea
+                        className="desc"
+                        placeholder="Description of Club"
+                        onChange={ (event) => setClub((club) => club ? {...club, description: event.target.value } : club) }
+                        value={ club?.description ?? "" }
+                        rows={ 4 }
+                    ></textarea>
+                    <div className="club-level rows-layout">
+                        <h6>Choose Club Level:</h6>
+                        <LevelChooser isPlayer={ false } level={ club?.level! } setLevel={ setClubLevel }/>
+                    </div>
+                    <div className="club-privacy rows-layout">
+                        <h6>Choose Club Privacy:</h6>
+                        <div className="btns-cont">
+                            <Button
+                                additionalClasses={ club?.is_public ? "active" : "" }
+                                onBtnClick={ () => setClub((club) => club ? {...club, is_public: true } : club) }
+                                content="Public"
+                            />
+                            <Button
+                                additionalClasses={!club?.is_public ? "active" : "" }
+                                onBtnClick={ () => setClub((club) => club ? {...club, is_public: false } : club) }
+                                content="Private"                
                             />
                         </div>
-                        <Button
-                            content={ isEditing
-                                ? (isLoading ? "Saving Changes..." : "Save Changes")
-                                : (isLoading ? "Creating Club..." : "Create")
-                            }
-                            onBtnClick={ () => isEditing ? updateClub() : createClub() }
-                            additionalClasses="create-btn"
+                    </div>
+                    <p className="privacy-desc">
+                        { club?.is_public
+                            ? "Club Posts, Events, and Members will be publically available. No request needed to join club." 
+                            : "Request is needed to join the club. Club Posts, Events, and Members are only shown to members." 
+                        }
+                    </p>
+                    <div className="club-loc rows-layout">
+                        <h6>Choose Club Location:</h6>
+                        <LocationInput
+                            locationName={ club?.location?.name || "" }
+                            onSelect={(loc) => setClub((club) => {
+                                const location: Locations = {
+                                    longitude: loc.longitude,
+                                    latitude: loc.latitude,
+                                    address: loc.address,
+                                    name: loc.name
+                                }
+                                return club ? { ...club, location } : club
+                            })}
                         />
                     </div>
+                    <Button
+                        content={ isEditing
+                            ? (isLoading ? "Saving Changes..." : "Save Changes")
+                            : (isLoading ? "Creating Club..." : "Create")
+                        }
+                        onBtnClick={ () => isEditing ? updateClub() : createClub() }
+                        additionalClasses="create-btn"
+                    />
                 </div>
             </div>
         </div>

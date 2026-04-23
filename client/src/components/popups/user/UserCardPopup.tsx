@@ -15,11 +15,10 @@ type UserCardPopupProp = {
     club_id: string | null;
     event_id: string | null;
     userHeader: UserHeader| null;
-    isClosed: boolean;
     setIsClosed: (close: boolean) => void;
 };
 
-export default function UserCardPopup({ userHeader, userCardId, club_id, event_id, isClosed, setIsClosed }: UserCardPopupProp){
+export default function UserCardPopup({ userHeader, userCardId, club_id, event_id, setIsClosed }: UserCardPopupProp){
     const [userInCard, setUserInCard] = useState<UserHeader | null>(null);
     const [clubMember, setClubMember] = useState<Club_Members_Basic | null>(null);
     const [clubRequest, setUserClubRequests] = useState<Club_Requests | null>(null);
@@ -172,15 +171,6 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
 
         setClubMember(null);
     }
-
-    useEffect(() => {
-        if(isClosed) return;
-        setUserInCard(null);
-        setClubMember(null);
-        setUserClubRequests(null);
-        setUserClubMember(null);
-        setError(null);
-    }, [closed]);
 
     useEffect(() => {
         getUserInCard();
@@ -371,11 +361,9 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
         </>
 
     return (
-        <div className="container">
-            <div className={`popup user-card ${isClosed ? "closed" : ""}`}>
-                <CloseButton setIsClosed={ closeCardPopup }/>
-                { content }
-            </div>
-        </div>        
+        <div className="popup user-card">
+            <CloseButton setIsClosed={ closeCardPopup }/>
+            { content }
+        </div>
     );
 }

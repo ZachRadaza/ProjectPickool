@@ -18,14 +18,13 @@ import PriceIconComp from "../../ui/icons/PriceIconComp";
 import EventInfoIconComp from "../../ui/icons/EventInfoIconComp";
 
 type OpenedEventPopupProp = {
-    isClosed: boolean;
     setIsClosed: (closed: boolean) => void;
     event_id: string | null;
     setClosedModifyEvent: (closed: boolean) => void;
     userHeader: UserHeader | null;
 }
 
-export default function OpenedEventPopup({ isClosed, setIsClosed, event_id, setClosedModifyEvent, userHeader }: OpenedEventPopupProp){
+export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModifyEvent, userHeader }: OpenedEventPopupProp){
     const [event, setEvent] = useState<Events | null>(null);
     const [userMember, setUserMember] = useState<Club_Members | null>(null);
     const [playersApproved, setPlayersApproved] = useState<Players[]>([]);
@@ -154,20 +153,6 @@ export default function OpenedEventPopup({ isClosed, setIsClosed, event_id, setC
     }
 
     useEffect(() => {
-        if(isClosed)
-            return;
-
-        setError(null);
-        setIsLoading(true);
-        setEvent(null);
-        setUserMember(null);
-        setPlayersApproved([]);
-        setPlayersNotApproved([]);
-        setMessage(null);
-        setJoining(false);
-    }, [isClosed]);
-
-    useEffect(() => {
         getEvent();
 
         async function getEvent(){
@@ -261,6 +246,7 @@ export default function OpenedEventPopup({ isClosed, setIsClosed, event_id, setC
                         description={ event.description }
                         address={ event.location?.address }
                     />
+                    <LocationIconComp location={ event?.location ?? null } />
                     <EventInfoIconComp 
                         isDUPR={ event?.is_dupr } 
                         isSingles={ event?.is_singles } 
@@ -268,7 +254,6 @@ export default function OpenedEventPopup({ isClosed, setIsClosed, event_id, setC
                         level={ event?.level }
                         sex={ event?.sex }
                     />
-                    <LocationIconComp location={ event?.location ?? null } />
                     <PriceIconComp price={ event?.price } />
                 </div>
             }
@@ -326,11 +311,9 @@ export default function OpenedEventPopup({ isClosed, setIsClosed, event_id, setC
         </>;
 
     return (
-        <div className="container">
-            <div className={`popup opened-event ${isClosed ? "closed" : ""}`}>
-                <CloseButton setIsClosed={ closeEventPopup } />
-                { content }
-            </div>
+        <div className="popup opened-event">
+            <CloseButton setIsClosed={ closeEventPopup } />
+            { content }
         </div>
     );
 }

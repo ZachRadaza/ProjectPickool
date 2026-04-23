@@ -12,11 +12,10 @@ import LocationInput from "../../ui/inputs/LocationInput";
 type EditUserPopupProp = {
     userHeader: UserHeader | null;
     setUserHeader: (userHeader: UserHeader | null) => void;
-    isClosed: boolean;
     setIsClosed: (closed: boolean) => void;
 };
 
-export default function EditUserPopup({ userHeader, setUserHeader, isClosed, setIsClosed }: EditUserPopupProp){
+export default function EditUserPopup({ userHeader, setUserHeader, setIsClosed }: EditUserPopupProp){
     const [user, setUser] = useState<Users | null>(null);
     const [userTemp, setUserTemp] = useState<Users | null>(null);
     
@@ -70,13 +69,6 @@ export default function EditUserPopup({ userHeader, setUserHeader, isClosed, set
     }
 
     useEffect(() => {
-        if(!isClosed)
-            return;
-
-        setError(null);
-    }, [isClosed]);
-
-    useEffect(() => {
         if(!user?.profile_pic_file) 
             return;
 
@@ -86,8 +78,7 @@ export default function EditUserPopup({ userHeader, setUserHeader, isClosed, set
     }, [user?.profile_pic_file]);
 
     useEffect(() => {
-        if(!isClosed)
-            getUser();
+        getUser();
 
         async function getUser(){
             try{
@@ -111,7 +102,7 @@ export default function EditUserPopup({ userHeader, setUserHeader, isClosed, set
                 setError("Error in Getting User");
             }
         }
-    }, [userHeader, isClosed]);
+    }, [userHeader]);
 
     if(isLoading)
         content = <Loading/>;
@@ -194,11 +185,9 @@ export default function EditUserPopup({ userHeader, setUserHeader, isClosed, set
         </>;
 
     return (
-        <div className="container">
-            <div className={ `popup edit-user-popup ${isClosed ? "closed" : ""}` }>
-                <CloseButton setIsClosed={ setIsClosed } />
-                { content }
-            </div>
+        <div className="popup edit-user-popup">
+            <CloseButton setIsClosed={ setIsClosed } />
+            { content }
         </div>
     );
 }

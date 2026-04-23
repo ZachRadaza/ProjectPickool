@@ -14,6 +14,7 @@ import UserCardPopup from "../components/popups/user/UserCardPopup";
 import EditUserPopup from "../components/popups/user/EditUserPopup";
 import ModifyEventPopup from "../components/popups/events/ModifyEventPopup";
 import OpenedEventPopup from "../components/popups/events/OpenedEventPopup";
+import PopupWrapper from "../components/popups/PopupWrapper";
 
 export default function Layout(){
     const [closedSignIn, setClosedSignIn] = useState<boolean>(true);
@@ -59,24 +60,21 @@ export default function Layout(){
         const club = searchParams.get("club");
         setClubId(club);
 
-        if(!club)
-            setClosedOpenedClub(true);
+        setClosedOpenedClub(!club);
     }, [searchParams.get("club")]);
 
     useEffect(() => {
         const userCardId = searchParams.get("previewuser");
         setPreviewUserId(userCardId);
 
-        if(!userCardId)
-            setClosedUserCard(true);
+        setClosedUserCard(!userCardId);
     }, [searchParams.get("previewuser")]);
 
     useEffect(() => {
         const eventId = searchParams.get("event");
         setEventId(eventId);
 
-        if(!eventId)
-            setClosedOpenedEvent(true);
+        setClosedOpenedEvent(!eventId);
     }, [searchParams.get("event")]);
 
     if(isLoading)
@@ -88,53 +86,84 @@ export default function Layout(){
     return (
         <>
             <div className="popups-cont">
-                <OpenedClubPopup 
-                    isClosed={ closedOpenedClub } 
-                    setIsClosed={ setClosedOpenedClub } 
-                    club_id={ club_id } 
-                    userHeader={ userHeader }
-                    setIsEditClubClosed={ setClosedModifyClub }
-                    setIsSignUpClosed={ setClosedSignUp }
-                    setIsModifyEventClosed={ setClosedModifyEvent }
+                <PopupWrapper 
+                    isClosed={ closedOpenedClub }
+                    popupComp={
+                        <OpenedClubPopup 
+                            setIsClosed={ setClosedOpenedClub } 
+                            club_id={ club_id } 
+                            userHeader={ userHeader }
+                            setIsEditClubClosed={ setClosedModifyClub }
+                            setIsSignUpClosed={ setClosedSignUp }
+                            setIsModifyEventClosed={ setClosedModifyEvent }
+                        />
+                    }
+                    isMaxWidth={ true }
                 />
-                <OpenedEventPopup 
+                <PopupWrapper 
                     isClosed={ closedOpenedEvent }
-                    setIsClosed={ setClosedOpenedEvent }
-                    userHeader={ userHeader }
-                    event_id={ event_id }
-                    setClosedModifyEvent={ setClosedModifyEvent }
+                    popupComp={
+                        <OpenedEventPopup 
+                            setIsClosed={ setClosedOpenedEvent }
+                            userHeader={ userHeader }
+                            event_id={ event_id }
+                            setClosedModifyEvent={ setClosedModifyEvent }
+                        />
+                    }
                 />
-                <ModifyClubPopup 
-                    isClosed={ closedModifyClub } 
-                    setIsClosed={ setClosedModifyClub } 
-                    userHeader={ userHeader } 
-                    isEditing={ !closedOpenedClub }
-                    club_id={ club_id }
+                <PopupWrapper
+                    isClosed={ closedModifyClub }
+                    popupComp={
+                        <ModifyClubPopup 
+                            setIsClosed={ setClosedModifyClub } 
+                            userHeader={ userHeader } 
+                            isEditing={ !closedOpenedClub }
+                            club_id={ club_id }
+                        />
+                    }
                 />
-                <ModifyEventPopup
+                <PopupWrapper 
                     isClosed={ closedModifyEvent }
-                    setIsClosed={ setClosedModifyEvent }
-                    userHeader={ userHeader }
-                    isEditing={ !closedOpenedEvent }
-                    club_id={ club_id }
-                    event_id={ event_id }
+                    popupComp={
+                        <ModifyEventPopup
+                            setIsClosed={ setClosedModifyEvent }
+                            userHeader={ userHeader }
+                            isEditing={ !closedOpenedEvent }
+                            club_id={ club_id }
+                            event_id={ event_id }
+                        />
+                    }
                 />
-                <UserCardPopup 
-                    isClosed={ closedUserCard } 
-                    setIsClosed={ setClosedUserCard } 
-                    userHeader={ userHeader } 
-                    userCardId={ previewUserId }
-                    club_id={ club_id }
-                    event_id={ event_id }
+                <PopupWrapper 
+                    isClosed={ closedUserCard }
+                    popupComp={ 
+                        <UserCardPopup 
+                            setIsClosed={ setClosedUserCard } 
+                            userHeader={ userHeader } 
+                            userCardId={ previewUserId }
+                            club_id={ club_id }
+                            event_id={ event_id }
+                        />
+                    }
                 />
-                <EditUserPopup
+                <PopupWrapper 
                     isClosed={ closedEditUser }
-                    setIsClosed={ setClosedEditUser }
-                    userHeader={ userHeader }
-                    setUserHeader={ setUserHeader }
+                    popupComp={ 
+                        <EditUserPopup
+                            setIsClosed={ setClosedEditUser }
+                            userHeader={ userHeader }
+                            setUserHeader={ setUserHeader }
+                        />
+                    }
                 />
-                <SignInPopup isClosed={ closedSignIn } setIsClosed={ setClosedSignIn }/>
-                <SignUpPopup isClosed={ closedSignUp } setIsClosed={ setClosedSignUp }/>
+                <PopupWrapper 
+                    isClosed={ closedSignIn }
+                    popupComp={ <SignInPopup setIsClosed={ setClosedSignIn }/>}
+                />
+                <PopupWrapper
+                    isClosed={ closedSignUp }
+                    popupComp={ <SignUpPopup setIsClosed={ setClosedSignUp }/> }
+                />
             </div>
             <main>
                 <Header userHeader={ userHeader }/>
