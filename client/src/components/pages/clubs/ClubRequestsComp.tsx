@@ -90,7 +90,6 @@ export default function ClubRequestsComp({ club_id, setNumRequests }: ClubReques
                         key={ req.user?.id } 
                         userHeader={ req.user! } 
                         clubInfoHeader={ null } 
-                        isRequest={ true }
                         approveClicked={ () => approveUserRequest(req.user?.id!) }
                         denyClicked={ () => denyUserRequest(req.user?.id!) }
                     />

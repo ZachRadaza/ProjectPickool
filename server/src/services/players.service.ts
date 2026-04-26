@@ -9,6 +9,8 @@ const playerBody = `
         profile_pic
     ),
     approved,
+    paid,
+    approved_at,
     created_at
 `;
 
@@ -61,10 +63,10 @@ export async function getUserPlayers(user_id: string){
     return data;
 }
 
-export async function addPlayer(event_id: string, user_id: string, approved: boolean){
+export async function addPlayer(event_id: string, user_id: string, approved: boolean, paid: boolean){
     const { data, error } = await supabase
         .from("players")
-        .insert([{ event_id, user_id, approved }])
+        .insert([{ event_id, user_id, approved, paid }])
         .select(playerBody)
         .single();
 

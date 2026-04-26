@@ -4,9 +4,10 @@ import ".//UserHeaderMiniComp.css";
 
 type UserHeaderMiniCompProp = {
     userHeader: UserHeader;
+    showUnpaid?: boolean;
 };
 
-export default function UserHeaderMiniComp({ userHeader }: UserHeaderMiniCompProp){
+export default function UserHeaderMiniComp({ userHeader, showUnpaid }: UserHeaderMiniCompProp){
     const navigate = useNavigate();
 
     function openUserProfile(){
@@ -20,6 +21,9 @@ export default function UserHeaderMiniComp({ userHeader }: UserHeaderMiniCompPro
             className="user-header-mini-cont"
             onClick={ () => openUserProfile() }    
         >
+            { showUnpaid === true &&
+                <p className="attribute-tag unpaid">Unpaid</p>
+            }
             <img 
                 src={ userHeader.profile_pic ?? import.meta.env.VITE_DEFAULT_PROFILE_PIC }
                 className="profile-pic"

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { capitalizeWords } from "../../../utils/random";
-import type { Events, Players } from "../../../utils/schemas";
+import { EventType, type Events, type Players } from "../../../utils/schemas";
 import "./EventsComp.css";
 
 type EventsCompProp = {
@@ -27,7 +27,12 @@ export default function EventsComp({ event, player, showClub }: EventsCompProp){
                         minute: "2-digit"
                     }) : "" }
                 </h6>
-                <h6 className="type">{ !event?.is_tournament ? "Casual" : "Tournament" }</h6>
+                <h6 className="type">
+                    { event?.event_type === EventType.DUPR 
+                        ? event.event_type.toUpperCase() 
+                        : capitalizeWords(event?.event_type) 
+                    }
+                </h6>
             </div>
             <div className="right-side">
                 <div className="heading-info">
@@ -41,7 +46,6 @@ export default function EventsComp({ event, player, showClub }: EventsCompProp){
                         <p className="attribute-tag accent">{ capitalizeWords(event?.level) }</p>
                         <p className="attribute-tag accent">{ capitalizeWords(event?.sex) }</p>
                         <p className="attribute-tag accent">{ event?.is_singles ? "Singles" : "Doubles" }</p>
-                        <p className="attribute-tag accent">{ event?.is_dupr ? "DUPR" : "No DUPR" }</p>
                     </div>
                 </div>
                 <div className="other-info">

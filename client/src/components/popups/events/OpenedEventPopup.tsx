@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Role, type Club_Members, type Events, type Players, type UserHeader } from "../../../utils/schemas";
+import { EventType, type Hosts, Role, type Club_Members, type Events, type Players, type UserHeader, EventButtonSituation } from "../../../utils/schemas";
 import CloseButton from "../../ui/buttons/CloseButton";
 import Loading from "../../../pages/Loading";
 import ErrorPage from "../../../pages/Error";
@@ -8,14 +8,13 @@ import { useNavigate } from "react-router-dom";
 import "../popup.css";
 import { capitalizeWords } from "../../../utils/random";
 import "./OpenedEventPopup.css";
-import Button from "../../ui/buttons/Button";
 import EditButton from "../../ui/buttons/EditButton";
 import DeleteButton from "../../ui/buttons/DeleteButton";
-import UsersDropdown from "../../pages/user/UsersDropdown";
-import LocationIconComp from "../../ui/icons/LocationIconComp";
-import DateIconComp from "../../ui/icons/DateIconComp";
-import PriceIconComp from "../../ui/icons/PriceIconComp";
-import EventInfoIconComp from "../../ui/icons/EventInfoIconComp";
+import PopupWrapper from "../PopupWrapper";
+import UserSearchPopup from "../clubs/UserSearchPopup";
+import EventIconsComp from "../../pages/events/EventIconsComp";
+import EventParticipantsComp from "../../pages/events/EventParticipantsComp";
+import EventButtonComp from "../../pages/events/EventButtonsComp";
 
 type OpenedEventPopupProp = {
     setIsClosed: (closed: boolean) => void;
@@ -27,10 +26,11 @@ type OpenedEventPopupProp = {
 export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModifyEvent, userHeader }: OpenedEventPopupProp){
     const [event, setEvent] = useState<Events | null>(null);
     const [userMember, setUserMember] = useState<Club_Members | null>(null);
+    const [hosts, setHosts] = useState<Hosts[]>([]);
     const [playersApproved, setPlayersApproved] = useState<Players[]>([]);
     const [playersNotApproved, setPlayersNotApproved] = useState<Players[]>([]);
-    const [message, setMessage] = useState<string | null>();
-    const [joining, setJoining] = useState<boolean>(false);
+
+    const [searchHostsClosed, setSearchHostsClosed] = useState<boolean>(true);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -38,28 +38,38 @@ export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModif
     const navigate = useNavigate();
     let content;
 
-    const canJoin = useMemo(() => {
-        if(!userMember){
-            setMessage("Not Member of Club");
-            return false;
-        }
+    const buttonSituation = useMemo(() => {
+        if(!userMember)
+            return EventButtonSituation.NOT_MEMBER;
 
         for(const player of playersApproved){
             if(player.user!.id === userHeader?.id){
-                setMessage("Already Joined Event");
-                return false;
+                if(player.paid)
+                    return EventButtonSituation.COMPLETE;
+                else 
+                    return EventButtonSituation.JOINED;
             }
         }
 
         for(const player of playersNotApproved){
             if(player.user!.id === userHeader?.id){
-                setMessage("Already Requested Event");
-                return false;
+                return EventButtonSituation.REQUESTED;
             }
         }
 
-        return true;
-    }, [userMember, event, playersApproved, playersNotApproved]);
+        return EventButtonSituation.MEMBER;
+    }, [userMember, playersApproved, playersNotApproved]);
+
+    const userIsHost = useMemo(() => {
+        if(!userMember || hosts.length === 0)
+            return false;
+
+        for(const host of hosts)
+            if(host.user?.id === userMember.user.id)
+                return true;
+
+        return false;
+    }, [hosts, userMember]);
 
     function closeEventPopup(closed: boolean){
         setIsClosed(closed);
@@ -82,30 +92,6 @@ export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModif
         navigate(`?club=${event.club.id}`);
     }
 
-    async function joinEvent(){
-        if(!userMember?.user|| !event?.id){
-            setError("Cant join event, not a member");
-            return;
-        }
-
-        setJoining(true);
-        let approved = userMember.role === Role.ADMIN || userMember.role === Role.OWNER ? true : false;        
-        const player = await ExtensionService.addPlayer(event.id, userMember.user.id, approved);
-
-        if(!player){
-            setError("Error in joining Event");
-            setJoining(false);
-            return;
-        }
-
-        if(approved)
-            setPlayersApproved([...playersApproved, player]);
-        else
-            setPlayersNotApproved([...playersNotApproved, player]);
-        
-        setJoining(false);
-    }
-
     async function deleteEvent(){
         if(!event?.id)
             return;
@@ -121,35 +107,19 @@ export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModif
         window.location.reload();
     }
 
-    async function approveRequest(memberId: string){
-        if(!event?.id || !memberId)
+
+    async function addHosts(user_id: string){
+        if(!user_id || !event?.id)
             return;
 
-        const updates: Partial<Players> = { approved: true };
+        const host = await ExtensionService.addHost(event.id, user_id);
 
-        const approved = await ExtensionService.updatePlayer(event?.id, memberId, updates);
-
-        if(!approved){
-            setError("Error in approving player");
-            return;
-        }
-
-        setPlayersNotApproved(playersNotApproved.filter((p) => p.user!.id !== memberId));
-        setPlayersApproved([...playersApproved, approved]);
-    }
-
-    async function denyRequest(memberId: string){
-        if(!event?.id || !memberId)
-            return;
-
-        const denied = await ExtensionService.deletePlayer(event.id, memberId);
-
-        if(!denied){
-            setError("Error in denying player");
+        if(!host){
+            setError("Error In adding host");
             return;
         }
 
-        setPlayersNotApproved(playersNotApproved.filter((p) => p.user!.id !== memberId));
+        setHosts([...hosts, host]);
     }
 
     useEffect(() => {
@@ -167,15 +137,17 @@ export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModif
                 }
 
                 const eventData = await ExtensionService.getEvent(event_id);
+                const hostsData = await ExtensionService.getEventHosts(event_id);
                 const playersData = await ExtensionService.getEventPlayers(event_id);
 
-                if(!eventData || !playersData){
+                if(!eventData || !playersData || !hostsData){
                     setIsLoading(false);
                     setError("Error in Getting Event");
                     return;
                 }
 
                 setEvent(eventData);
+                setHosts(hostsData);
                 setPlayersApproved(playersData.filter((player) => player.approved));
                 setPlayersNotApproved(playersData.filter((player) => !player.approved));
 
@@ -220,8 +192,19 @@ export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModif
                         minute: "2-digit"
                     }) : "" }`}
                 </h6>
+                <div className="host-club">
+                    <h6>Hosting Club: </h6>
+                    <h6 onClick={ () => openClub() } className="club-name">
+                        { event?.club?.name }
+                    </h6>
+                </div>
                 <div className="tags">
-                    { event?.is_dupr && <p className="attribute-tag accent">DUPR</p> }
+                    <p className="attribute-tag accent">
+                        { event?.event_type === EventType.DUPR 
+                            ? event.event_type.toUpperCase()
+                            : capitalizeWords(event?.event_type)
+                        }
+                    </p>
                     <p className="attribute-tag accent">{ capitalizeWords(event?.level) }</p>
                     <p className="attribute-tag accent">{ capitalizeWords(event?.sex) }</p>
                     <p className="attribute-tag accent">{ event?.is_singles ? "Singles" : "Doubles" }</p>
@@ -237,83 +220,58 @@ export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModif
                     />
                 </div>
             }
-            { event && 
-                <div className="icons">
-                    <DateIconComp 
-                        startTime={ event?.start_time } 
-                        endTime={ event?.end_time } 
-                        name={ event.name }
-                        description={ event.description }
-                        address={ event.location?.address }
-                    />
-                    <LocationIconComp location={ event?.location ?? null } />
-                    <EventInfoIconComp 
-                        isDUPR={ event?.is_dupr } 
-                        isSingles={ event?.is_singles } 
-                        isTournament={ event?.is_tournament } 
-                        level={ event?.level }
-                        sex={ event?.sex }
-                    />
-                    <PriceIconComp price={ event?.price } />
-                </div>
-            }
+            <EventIconsComp event={ event } />
             { event?.description &&
                 <div className="desc-cont">
                     <h6>Description</h6>
                     <p>{ event.description }</p>
                 </div>
             }
-            <div className="host-club">
-                <h6>Hosting Club</h6>
-                <div className="club" onClick={ () => openClub() } >
-                    <img className="profile-pic" src={ event?.club?.profile_pic ?? import.meta.env.VITE_DEFAULT_CLUB_PIC }/>
-                    <h6 className="name">{ event?.club?.name }</h6>
-                </div>
-            </div>
-            { playersApproved.length > 0 &&
-                <div className="approved-cont">
-                    <UsersDropdown 
-                        content={ `Current Players${ playersApproved.length >= (event?.max_players ?? 100) ? " (Full)" : ""}` }
-                        users={ playersApproved.map((player) => player.user!) }
-                        showNum={ true }
-                        isMini={ true }
-                    />
-                </div>
-            }
-            { playersNotApproved.length > 0 &&
-                <div className="not-approved-cont">
-                    { userMember?.role === Role.ADMIN || userMember?.role === Role.OWNER
-                        ? <UsersDropdown 
-                            content="Requested"
-                            showNum={ true }
-                            users={ playersNotApproved.map((player) => player.user!) }
-                            isMini={ false }
-                            appovedClicked={ (id: string) => approveRequest(id) }
-                            denyClicked={ (id: string) => denyRequest(id) }
-                            isDisabled={ playersApproved.length >= (event?.max_players ?? 100) }
-                        />
-                        : <UsersDropdown 
-                            content="Requested"
-                            showNum={ true }
-                            users={ playersNotApproved.map((player) => player.user!) }
-                            isMini={ true }
-                        />
-                    }
-                </div>
-            }
-            { userMember && canJoin
-                ? <Button 
-                        content={ joining ? "Joining Event..." : "Join Event" }
-                        onBtnClick={() => joinEvent()}
-                    />
-                : <p className="cant-join-message">*Can't Join - { message ? message : "" }</p>
-            }
+            <EventParticipantsComp
+                event={ event }
+                hosts={ hosts }
+                playersApproved={ playersApproved }
+                playersNotApproved={ playersNotApproved }
+                userMember={ userMember }
+                setSearchHostsClosed={ setSearchHostsClosed }
+                userIsHost={ userIsHost }
+                setPlayersApproved={ setPlayersApproved }
+                setPlayersNotApproved={ setPlayersNotApproved }
+                setError={ setError }
+            />
+            <EventButtonComp 
+                event={ event }
+                userMember={ userMember }
+                playersApproved={ playersApproved }
+                playersNotApproved={ playersNotApproved }
+                buttonSituation={ buttonSituation }
+                userIsHost={ userIsHost }
+                openClub={ openClub }
+                setPlayersApproved={ setPlayersApproved }
+                setPlayersNotApproved={ setPlayersNotApproved }
+                setError={ setError }
+            />
         </>;
 
     return (
-        <div className="popup opened-event">
-            <CloseButton setIsClosed={ closeEventPopup } />
-            { content }
-        </div>
+        <>
+            <div className="popup opened-event">
+                <CloseButton setIsClosed={ closeEventPopup } />
+                { content }
+                <PopupWrapper 
+                    popupComp={ 
+                        <UserSearchPopup
+                            club_id={ event?.club?.id ? event?.club.id : null }
+                            canApprove={ true }
+                            setIsClosed={ setSearchHostsClosed }
+                            approveClicked={ addHosts }
+                            approveContent="Add Host"
+                            usersApproved={ hosts.map((host) => host.user ? host.user : null).filter((user) => user !== null) }
+                        />
+                    }
+                    isClosed={ searchHostsClosed }
+                />
+            </div>
+        </>
     );
 }

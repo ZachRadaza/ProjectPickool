@@ -5,6 +5,7 @@ import clubRequestsRouter from "./club_requests.router.js";
 import clubMemberRouter from "./club_members.router.js";
 import eventsRouter from "./events.router.js";
 import playersRouter from "./players.router.js";
+import hostRouter from "./hosts.router.js";
 
 const router = Router();
 
@@ -21,5 +22,6 @@ router.use("/clubrequests", clubRequestsRouter);
 router.use("/clubmembers", clubMemberRouter);
 router.use("/events", eventsRouter);
 router.use("/players", playersRouter);
+router.use("/hosts", hostRouter);
 
 export default router;

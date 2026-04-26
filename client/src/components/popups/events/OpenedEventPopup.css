@@ -16,44 +16,26 @@
     gap: 0.5rem;
 }
 
+.opened-event .host-club{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.opened-event .host-club .club-name{
+    cursor: pointer;
+    transition: color 100ms ease;
+}
+
+.opened-event .host-club:hover .club-name{ color: var(--color-accent); }
+
 .opened-event .event-actions-cont{
     display: flex;
     flex-direction: row;
     gap: 1rem;
-    width: 100%;
-}
-
-.opened-event .host-club{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-.opened-event .host-club .club{
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: center;
-    width: fit-content;
-    margin: 0.3rem 1rem;
-}
-
-.opened-event .host-club .club .profile-pic{
-    border-radius: 999px;
-    width: clamp(3rem, 8vw, 5rem);
-    height: auto;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border: 0.1rem solid var(--color-text);
-}
-
-.opened-event .host-club .club > *{ transition: all 100ms ease; }
-.opened-event .host-club .club:hover .profile-pic{ border-color: var(--color-accent); }
-.opened-event .host-club .club:hover .name{ color: var(--color-accent); }
-
-.opened-event .icons{
-    display: flex;
-    flex-direction: column;
     width: 100%;
 }
 
@@ -64,12 +46,8 @@
     gap: 0.5rem;
 }
 
-.opened-event .approved-cont,
-.opened-event .not-approved-cont{
-    width: 100%;
-}
-
-.opened-event .cant-join-message{
-    opacity: 0.7;
-    font-style: italic;
+.opened-event .popup-wrapper{
+    position: absolute;
+    left: 0px;
+    height: 100vh;
 }

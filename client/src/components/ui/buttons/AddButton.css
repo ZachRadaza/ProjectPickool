@@ -1,0 +1,39 @@
+.add-btn-cont{
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-btn-cont .add-btn{
+    border-radius: 0px;
+    box-sizing: border-box;
+}
+
+.add-btn-cont .add-btn.mini{
+    border-radius: 999px;
+    aspect-ratio: 1 / 1;
+    width: clamp(3rem, 8vw, 5rem);
+    height: auto;
+    padding: 0px;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-btn-cont .add-btn svg{
+    width: 1.5rem;
+    height: auto;
+    fill: var(--color-text);
+    stroke: var(--color-text);
+    transform: rotate(45deg);
+    transition: transform 300ms ease;
+}
+
+.add-btn-cont .add-btn:hover svg{
+    transform: rotate(135deg);
+}
+
+.add-btn-cont .filler{
+    opacity: 0;
+}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Level, Recurring, Sex, type Events, type Locations, type UserHeader } from "../../../utils/schemas";
+import { EventType, Level, Recurring, Sex, type Events, type Locations, type UserHeader } from "../../../utils/schemas";
 import CloseButton from "../../ui/buttons/CloseButton";
 import "../popup.css";
 import Loading from "../../../pages/Loading";
@@ -11,6 +11,8 @@ import RecurringChooser from "../../ui/choosers/RecurringChooser";
 import SexChooser from "../../ui/choosers/SexChooser";
 import "./ModifyEventPopup.css";
 import LocationInput from "../../ui/inputs/LocationInput";
+import EventTypeChooser from "../../ui/choosers/EventTypeChooser";
+import { convertHoursToSeconds, convertSecondsToHours } from "../../../utils/random";
 
 type ModifyEventPopup = {
     userHeader: UserHeader | null;
@@ -73,17 +75,15 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
         if(event.sex !== eventCopy?.sex) updates.sex = event.sex;
         if(event.level !== eventCopy?.level) updates.level = event.level;
         if(event.is_auto_approve !== eventCopy?.is_auto_approve) updates.is_auto_approve = event.is_auto_approve;
-        if(event.is_dupr !== eventCopy?.is_dupr) updates.is_dupr = event.is_dupr;
+        if(event.event_type !== eventCopy?.event_type) updates.event_type = event.event_type;
         if(event.is_singles !== eventCopy?.is_singles) updates.is_singles = event.is_singles;
-        if(event.is_tournament !== eventCopy?.is_tournament) updates.is_tournament = event.is_tournament;
+        if(event.approve_window !== eventCopy?.approve_window) updates.approve_window = convertHoursToSeconds(event.approve_window || 0);
 
         if(
             JSON.stringify(event?.location) !== JSON.stringify(eventCopy?.location) &&
             event?.location
         )
             updates.location = event?.location;
-
-        console.log(updates);
 
         const updated = await ExtensionService.updateEvent(event_id, updates);
 
@@ -120,14 +120,18 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
         } else 
             setMessage("");
 
-        const newEvent = await ExtensionService.addEvent(event);
+        const eventHoursUpdated: Events = { ...event, approve_window: convertHoursToSeconds(event.approve_window || 0) };
 
-        if(!newEvent){
+        const newEvent = await ExtensionService.addEvent(eventHoursUpdated);
+
+        if(!newEvent || !newEvent.id){
             setIsSaving(false);
             setError("Error in Creating New Event")
             return;
         }
-        
+
+        await ExtensionService.addHost(newEvent.id, userHeader.id);
+
         setIsSaving(false);
         setIsClosed(true);
         window.location.reload();
@@ -165,8 +169,8 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                         recurring: Recurring.NONE,
                         is_singles: true,
                         is_auto_approve: true,
-                        is_dupr: true,
-                        is_tournament: false
+                        event_type: EventType.CASUAL,
+                        approve_window: 10
                     };
 
                     setEvent(eventNew);
@@ -179,8 +183,8 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                         setError("Error in Getting Event");
                     }
 
-                    setEvent(eventData);
-                    setEventCopy({ ...eventData });
+                    setEvent({... eventData, approve_window: convertSecondsToHours(eventData.approve_window || 0) });
+                    setEventCopy({ ...eventData, approve_window: convertSecondsToHours(eventData.approve_window || 0) });
                 }
                 setIsLoading(false);
             } catch(error){
@@ -283,7 +287,14 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                         value={ event?.max_players ?? "" }
                         onChange={ (e) => {
                             const value = e.target.value;
-                            setEvent((ev) => ev ? { ...ev, max_players: value === "" ? null : Number(e.target.value) } : ev) 
+
+                            if(value === ""){
+                                setEvent(ev => ev ? { ...ev, max_players: 0 } : ev);
+                                return;
+                            }
+
+                            const intValue = Math.floor(Number(value));
+                            setEvent(ev => ev ? { ...ev, max_players: intValue } : ev);
                         }}
                     />
                 </div>
@@ -306,7 +317,7 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                     <h6>Sex</h6>
                     <SexChooser 
                         sex={ event?.sex ?? Sex.MIXED }
-                        setSex={ (sex) => setEvent((ev) => ev ? {...ev, sex } : ev) }
+                        setSex={ (sex) => setEvent((ev) => ev ? { ...ev, sex } : ev) }
                     />
                 </div>
                 <div className="choosers">
@@ -315,6 +326,13 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                         isPlayer={ false }
                         level={ event?.level ?? Level.ALL }
                         setLevel={ (level: Level) => setEvent((ev) => ev ? { ...ev, level: level } : ev) }
+                    />
+                </div>
+                <div className="choosers">
+                    <h6>Event Type</h6>
+                    <EventTypeChooser
+                        event_type={ event?.event_type ?? EventType.CASUAL }
+                        setEventType={ (event_type) => setEvent((ev) => ev ? { ...ev, event_type } : ev) }
                     />
                 </div>
             </div>
@@ -332,41 +350,35 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                         additionalClasses={ !event?.is_singles ? "active" : "" }
                     />
                 </div>
-                <div className="switch">
-                    <Button 
-                        content="Casual"
-                        onBtnClick={() => setEvent((ev) => ev ? { ...ev, is_tournament: false } : ev) }
-                        additionalClasses={ !event?.is_tournament ? "active" : "" }
-                    />
-                    <Button 
-                        content="Tournament"
-                        onBtnClick={() => setEvent((ev) => ev ? { ...ev, is_tournament: true } : ev) }
-                        additionalClasses={ event?.is_tournament ? "active" : "" }
-                    />
-                </div>
-                <div className="switch">
-                    <Button 
-                        content="DUPR Rating"
-                        onBtnClick={() => setEvent((ev) => ev ? { ...ev, is_dupr: true } : ev) }
-                        additionalClasses={ event?.is_dupr ? "active" : "" }
-                    />
-                    <Button 
-                        content="No DUPR Rating"
-                        onBtnClick={() => setEvent((ev) => ev ? { ...ev, is_dupr: false } : ev) }
-                        additionalClasses={ !event?.is_dupr ? "active" : "" }
-                    />
-                </div>
-                <div className="switch">
-                    <Button 
-                        content="Auto-Approve"
-                        onBtnClick={() => setEvent((ev) => ev ? { ...ev, is_auto_approved: true } : ev) }
-                        additionalClasses={ event?.is_auto_approve ? "active" : "" }
-                    />
-                    <Button 
-                        content="Request Join"
-                        onBtnClick={() => setEvent((ev) => ev ? { ...ev, is_auto_approved: false } : ev) }
-                        additionalClasses={ !event?.is_auto_approve ? "active" : "" }
-                    />
+                <div className="approve-cont">
+                    <div className="switch">
+                        <Button 
+                            content="Auto-Approve"
+                            onBtnClick={() => setEvent((ev) => ev ? { ...ev, is_auto_approve: true } : ev) }
+                            additionalClasses={ event?.is_auto_approve ? "active" : "" }
+                        />
+                        <Button 
+                            content="Request Join"
+                            onBtnClick={() => setEvent((ev) => ev ? { ...ev, is_auto_approve: false } : ev) }
+                            additionalClasses={ event?.is_auto_approve ? "" : "active" }
+                        />
+                    </div>
+                    { (!event?.is_auto_approve && (event?.price ? event.price : 0) > 0) &&
+                        <div className="input-pair">
+                            <h6>Number of Hours to Pay</h6>
+                            <input 
+                                type="number"
+                                min={ 0 }
+                                max={ 240 }
+                                step="1"
+                                value={ event?.approve_window ?? "" }
+                                onChange={ (e) => {
+                                    const value = e.target.value;
+                                    setEvent((ev) => ev ? { ...ev, approve_window: value === "" ? null : Number(e.target.value) } : ev) 
+                                }}
+                            />
+                        </div>
+                    }
                 </div>
             </div>
             <Button 

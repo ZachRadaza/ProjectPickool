@@ -1,4 +1,5 @@
 .user-header-mini-cont{
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
@@ -8,6 +9,12 @@
 }
 
 .user-header-mini-cont > *{ transition: all 100ms ease; }
+
+.user-header-mini-cont .unpaid{
+    position: absolute;
+    top: 0px;
+    left: 50%;
+}
 
 .user-header-mini-cont .profile-pic{
     border: 0.1rem solid var(--color-text);

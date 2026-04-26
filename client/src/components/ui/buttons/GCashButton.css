@@ -1,0 +1,18 @@
+.gcash-btn{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 1rem 1rem;
+    background: #007dff;
+    color: var(--color-bg);
+}
+
+.gcash-btn:disabled{
+    background: color-mix(in srgb, #007dff 50%, transparent);
+}
+
+.gcash-btn svg{
+    height: 3rem;
+    width: auto;
+}

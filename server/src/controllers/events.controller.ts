@@ -280,5 +280,5 @@ export async function deleteEvent(req: Request, res: Response){
 }
 
 function validateEventBody(event: Events){
-    return (event.club_id && event.start_time && event.end_time && event.name && event.price);
+    return (event.club_id && event.start_time && event.end_time && event.name && event.price !== null);
 }

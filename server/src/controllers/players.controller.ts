@@ -100,7 +100,7 @@ export async function getUserPlayers(req: Request, res: Response){
 
 export async function addPlayer(req: Request, res: Response){
     try{
-        const { event_id, user_id, approved } = req.body;
+        const { event_id, user_id, approved, paid } = req.body;
 
         if(
             !event_id || 
@@ -113,7 +113,7 @@ export async function addPlayer(req: Request, res: Response){
                 error: "event id and user id required"
             });
 
-        const data = await playerService.addPlayer(event_id, user_id, approved);
+        const data = await playerService.addPlayer(event_id, user_id, approved, paid);
 
         res.status(200).json({
             success: true,

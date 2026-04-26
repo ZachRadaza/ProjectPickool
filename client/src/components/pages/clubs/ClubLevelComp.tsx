@@ -89,12 +89,12 @@ export default function ClubLevelComp({ userHeader, userClubMember, club_id, set
             <div className="setting-area">
                 <h5 className="club-level-info">
                     { userClubMember?.is_level_approved && userClubMember.level === level
-                        ? "Your Club Level is approved"
-                        : "Club Level is not approved"
+                        ? "Your Player Level is approved"
+                        : "Player Level is not approved"
                     }
                 </h5>
                 <div className="club-level-pair">
-                    <h6>Club Level: </h6>
+                    <h6>Player Level: </h6>
                     <LevelChooser 
                         isPlayer={ true } 
                         level={ level } 

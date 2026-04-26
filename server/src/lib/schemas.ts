@@ -3,7 +3,6 @@ export const Role = {
     MEMBER: "member",
     OWNER: "owner"
 } as const;
-
 export type Role = (typeof Role)[keyof typeof Role];
 
 export const Level = {
@@ -13,7 +12,6 @@ export const Level = {
     ADVANCED: "advanced",
     ALL: "all levels"
 } as const;
-
 export type Level = (typeof Level)[keyof typeof Level];
 
 export const RequestStatus = {
@@ -21,7 +19,6 @@ export const RequestStatus = {
     APPROVED: "approved",
     DENIED: "denied"
 } as const;
-
 export type RequestStatus = (typeof RequestStatus)[keyof typeof RequestStatus];
 
 export const Sex = {
@@ -29,7 +26,6 @@ export const Sex = {
     FEMALE: "females",
     MIXED: "mixed"
 } as const;
-
 export type Sex = (typeof Sex)[keyof typeof Sex];
 
 export const Recurring = {
@@ -39,8 +35,14 @@ export const Recurring = {
     BIWEEKLY: "biweekly",
     MONTLY: "monthly"
 } as const;
-
 export type Recurring = (typeof Recurring)[keyof typeof Recurring];
+
+export const EventType = {
+    CASUAL: "casual",
+    TOURNAMENT: "tournament",
+    DUPR: "dupr"
+} as const;
+export type EventType = (typeof EventType)[keyof typeof EventType];
 
 export const LikeType = {
     LIKE: "like",
@@ -48,7 +50,6 @@ export const LikeType = {
     LAUGH: "laugh",
     PICKLE: "pickle"
 } as const;
-
 export type LikeType = (typeof LikeType)[keyof typeof LikeType];
 
 export type Locations = {
@@ -75,6 +76,7 @@ export type UserHeader = {
     id: string;
     username: string;
     profile_pic: string;
+    location?: Locations | null;
 }
 
 export type Clubs = {
@@ -134,20 +136,27 @@ export type Events = {
     price: number;
     description?: string | null;
     is_auto_approve: boolean;
-    is_tournament: boolean;
-    is_dupr: boolean;
     is_singles: boolean;
+    event_type: EventType;
     sex: Sex;
     level: Level;
     max_players: number;
     recurring: Recurring;
+    approve_window: number;
 }
 
 export type Players = {
     user: UserHeader;
     event_id: string;
     approved: boolean;
+    approved_at: string;
+    paid: boolean;
 };
+
+export type Hosts = {
+    user: UserHeader | null;
+    event_id: string;
+}
 
 export type Posts = {
     id: string;

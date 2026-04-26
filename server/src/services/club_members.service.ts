@@ -2,7 +2,7 @@ import { Level, type Club_Members } from "../lib/schemas.js";
 import { supabase } from "../lib/supabase.js";
 
 const clubMemberBody = `
-    user:users(
+    user:users!inner(
         id,
         username,
         profile_pic
@@ -80,24 +80,30 @@ export async function getClubUnapproved(club_id: string){
 }
 
 export async function getSingleClubMember(club_id: string, user_id: string){
-    const { data } = await supabase
+    const { data, error } = await supabase
         .from("club_members")
         .select(clubMemberBody)
         .eq("user_id", user_id)
         .eq("club_id", club_id)
         .maybeSingle();
 
+    if(error)
+        throw new Error(error.message);
+
     return data;
 }
 
 export async function getBasicClubMember(club_id: string, user_id: string){
-    const { data } = await supabase
+    const { data, error } = await supabase
         .from("club_members")
         .select("*")
         .eq("user_id", user_id)
         .eq("club_id", club_id)
         .maybeSingle();
 
+    if(error)
+        throw new Error(error.message);
+    
     return data;
 }
 
@@ -111,6 +117,20 @@ export async function getClubMembersNum(club_id: string){
         throw new Error(error.message);
 
     return count;
+}
+
+export async function getQueryClubMembers(club_id: string, query: string){
+    const { data ,error } = await supabase
+        .from("club_members")
+        .select(clubMemberBody)
+        .eq("club_id", club_id)
+        .ilike("users.username", `%${query}%`)
+        .limit(50);
+
+    if(error)
+        throw new Error(error.message);
+
+    return data;
 }
 
 export async function addClubMember(club_id: string, user_id: string, isOwner: boolean){

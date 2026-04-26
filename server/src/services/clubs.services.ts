@@ -42,7 +42,7 @@ export async function getClub(id: string){
 export async function getNearbyClubs(user_id: string) {
     const { data, error } = await supabase.rpc("get_nearby_clubs", {
         p_user_id: user_id,
-        p_radius_km: 20
+        p_radius_km: 40
     });
 
     if(error)
@@ -73,7 +73,7 @@ export async function getQueryNearbyClubs(user_id: string, query: string){
 
     const { data, error } = await supabase.rpc("get_nearby_clubs", {
         p_user_id: user_id,
-        p_radius_km: 20
+        p_radius_km: 40
     });
 
     if(error)

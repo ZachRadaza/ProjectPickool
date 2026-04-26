@@ -31,6 +31,7 @@ export default function CalendarComp({ events, setClosedModifyEvent, showClub, u
 
     useEffect(() => {
         getEventUserPlayer();
+        
         async function getEventUserPlayer(){
             try{
                 setIsLoading(true);
@@ -132,7 +133,8 @@ export default function CalendarComp({ events, setClosedModifyEvent, showClub, u
                                         year: "numeric"
                                     }) }
                                 </h5>
-                                { eventsList.map((e) =>
+                                { eventsList.sort((a, b) => a.event.start_time.localeCompare(b.event.start_time))
+                                .map((e) =>
                                     <EventsComp event={ e.event } showClub={ showClub } player={ e.player } key={ e.event.id }/>
                                 )}
                             </div>

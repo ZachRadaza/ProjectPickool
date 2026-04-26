@@ -201,6 +201,34 @@ export async function getClubMembersNum(req: Request, res: Response){
     }
 }
 
+export async function getQueryClubMembers(req: Request, res: Response){
+    try{
+        const { club_id, query } = req.params;
+
+        if(
+            !club_id || typeof club_id !== "string" ||
+            !query|| typeof query !== "string"
+        )
+            return res.status(400).json({
+                success: false,
+                error: "club id and query required"        
+            });
+
+        const data = await clubMemberService.getQueryClubMembers(club_id, query);
+
+        res.status(200).json({
+            success: true,
+            data: data
+        });
+    } catch(error: any){
+        console.error("getQueryClubMembers error", error);
+        res.status(500).json({
+            success: false,
+            error: error
+        });
+    }
+}
+
 export async function addClubMember(req: Request, res: Response){
     try{
         const { user_id, club_id } = req.body;

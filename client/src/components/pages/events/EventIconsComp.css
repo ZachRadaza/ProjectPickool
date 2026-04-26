@@ -1,0 +1,5 @@
+.event-icons-cont{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}

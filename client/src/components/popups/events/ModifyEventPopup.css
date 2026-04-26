@@ -98,6 +98,12 @@ input[type="number"]::-webkit-inner-spin-button {
 .modify-event .switches-cont .switch button.active{ background: var(--color-primary); }
 .modify-event .switches-cont .switch button.active:hover{ background: var(--color-accent); }
 
+.modify-event .approve-cont{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
 @media (max-width: 640px){
     .modify-event .name-cont, .modify-event .name-cont input{ width: 100%; }
 

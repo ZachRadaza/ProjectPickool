@@ -1,15 +1,14 @@
 import { capitalizeWords } from "../../../utils/random";
-import type { Level, Sex } from "../../../utils/schemas";
+import { EventType, type Level, type Sex } from "../../../utils/schemas";
 
 type EventInfoIconCompProp = {
     isSingles: boolean;
-    isTournament: boolean;
-    isDUPR: boolean;
+    eventType: EventType;
     sex: Sex;
     level: Level;
 };
 
-export default function EventInfoIconComp({ isSingles, isTournament, isDUPR, sex, level }:EventInfoIconCompProp){
+export default function EventInfoIconComp({ isSingles, eventType, sex, level }:EventInfoIconCompProp){
     return (
         <div className="icon-comp-cont">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1.6 -3.2 35.2 43.2">
@@ -17,8 +16,12 @@ export default function EventInfoIconComp({ isSingles, isTournament, isDUPR, sex
                 <path d="M28.05,15.49l-6.42,6.42c-1.58,1.58-3.96,1.86-5.82,.84h0c-2.73-.99-4.14,.42-4.14,.42l-.37,.37c-.21,.21-.55,.21-.77,0l-2.07-2.07c-.21-.21-.21-.55,0-.77l.37-.37s1.41-1.42,.42-4.14h0c-1.02-1.86-.74-4.25,.84-5.82l6.42-6.42c1.92-1.92,5.03-1.92,6.95,0l4.6,4.6c1.92,1.92,1.92,5.03,0,6.95Z"/>
             </svg>
             <div className="right-side">
-                <h6 className="name">{isSingles ? "Singles" : "Doubles"} { isTournament ? "Tournament" : "Casual" }</h6>
-                <p className="bottom">{ isDUPR ? "DUPR •" : "" } { capitalizeWords(sex) } • { capitalizeWords(level) }</p>
+                <h6 className="name">
+                    {isSingles ? "Singles" : "Doubles"} { eventType === EventType.DUPR 
+                        ? eventType.toUpperCase() 
+                        : capitalizeWords(eventType) }
+                </h6>
+                <p className="bottom">{ capitalizeWords(sex) } • { capitalizeWords(level) }</p>
             </div>
         </div>
     );

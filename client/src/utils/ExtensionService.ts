@@ -1,4 +1,4 @@
-import type { Club_Members, Club_Requests, Clubs, Events, Players, UserClubRequests, UserClubs, UserHeader, Users } from "./schemas";
+import type { Club_Members, Club_Requests, Clubs, Events, Hosts, Players, UserClubRequests, UserClubs, UserHeader, Users } from "./schemas";
 import { supabase } from "./supabase";
 
 const apiUrl = "http://localhost:3000/api";
@@ -8,6 +8,7 @@ const clubRequestApiUrl = `${apiUrl}/clubrequests`;
 const clubMemberApiUrl = `${apiUrl}/clubmembers`;
 const eventApiUrl = `${apiUrl}/events`;
 const playerApiUrl = `${apiUrl}/players`;
+const hostApiUrl = `${apiUrl}/hosts`;
 
 export const ExtensionService = {
 
@@ -22,7 +23,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const dataRet: Users = res.data;
 
             return dataRet;
@@ -48,7 +48,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const user: UserHeader = res.data;
 
             return user;
@@ -67,7 +66,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const user: UserHeader = res.data;
 
             return user;
@@ -86,7 +84,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Users[] = res.data;
 
             return data;
@@ -178,7 +175,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const updatedUser: Users = res.data;
 
             return updatedUser;
@@ -197,7 +193,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data = res.data;
 
             return data;
@@ -339,9 +334,6 @@ export const ExtensionService = {
             const res = await req.json();
             const data: Clubs = res.data;
 
-            console.log("res", res);
-            console.log("data", data);
-
             return data;
         } catch(error){
             console.error("error", error);
@@ -410,7 +402,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Club_Requests[] = res.data;
 
             return data;
@@ -448,7 +439,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: UserClubRequests[] = res.data;
 
             return data;
@@ -467,7 +457,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-            
             const data: Club_Requests = res.data;
 
             return data;
@@ -487,7 +476,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Club_Requests = res.data;
 
             return data;
@@ -506,7 +494,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: number = res.data;
 
             return data;
@@ -525,7 +512,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Club_Requests = res.data;
 
             return data;
@@ -537,20 +523,14 @@ export const ExtensionService = {
 
     async denyClubRequest(club_id: string, user_id: string){
         try{
-            console.log("user", user_id);
-            console.log("club", club_id);
             const req = await fetch(`${clubRequestApiUrl}/deny/${user_id}/${club_id}`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include"
             });
-            console.log("1");
 
             const res = await req.json();
-            console.log("2")
-
             const data: Club_Requests = res.data;
-            console.log("3");
 
             return data;
         } catch(error){
@@ -570,7 +550,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Club_Members[] = res.data;
 
             return data;
@@ -589,7 +568,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Club_Members[] = res.data;
 
             return data;
@@ -608,7 +586,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Club_Members[] = res.data;
 
             return data;
@@ -627,7 +604,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Club_Members = res.data;
 
             return data;
@@ -646,7 +622,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Club_Members[] = res.data;
 
             return data;
@@ -666,7 +641,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: number = res.data;
 
             return data;
@@ -685,7 +659,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Club_Members = res.data;
 
             return data;
@@ -704,8 +677,25 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Club_Members = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getQueryClubMembers(club_id: string, query: string){
+        try{
+            const req = await fetch(`${clubMemberApiUrl}/query/${club_id}/${query}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Club_Members[] = res.data;
 
             return data;
         } catch(error){
@@ -724,7 +714,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Club_Members = res.data;
 
             return data;
@@ -744,7 +733,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Club_Members = res.data;
 
             return data;
@@ -763,7 +751,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Club_Members = res.data;
 
             return data;
@@ -784,7 +771,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Events[] = res.data;
 
             return data;
@@ -803,7 +789,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Events = res.data;
 
             return data;
@@ -822,7 +807,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Events[] = res.data;
 
             return data;
@@ -841,7 +825,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Events[] = res.data;
 
             return data;
@@ -860,7 +843,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Events[] = res.data;
 
             return data;
@@ -879,7 +861,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Events[] = res.data;
 
             return data;
@@ -898,7 +879,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Events[] = res.data;
 
             return data;
@@ -918,7 +898,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Events = res.data;
 
             return data;
@@ -938,7 +917,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Events = res.data;
 
             return data;
@@ -957,7 +935,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Events = res.data;
 
             return data;
@@ -978,7 +955,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Players[] = res.data;
 
             return data;
@@ -997,7 +973,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Players = res.data;
 
             return data;
@@ -1016,7 +991,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Players[] = res.data;
 
             return data;
@@ -1035,7 +1009,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Players[] = res.data;
 
             return data;
@@ -1045,17 +1018,16 @@ export const ExtensionService = {
         }
     },
 
-    async addPlayer(event_id: string, user_id: String, approved: boolean){
+    async addPlayer(event_id: string, user_id: String, approved: boolean, paid: boolean){
         try{
             const req = await fetch(`${playerApiUrl}/`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ event_id, user_id, approved }),
+                body: JSON.stringify({ event_id, user_id, approved, paid }),
                 credentials: "include"
             });
 
             const res = await req.json();
-
             const data: Players = res.data;
 
             return data;
@@ -1075,7 +1047,6 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Players = res.data;
 
             return data;
@@ -1094,8 +1065,115 @@ export const ExtensionService = {
             });
 
             const res = await req.json();
-
             const data: Players = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getAllHosts(){
+        try{
+            const req = await fetch(`${hostApiUrl}/`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Hosts[] = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getHost(event_id: string, user_id: string){
+        try{
+            const req = await fetch(`${hostApiUrl}/${event_id}/${user_id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Hosts = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getEventHosts(event_id: string){
+        try{
+            const req = await fetch(`${hostApiUrl}/event/${event_id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Hosts[] = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getUserHost(user_id: string){
+        try{
+            const req = await fetch(`${hostApiUrl}/user/${user_id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Hosts = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async addHost(event_id: string, user_id: string){
+        try{
+            const req = await fetch(`${hostApiUrl}/${event_id}/${user_id}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Hosts = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async deleteHost(event_id: string, user_id: string){
+        try{
+            const req = await fetch(`${hostApiUrl}/${event_id}/${user_id}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Hosts = res.data;
 
             return data;
         } catch(error){

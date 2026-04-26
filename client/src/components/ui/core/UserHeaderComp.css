@@ -63,3 +63,7 @@
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
 }
+
+.user-header-cont .req-btns-cont button:only-child{
+    border-radius: 999px;
+}

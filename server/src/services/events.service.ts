@@ -15,13 +15,13 @@ const eventBody = `
     price,
     description,
     is_auto_approve,
-    is_tournament,
-    is_dupr,
     is_singles,
+    event_type,
     sex,
     level,
     max_players,
-    recurring
+    recurring,
+    approve_window
 `;
 
 export async function getAllEvents(){
@@ -88,7 +88,7 @@ export async function getPossibleUserClubEvents(user_id: string){
 export async function getPossibleUserLocationEvents(user_id: string){
     const { data, error } = await supabase.rpc("get_nearby_events", {
         p_user_id: user_id,
-        p_radius_km: 10
+        p_radius_km: 40
     });
 
     if(error) 
@@ -119,7 +119,7 @@ export async function getQueryNearbyEvents(user_id: string, query: string){
 
     const { data, error } = await supabase.rpc("get_nearby_events", {
         p_user_id: user_id,
-        p_radius_km: 20
+        p_radius_km: 40
     });
 
     if(error)

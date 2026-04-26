@@ -38,3 +38,11 @@ export function getCurrentLocation(): Promise<{ latitude: number; longitude: num
         );
     });
 }
+
+export function convertSecondsToHours(sec: number){
+    return sec / 3600;
+}
+
+export function convertHoursToSeconds(hours: number){
+    return hours * 60 * 60;
+}

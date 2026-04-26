@@ -6,13 +6,13 @@ import Button from "../buttons/Button";
 type UserHeaderCompProp = {
     userHeader: UserHeader | null;
     clubInfoHeader?: Club_Members | null;
-    isRequest?: boolean;
     disableBtns?: boolean;
     approveClicked?: () => void;
     denyClicked?: () => void;
+    approveContent?: string | null;
 };
 
-export default function UserHeaderComp({ userHeader, clubInfoHeader, isRequest, disableBtns, approveClicked, denyClicked }: UserHeaderCompProp){
+export default function UserHeaderComp({ userHeader, clubInfoHeader, disableBtns, approveClicked, denyClicked, approveContent }: UserHeaderCompProp){
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -44,27 +44,22 @@ export default function UserHeaderComp({ userHeader, clubInfoHeader, isRequest, 
                     </div>
                     { clubInfoHeader && <h6 className="role">{ clubInfoHeader.role }</h6> }
                 </div>
-                { isRequest
-                    ? <div className="req-btns-cont">
+                <div className="req-btns-cont">
+                    { approveClicked &&   
                         <Button
-                            onBtnClick={ () => { 
-                                if(approveClicked) 
-                                    approveClicked(); 
-                            }}
-                            content="Approve"
+                            onBtnClick={ () => approveClicked() }
+                            content={ approveContent ? approveContent : "Approve"}
                             isDisabled={ disableBtns }
                         />
+                    }
+                    { denyClicked &&
                         <Button
-                            onBtnClick={ () => {
-                                if(denyClicked) 
-                                    denyClicked(); 
-                            }}
+                            onBtnClick={ () => denyClicked() }
                             content="Deny"
                             additionalClasses="red"
                         />
-                    </div>
-                    : <></>
-                }
+                    }
+                </div>
             </div>
         </div>
     );

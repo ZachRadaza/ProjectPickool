@@ -53,8 +53,6 @@ export default function EditUserPopup({ userHeader, setUserHeader, setIsClosed }
         if(userTemp?.profile_pic_file instanceof File)
             updatedUser.profile_pic_file = userTemp.profile_pic_file;
 
-        console.log(updatedUser);
-
         const userData = await ExtensionService.updateUser(userHeader.id, updatedUser);
 
         if(!userData){

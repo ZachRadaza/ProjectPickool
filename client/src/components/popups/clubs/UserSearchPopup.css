@@ -1,0 +1,17 @@
+.user-search-popup{
+    min-height: 400px;
+}
+
+.user-search-popup .content-cont:first-child{
+    border-top-right-radius: 1rem;
+    border-top-left-radius: 1rem;
+}
+
+.user-search-popup .content-cont:last-child{
+    border-bottom-right-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+}
+
+.user-search-popup .content-cont:only-child{
+    border-radius: 1rem;
+}
