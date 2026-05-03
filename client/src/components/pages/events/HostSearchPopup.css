@@ -1,0 +1,7 @@
+.host-search-popup{
+    display: grid;
+}
+
+.host-search-popup > *{
+    grid-area: 1 / 1;
+}

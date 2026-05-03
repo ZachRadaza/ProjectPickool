@@ -1,7 +1,8 @@
 import type { Request, Response } from "express";
 import * as eventService from "../services/events.service.js";
-import type { Events } from "../lib/schemas.js";
+import { Recurring, type Events } from "../lib/schemas.js";
 import * as locationService from "../services/location.service.js";
+import * as eventSeriesService from "../services/event_series.service.js";
 
 export async function getAllEvents(req: Request, res: Response){
     try{
@@ -185,7 +186,7 @@ export async function addEvent(req: Request, res: Response){
         const { event } = req.body;
         const { location, ...eventNoLoc } = event;
 
-        if(!event || validateEventBody(event))
+        if(!event || !validateEventBody(event))
             return res.status(400).json({
                 success: false,
                 error: "event body must have valid values"
@@ -198,7 +199,11 @@ export async function addEvent(req: Request, res: Response){
             eventUpdatedLoc = { ...eventNoLoc,  location_id: locationNew.id };
         }
 
-        const addedEvent = await eventService.addEvent(eventUpdatedLoc);
+        let addedEvent = null;
+        if(eventUpdatedLoc.recurring !== Recurring.NONE)
+            addedEvent = await eventSeriesService.addEventSeries(eventUpdatedLoc);
+        else
+            addedEvent = await eventService.addEvent(eventUpdatedLoc);
 
         res.status(200).json({
             success: true,
@@ -254,6 +259,44 @@ export async function updateEvent(req: Request, res: Response){
     }
 }
 
+export async function updateEventSeries(req: Request, res: Response){
+    try{
+        const { id, series_id } = req.params;
+        const { event } = req.body;
+
+        const { location, ...eventNoLoc } = event;
+
+        if(
+            !id || typeof id !== "string" ||
+            !series_id || typeof series_id !== "string"
+        )
+            return res.status(400).json({
+                success: false,
+                error: "Event id and series id required"
+            });
+
+        let eventUpdatedLoc = { ...eventNoLoc };
+
+        if(location && !location.id){
+            const locationNew = await locationService.locationExists(location);
+            eventUpdatedLoc = { ...eventNoLoc,  location_id: locationNew.id };
+        }
+
+        const updatedEventSeries = await eventSeriesService.updateEventSeries(series_id, eventUpdatedLoc);
+
+        res.status(200).json({
+            success: true,
+            data: updatedEventSeries
+        });
+    } catch(error: any){
+        console.error("updateEventEvents Error: ", error.message);
+        res.status(500).json({
+            success: false,
+            error: error.message || "Internal Server error"
+        });
+    }
+}
+
 export async function deleteEvent(req: Request, res: Response){
     try{
         const { id } = req.params;
@@ -272,6 +315,35 @@ export async function deleteEvent(req: Request, res: Response){
         });
     } catch(error: any){
         console.error("deleteEvents Error: ", error.message);
+        res.status(500).json({
+            success: false,
+            error: error.message || "Internal Server error"
+        });
+    }
+}
+
+export async function deleteEventSeries(req: Request, res: Response){
+    try{
+        const { id, series_id } = req.params;
+
+        if(
+            !id || typeof id !== "string" ||
+            !series_id || typeof series_id !== "string"
+        )
+            return res.status(400).json({
+                success: false,
+                error: "Event id and series id required"
+            });
+
+        const deleteEvent = await eventService.deleteEvent(id);
+        await eventSeriesService.deleteEventSeries(series_id);
+
+        res.status(200).json({
+            success: true,
+            data: deleteEvent
+        });
+    } catch(error: any){
+        console.error("deleteEventSeries Error: ", error.message);
         res.status(500).json({
             success: false,
             error: error.message || "Internal Server error"

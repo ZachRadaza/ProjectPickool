@@ -26,6 +26,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
     const [isCardHost, setIsCardHost] = useState<boolean>(false);
     const [isUserHost, setIsUserHost] = useState<boolean>(false);
     const [userClubMember, setUserClubMember] = useState<Club_Members_Basic | null>(null);
+    const [eventSeriesId, setEventSeriesId] = useState<string | null>(null);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -202,6 +203,20 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
         setIsCardHost(false);
     }
 
+    async function removeHostSeries(){
+        if(!userCardId || !eventSeriesId)
+            return;
+
+        const removed = await ExtensionService.deleteHostSeries(eventSeriesId, userCardId);
+
+        if(!removed){
+            setError("Error in removing host from recurring event");
+            return;
+        }
+
+        setIsCardHost(false);
+    }
+
     useEffect(() => {
         getUserInCard();
 
@@ -327,7 +342,10 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
                     return
                 
                 const host = await ExtensionService.getHost(event_id, userCardId);
+                const event = await ExtensionService.getEvent(event_id);
+
                 setIsCardHost(host !== null);
+                setEventSeriesId(event.series_id ?? null);
             } catch(error){
                 setError("Error in Fetching Profile Info");
                 setIsLoading(false);
@@ -376,11 +394,20 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
             { (isUserHost || userClubMember?.role === Role.OWNER) && 
                 <>
                 { isCardHost
-                    ? <Button 
-                        content="Remove Host"
-                        onBtnClick={() => removeHost() }
-                        additionalClasses="red"
-                    />
+                    ? <>
+                        <Button 
+                            content="Remove Host"
+                            onBtnClick={() => removeHost() }
+                            additionalClasses="red"
+                        />
+                        { eventSeriesId &&
+                            <Button 
+                                content="Remove Host from all future events"
+                                onBtnClick={ () => removeHostSeries() }
+                                additionalClasses="red"
+                            />
+                        }
+                    </>
                     : <Button 
                         content="Add Host"
                         onBtnClick={ () => addHost() }

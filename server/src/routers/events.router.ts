@@ -11,6 +11,8 @@ eventsRouter.get("/user/:user_id", eventsController.getPossibleUserEvents);
 eventsRouter.get("/near/:user_id", eventsController.getNearbyUserEvents);
 eventsRouter.get("/query/:query", eventsController.getQueryEvents);
 eventsRouter.get("/querynear/:user_id/:query", eventsController.getQueryNearbyEvents)
+eventsRouter.put("/series/:series_id/:id", eventsController.updateEventSeries)
+eventsRouter.delete("/series/:series_id/:id", eventsController.deleteEventSeries)
 
 eventsRouter.get("/:id", eventsController.getEvent);
 eventsRouter.put("/:id", eventsController.updateEvent);

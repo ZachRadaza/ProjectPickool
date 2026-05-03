@@ -926,6 +926,25 @@ export const ExtensionService = {
         }
     },
 
+    async updateEventSeries(event_id: string, series_id: string, event: Partial<Events>){
+        try{
+            const req = await fetch(`${eventApiUrl}/series/${series_id}/${event_id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ event }),
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Events = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }   
+    },
+
     async deleteEvent(event_id: string){
         try{
             const req = await fetch(`${eventApiUrl}/${event_id}`, {
@@ -942,6 +961,24 @@ export const ExtensionService = {
             console.error("error", error);
             throw error;
         }
+    },
+
+    async deleteEventSeries(event_id: string, series_id: string){
+        try{
+            const req = await fetch(`${eventApiUrl}/series/${series_id}/${event_id}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Events = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }   
     },
 
     // PLAYERS
@@ -1164,9 +1201,45 @@ export const ExtensionService = {
         }
     },
 
+    async addHostSeries(event_series_id: string, user_id: string){
+        try{
+            const req = await fetch(`${hostApiUrl}/series/${event_series_id}/${user_id}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Hosts = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
     async deleteHost(event_id: string, user_id: string){
         try{
             const req = await fetch(`${hostApiUrl}/${event_id}/${user_id}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Hosts = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async deleteHostSeries(event_series_id: string, user_id: string){
+        try{
+            const req = await fetch(`${hostApiUrl}/series/${event_series_id}/${user_id}`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include"

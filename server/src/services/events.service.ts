@@ -21,7 +21,8 @@ const eventBody = `
     level,
     max_players,
     recurring,
-    approve_window
+    approve_window,
+    series_id
 `;
 
 export async function getAllEvents(){

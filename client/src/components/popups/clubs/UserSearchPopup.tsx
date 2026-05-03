@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { type Club_Members, type UserHeader } from "../../../utils/schemas";
 import CloseButton from "../../ui/buttons/CloseButton";
 import Loading from "../../../pages/Loading";
@@ -25,15 +25,6 @@ export default function UserSearchPopup({ club_id, canApprove, setIsClosed, appr
     const [error, setError] = useState<string | null>(null);
 
     let content;
-
-    function approveBtnClicked(user_id: string){
-        if(!approveClicked)
-            return;
-
-        setSearchedMembers(searchedMembers.filter((member) => member.user.id !== user_id));
-
-        approveClicked(user_id);
-    }
 
     async function searchUser(){
         try{
@@ -71,6 +62,19 @@ export default function UserSearchPopup({ club_id, canApprove, setIsClosed, appr
         }
     }
 
+    useEffect(() => {
+        if(usersApproved){
+            const approvedIds = new Set(usersApproved.map(user => user.id));
+
+            const members = searchedMembers.filter(
+                member => !approvedIds.has(member.user.id)
+            );
+
+            setSearchedMembers(members);
+        }
+    }, [usersApproved]);
+
+
     if(isLoading)
         content = <Loading />;
     else if(error)
@@ -83,7 +87,7 @@ export default function UserSearchPopup({ club_id, canApprove, setIsClosed, appr
                         ? <UserHeaderComp 
                             userHeader={ member.user }
                             clubInfoHeader={ member }
-                            approveClicked={ () => approveBtnClicked(member.user.id) }
+                            approveClicked={ () => { if(approveClicked) approveClicked(member.user.id) }}
                             key={ member.user.id }
                             approveContent={ approveContent }
                         />

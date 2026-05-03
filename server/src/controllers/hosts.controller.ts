@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import * as hostService from "../services/hosts.service.js";
+import * as hostSeriesService from "../services/host_series.service.js";
 
 export async function getAllHosts(req: Request, res: Response){
     try{
@@ -124,6 +125,34 @@ export async function addHost(req: Request, res: Response){
     }
 }
 
+export async function addHostSeries(req: Request, res: Response){
+    try{
+        const { event_series_id, user_id } = req.params;
+
+        if(
+            !event_series_id || typeof event_series_id !== "string" ||
+            !user_id || typeof user_id !== "string"
+        )
+            return res.status(400).json({
+                success: false,
+                error: "user id and event id required"
+            });
+
+        const data = await hostSeriesService.addHostSeries(event_series_id, user_id);
+
+        res.status(200).json({
+            success: true,
+            data: data
+        });
+    } catch(error){
+        console.error("Error in addHosts: ", error);
+        res.status(500).json({
+            success: false,
+            error: error
+        });
+    }
+}
+
 export async function deleteHost(req: Request, res: Response){
     try{
         const { event_id, user_id } = req.params;
@@ -145,6 +174,34 @@ export async function deleteHost(req: Request, res: Response){
         });
     } catch(error){
         console.error("Error in deleteHosts: ", error);
+        res.status(500).json({
+            success: false,
+            error: error
+        });
+    }
+}
+
+export async function deleteHostSeries(req: Request, res: Response){
+    try{
+        const { event_series_id, user_id } = req.params;
+
+        if(
+            !event_series_id || typeof event_series_id !== "string" ||
+            !user_id || typeof user_id !== "string"
+        )
+            return res.status(400).json({
+                success: false,
+                error: "user id and event id required"
+            });
+
+        const data = await hostSeriesService.deleteHostSeries(event_series_id, user_id);
+
+        res.status(200).json({
+            success: true,
+            data: data
+        });
+    } catch(error){
+        console.error("Error in deleteHostSeries: ", error);
         res.status(500).json({
             success: false,
             error: error

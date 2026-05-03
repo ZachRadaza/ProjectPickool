@@ -49,7 +49,7 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
         );
     }
 
-    async function saveChanges(){
+    async function saveChanges(saveFuture: boolean){
         setIsSaving(true);
 
         if(!event || !event_id){
@@ -86,6 +86,7 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
             updates.location = event?.location;
 
         const updated = await ExtensionService.updateEvent(event_id, updates);
+        if(saveFuture && event.series_id) ExtensionService.updateEventSeries(event_id, event.series_id, updates);
 
         if(!updated){
             setIsSaving(false);
@@ -130,7 +131,10 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
             return;
         }
 
-        await ExtensionService.addHost(newEvent.id, userHeader.id);
+        if(newEvent.series_id)
+            await ExtensionService.addHostSeries(newEvent.series_id, userHeader.id);
+        else
+            await ExtensionService.addHost(newEvent.id, userHeader.id);
 
         setIsSaving(false);
         setIsClosed(true);
@@ -381,13 +385,21 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                     }
                 </div>
             </div>
-            <Button 
-                content={ isEditing 
-                    ? ( isSaving ?  "Saving Changes..." : "Save Changes" ) 
-                    : ( isSaving ? "Creating Event..." : "Create Event" ) 
+            <div className="save-btn-cont">
+                <Button 
+                    content={ isEditing 
+                        ? ( isSaving ?  "Saving Changes..." : "Save Changes" ) 
+                        : ( isSaving ? "Creating Event..." : "Create Event" ) 
+                    }
+                    onBtnClick={ () => isEditing ? saveChanges(false) : createEvent() }
+                />
+                { event?.series_id &&
+                    <Button 
+                        content={ isSaving ? "Saving Changes..." : "Save for Future Events" }
+                        onBtnClick={ () => saveChanges(true) }
+                    />
                 }
-                onBtnClick={ () => isEditing ? saveChanges() : createEvent() }
-            />
+            </div>
         </>;
 
     return (

@@ -120,7 +120,7 @@ export default function EventButtonComp({
         <>
             { userMember && (buttonSituation === EventButtonSituation.MEMBER || buttonSituation === EventButtonSituation.JOINED)
                 ? ( 
-                    (event?.is_auto_approve && (event.price ? event.price : 0) > 0) ||
+                    (event?.is_auto_approve && (event.price ? event.price : 0) > 0 && !userIsHost) ||
                     (event?.price !== 0 && buttonSituation === EventButtonSituation.JOINED)
                 )
                     ? <>

@@ -104,6 +104,14 @@ input[type="number"]::-webkit-inner-spin-button {
     gap: 0.5rem;
 }
 
+.modify-event .save-btn-cont{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
 @media (max-width: 640px){
     .modify-event .name-cont, .modify-event .name-cont input{ width: 100%; }
 

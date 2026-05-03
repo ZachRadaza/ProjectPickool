@@ -130,6 +130,7 @@ export type Events = {
     club_id?: string;
     club?: ClubHeader;
     start_time: string;
+    original_start_time?: string;
     end_time: string;
     location?: Locations | null;
     location_id?: string | null;
@@ -143,6 +144,7 @@ export type Events = {
     max_players: number;
     recurring: Recurring;
     approve_window: number;
+    series_id?: string | null;
 }
 
 export type Players = {
@@ -156,6 +158,8 @@ export type Players = {
 export type Hosts = {
     user: UserHeader | null;
     event_id: string;
+    event_series_id?: string;
+    series_id?: string;
 }
 
 export type Posts = {

@@ -154,6 +154,7 @@ export type Events = {
     max_players: number | null;
     recurring: Recurring;
     approve_window: number | null;
+    series_id?: string | null;
 }
 
 export type Players = {

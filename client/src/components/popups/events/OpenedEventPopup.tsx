@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { EventType, type Hosts, Role, type Club_Members, type Events, type Players, type UserHeader, EventButtonSituation } from "../../../utils/schemas";
+import { EventType, type Hosts, Role, type Club_Members, type Events, type Players, type UserHeader, EventButtonSituation, Recurring } from "../../../utils/schemas";
 import CloseButton from "../../ui/buttons/CloseButton";
 import Loading from "../../../pages/Loading";
 import ErrorPage from "../../../pages/Error";
@@ -11,10 +11,11 @@ import "./OpenedEventPopup.css";
 import EditButton from "../../ui/buttons/EditButton";
 import DeleteButton from "../../ui/buttons/DeleteButton";
 import PopupWrapper from "../PopupWrapper";
-import UserSearchPopup from "../clubs/UserSearchPopup";
 import EventIconsComp from "../../pages/events/EventIconsComp";
 import EventParticipantsComp from "../../pages/events/EventParticipantsComp";
 import EventButtonComp from "../../pages/events/EventButtonsComp";
+import TwoOptionPopup from "../general/TwoOptionPopup";
+import HostSearchPopup from "../../pages/events/HostSearchPopup";
 
 type OpenedEventPopupProp = {
     setIsClosed: (closed: boolean) => void;
@@ -29,7 +30,7 @@ export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModif
     const [hosts, setHosts] = useState<Hosts[]>([]);
     const [playersApproved, setPlayersApproved] = useState<Players[]>([]);
     const [playersNotApproved, setPlayersNotApproved] = useState<Players[]>([]);
-
+    const [deleteConfirmationClosed, setDeleteConfirmationClosed] = useState<boolean>(true);
     const [searchHostsClosed, setSearchHostsClosed] = useState<boolean>(true);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -71,6 +72,22 @@ export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModif
         return false;
     }, [hosts, userMember]);
 
+    const deleteConfirmationPopupContents = event?.recurring === Recurring.NONE || !event?.series_id 
+        ? {
+            title: "Delete Event",
+            body: "Do you want to delete this event?",
+            btn2Content: "Cancel",
+            btn2Click: () => {},
+            btn2Red: false
+        }
+        : {
+            title: "Delete Recurring Event?",
+            body: "Delete all future events as well?",
+            btn2Content: "Delete All Future Events",
+            btn2Click: deleteRecurringEvent,
+            btn2Red: true 
+        }
+
     function closeEventPopup(closed: boolean){
         setIsClosed(closed);
 
@@ -107,19 +124,19 @@ export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModif
         window.location.reload();
     }
 
-
-    async function addHosts(user_id: string){
-        if(!user_id || !event?.id)
+    async function deleteRecurringEvent(){
+        if(!event?.id || !event.series_id)
             return;
 
-        const host = await ExtensionService.addHost(event.id, user_id);
+        const deleted = await ExtensionService.deleteEventSeries(event.id, event.series_id);
 
-        if(!host){
-            setError("Error In adding host");
+        if(!deleted){
+            setError("error in deleting event");
             return;
         }
 
-        setHosts([...hosts, host]);
+        closeEventPopup(true);
+        window.location.reload();
     }
 
     useEffect(() => {
@@ -215,9 +232,11 @@ export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModif
                     <EditButton
                         onBtnClick={ () => setClosedModifyEvent(false) }
                     />
-                    <DeleteButton 
-                        onBtnClick={ () => deleteEvent() }
-                    />
+                    { (playersApproved.length === 0 || !!event?.start_time && Date.now() > new Date(event.start_time).getTime()) &&
+                        <DeleteButton 
+                            onBtnClick={ () => setDeleteConfirmationClosed(false) }
+                        />
+                    }
                 </div>
             }
             <EventIconsComp event={ event } />
@@ -258,18 +277,29 @@ export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModif
             <div className="popup opened-event">
                 <CloseButton setIsClosed={ closeEventPopup } />
                 { content }
+                <HostSearchPopup 
+                    hosts={ hosts }
+                    setSearchHostsClosed={ setSearchHostsClosed }
+                    searchHostsClosed={ searchHostsClosed }
+                    setError={ setError }
+                    setHosts={ setHosts }
+                    event={ event }
+                />
                 <PopupWrapper 
-                    popupComp={ 
-                        <UserSearchPopup
-                            club_id={ event?.club?.id ? event?.club.id : null }
-                            canApprove={ true }
-                            setIsClosed={ setSearchHostsClosed }
-                            approveClicked={ addHosts }
-                            approveContent="Add Host"
-                            usersApproved={ hosts.map((host) => host.user ? host.user : null).filter((user) => user !== null) }
+                    popupComp={
+                        <TwoOptionPopup 
+                            title={ deleteConfirmationPopupContents.title }
+                            body={ deleteConfirmationPopupContents.body }
+                            btn1Content="Delete this event"
+                            btn2Content={ deleteConfirmationPopupContents.btn2Content }
+                            btn1Click={ () => deleteEvent() }
+                            btn2Click={ deleteConfirmationPopupContents.btn2Click }
+                            setIsClosed={ setDeleteConfirmationClosed }
+                            btn1Red={ true }
+                            btn2Red={ deleteConfirmationPopupContents.btn2Red }
                         />
                     }
-                    isClosed={ searchHostsClosed }
+                    isClosed={ deleteConfirmationClosed }
                 />
             </div>
         </>
