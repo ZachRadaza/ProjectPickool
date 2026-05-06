@@ -1,4 +1,4 @@
-import type { Club_Members, Club_Requests, Clubs, Events, Hosts, Players, UserClubRequests, UserClubs, UserHeader, Users } from "./schemas";
+import type { Club_Members, Club_Requests, Clubs, Events, Hosts, Notifications, Players, UserClubRequests, UserClubs, UserHeader, Users } from "./schemas";
 import { supabase } from "./supabase";
 
 const apiUrl = "http://localhost:3000/api";
@@ -9,6 +9,7 @@ const clubMemberApiUrl = `${apiUrl}/clubmembers`;
 const eventApiUrl = `${apiUrl}/events`;
 const playerApiUrl = `${apiUrl}/players`;
 const hostApiUrl = `${apiUrl}/hosts`;
+const notificationApiUrl = `${apiUrl}/notifications`;
 
 export const ExtensionService = {
 
@@ -1247,6 +1248,97 @@ export const ExtensionService = {
 
             const res = await req.json();
             const data: Hosts = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getAllNotifications(user_id: string){
+        try{
+            const req = await fetch(`${notificationApiUrl}/all/${user_id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Notifications[] = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getNumNotifications(user_id: string){
+        try{
+            const req = await fetch(`${notificationApiUrl}/num/${user_id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: number = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getNotification(id: string){
+        try{
+            const req = await fetch(`${notificationApiUrl}/${id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Notifications = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async addNotification(notification: Notifications){
+        try{
+            const req = await fetch(`${notificationApiUrl}/`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ notification }),
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Notifications = res.data;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async deleteNotification(id: string){
+        try{
+            const req = await fetch(`${notificationApiUrl}/${id}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Notifications = res.data;
 
             return data;
         } catch(error){

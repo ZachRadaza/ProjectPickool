@@ -25,3 +25,9 @@
 .users-dropdown-cont .dropdown.mini.active{
     padding: 0.3rem 1rem;
 }
+
+@media (max-width: 640px) {
+    .users-dropdown-cont .dropdown.mini{
+        grid-template-columns: repeat(auto-fit, minmax(2.5rem, 3rem));
+    }
+}

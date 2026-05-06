@@ -2,12 +2,15 @@ import { NavLink } from "react-router-dom";
 import type { UserHeader } from "../../utils/schemas";
 import "./header.css";
 import { useState } from "react";
+import NotificationButton from "../ui/buttons/NotificationButton";
 
 type HeaderProp = {
     userHeader: UserHeader | null;
+    numberNotifs: number;
+    setClosedNotifsPopup: (close: boolean) => void;
 };
 
-export default function Header({ userHeader }: HeaderProp){
+export default function Header({ userHeader, numberNotifs, setClosedNotifsPopup }: HeaderProp){
     const navClass = ({ isActive }: { isActive: boolean }) => isActive ? "nav-link active" : "nav-link";
 
     const [menuClosed, setMenuClosed] = useState<boolean>(true);
@@ -20,6 +23,12 @@ export default function Header({ userHeader }: HeaderProp){
                         <img />
                         <h4 className="brand-title">Project Pickool</h4>
                     </NavLink>
+                </div>
+                <div className="notification-section">
+                    <NotificationButton
+                        onBtnClick={ () => setClosedNotifsPopup(false) }
+                        numberNotifs={ numberNotifs }
+                    />
                 </div>
                 <div className={`nav-section hidable ${menuClosed ? "" : "active"}`}>
                     <button

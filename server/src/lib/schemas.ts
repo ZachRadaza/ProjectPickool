@@ -44,6 +44,19 @@ export const EventType = {
 } as const;
 export type EventType = (typeof EventType)[keyof typeof EventType];
 
+export const NotificationType = {
+    CLUB_REQUEST: "club_request",
+    CLUB_ACCEPTED: "club_accepted",
+    CLUB_NEW_EVENT: "club_new_event",
+    CLUB_LEVEL_APPROVED: "club_level_approved",
+    CLUB_ADMIN: "club_admin",
+    EVENT_HOST: "event_host",
+    EVENT_REQUEST: "event_request",
+    EVENT_ACCEPTED: 'event_accepted',
+    EVENT_REMINDER: "event_reminder"
+} as const;
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];
+
 export const LikeType = {
     LIKE: "like",
     MAD: "mad",
@@ -99,7 +112,7 @@ export type ClubHeader = {
     id: string | null;
     name: string;
     profile_pic?: string | null;
-    location: Locations | null;
+    location?: Locations | null;
 }
 
 export type Club_Members = {
@@ -147,6 +160,15 @@ export type Events = {
     series_id?: string | null;
 }
 
+export type EventHeader = {
+    id: string | null;
+    name: string;
+    start_time: string;
+    club?: ClubHeader;
+    price: number;
+    approve_window: number;
+};
+
 export type Players = {
     user: UserHeader;
     event_id: string;
@@ -161,6 +183,17 @@ export type Hosts = {
     event_series_id?: string;
     series_id?: string;
 }
+
+export type Notifications = {
+    id?: string;
+    user_id: string;
+    club_id?: string | null;
+    club?: ClubHeader | null;
+    event_id?: string | null;
+    event?: EventHeader | null;
+    notification_type: NotificationType;
+    created_at?: string;
+};
 
 export type Posts = {
     id: string;

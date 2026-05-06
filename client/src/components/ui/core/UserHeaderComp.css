@@ -3,7 +3,8 @@
     flex-direction: row;
     padding: 0.5rem;
     gap: 1rem;
-    border: 0.1rem solid var(--color-text);
+    border-top: 0.1rem solid var(--color-text);
+    border-bottom: 0.1rem solid var(--color-text);
     background: var(--color-bg);
     cursor: pointer;
 }

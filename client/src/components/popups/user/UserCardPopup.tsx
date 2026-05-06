@@ -339,7 +339,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
         async function getHost(){
             try{
                 if(!event_id || !userCardId)
-                    return
+                    return;
                 
                 const host = await ExtensionService.getHost(event_id, userCardId);
                 const event = await ExtensionService.getEvent(event_id);
@@ -408,7 +408,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
                             />
                         }
                     </>
-                    : <Button 
+                    : event_id && <Button 
                         content="Add Host"
                         onBtnClick={ () => addHost() }
                     />

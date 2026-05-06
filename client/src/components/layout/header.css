@@ -35,6 +35,14 @@ header .logo-section .nav-link:hover .brand-title{
     color: var(--color-primary);
 }
 
+header .notification-section{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0px 1rem;
+}
+
 header .nav-section.burger, header .nav-section .close-menu { display: none; }
 
 header .nav-section button svg{
@@ -110,6 +118,10 @@ header .profile-section:hover img{ border-color: var(--color-accent); }
         width: min-content;
     }
     
+    header .notification-section{
+        padding: 0px;
+    }
+
     header .nav-section.hidable{
         position: fixed;
         width: 100vw;

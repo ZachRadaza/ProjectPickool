@@ -1,0 +1,9 @@
+.notif-popup .notifications{
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+}
+
+.notif-popup .notifications .no-notif{
+    margin-top: 2rem;
+}

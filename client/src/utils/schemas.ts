@@ -46,6 +46,19 @@ export const EventButtonSituation = {
 } as const;
 export type EventButtonSituation = (typeof EventButtonSituation)[keyof typeof EventButtonSituation];
 
+export const NotificationType = {
+    CLUB_REQUEST: "club_request",
+    CLUB_ACCEPTED: "club_accepted",
+    CLUB_NEW_EVENT: "club_new_event",
+    CLUB_LEVEL_APPROVED: "club_level_approved",
+    CLUB_ADMIN: "club_admin",
+    EVENT_HOST: "event_host",
+    EVENT_REQUEST: "event_request",
+    EVENT_ACCEPTED: 'event_accepted',
+    EVENT_REMINDER: "event_reminder"
+} as const;
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];
+
 export const LikeType = {
     LIKE: "like",
     MAD: "mad",
@@ -60,7 +73,7 @@ export type Locations = {
     latitude: number;
     longitude: number;
     address?: string;
-}
+};
 
 export type Users = {
     id: string | null;
@@ -79,7 +92,7 @@ export type UserHeader = {
     username: string;
     profile_pic: string;
     location?: Locations | null;
-}
+};
 
 export type Club_Members_Basic = {
     user_id?: string;
@@ -88,22 +101,22 @@ export type Club_Members_Basic = {
     is_favorite: boolean;
     level?: Level;
     is_level_approved: boolean;
-}
+};
 
 export type Club_Members = Club_Members_Basic & {
     user: UserHeader;
-}
+};
 
 export type Club_Requests = {
     user?: UserHeader;
     club_id: string
-}
+};
 
 export type UserClubRequests = {
     id: string;
     user_id: string;
     club: Clubs;
-}
+};
 
 export type Clubs = {
     id?: string | null;
@@ -125,6 +138,7 @@ export type ClubHeader = {
     id: string | null;
     name: string;
     profile_pic?: string | null;
+    location?: Locations | null;
 }
 
 export type UserClubs = {
@@ -133,7 +147,7 @@ export type UserClubs = {
     level?: Level;
     is_level_approved: boolean;
     club: Clubs;
-}
+};
 
 export type Events = {
     id?: string | null;
@@ -155,7 +169,16 @@ export type Events = {
     recurring: Recurring;
     approve_window: number | null;
     series_id?: string | null;
-}
+};
+
+export type EventHeader = {
+    id: string | null;
+    name: string;
+    start_time: string;
+    club?: ClubHeader;
+    price: number;
+    approve_window: number;
+};
 
 export type Players = {
     user: UserHeader | null;
@@ -168,12 +191,23 @@ export type Players = {
 export type Hosts = {
     user: UserHeader | null;
     event_id: string;
-}
+};
 
 export type EventPlayer = {
     event: Events;
     player: Players | null;
-}
+};
+
+export type Notifications = {
+    id?: string;
+    user_id: string;
+    club_id?: string | null;
+    club?: ClubHeader | null;
+    event_id?: string | null;
+    event?: EventHeader | null;
+    notification_type: NotificationType;
+    created_at: string;
+};
 
 export type Posts = {
     id: string;
@@ -184,17 +218,17 @@ export type Posts = {
     images: string[];
     likes: Likes[];
     numComments: number;
-}
+};
 
 export type Comment = {
     id: string;
     post_id: Posts;
     comment: string;
     user: Users;
-}
+};
 
 export type Likes = {
     post_id: string;
     user_id: string;
     type: LikeType;
-}
+};

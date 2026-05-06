@@ -6,6 +6,7 @@ import clubMemberRouter from "./club_members.router.js";
 import eventsRouter from "./events.router.js";
 import playersRouter from "./players.router.js";
 import hostRouter from "./hosts.router.js";
+import notificationsRouter from "./notifications.router.js";
 
 const router = Router();
 
@@ -23,5 +24,6 @@ router.use("/clubmembers", clubMemberRouter);
 router.use("/events", eventsRouter);
 router.use("/players", playersRouter);
 router.use("/hosts", hostRouter);
+router.use("/notifications", notificationsRouter);
 
 export default router;

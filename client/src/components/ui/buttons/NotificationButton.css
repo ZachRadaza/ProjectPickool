@@ -1,0 +1,32 @@
+.notification-btn{
+    position: relative;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+}
+
+.notification-btn:hover{
+    background: transparent;
+}
+
+.notification-btn .num-notifs{
+    position: absolute;
+    top: 0px;
+    right: 0.5rem;
+    background: var(--color-red);
+    color: var(--color-bg);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    padding: 0.1rem 0.3rem;
+}
+
+.notification-btn svg{
+    width: 1.5rem;
+    height: auto;
+    fill: var(--color-text);
+    transition: fill 100ms ease;
+}
+
+.notification-btn:hover svg{
+    fill: var(--color-accent);
+}

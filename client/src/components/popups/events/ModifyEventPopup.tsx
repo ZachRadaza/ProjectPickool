@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { EventType, Level, Recurring, Sex, type Events, type Locations, type UserHeader } from "../../../utils/schemas";
 import CloseButton from "../../ui/buttons/CloseButton";
 import "../popup.css";
@@ -13,6 +13,7 @@ import "./ModifyEventPopup.css";
 import LocationInput from "../../ui/inputs/LocationInput";
 import EventTypeChooser from "../../ui/choosers/EventTypeChooser";
 import { convertHoursToSeconds, convertSecondsToHours } from "../../../utils/random";
+import DateButton from "../../ui/buttons/DateButton";
 
 type ModifyEventPopup = {
     userHeader: UserHeader | null;
@@ -31,13 +32,29 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
+    const startDateInputRef = useRef<HTMLInputElement>(null);
+
     let content;
 
-    function toLocalInputValue(dateString: string) {
-        const date = new Date(dateString);
-        const offset = date.getTimezoneOffset() * 60000;
-        const local = new Date(date.getTime() - offset);
-        return local.toISOString().slice(0, 16);
+    function toLocalDateValue(isoString: string) {
+        const d = new Date(isoString);
+        if (Number.isNaN(d.getTime())) return "";
+
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const day = String(d.getDate()).padStart(2, "0");
+
+        return `${year}-${month}-${day}`;
+    }
+
+    function toLocalTimeValue(isoString: string) {
+        const d = new Date(isoString);
+        if (Number.isNaN(d.getTime())) return "";
+
+        const hours = String(d.getHours()).padStart(2, "0");
+        const minutes = String(d.getMinutes()).padStart(2, "0");
+
+        return `${hours}:${minutes}`;
     }
 
     function notEmpty(){
@@ -223,39 +240,99 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
             </div>
             <div className="additional-info">
                 <div className="time-cont">
+                    <h6>Date</h6>
+                    <div className="date-input">
+                        <input
+                            type="date"
+                            min="2000-01-01T00:00"
+                            max="2100-12-31T23:59"
+                            ref={ startDateInputRef }
+                            value={ event?.start_time ? toLocalDateValue(event.start_time) : ""}
+                            onChange={ (e) => {
+                                const date = e.target.value;
+                                if(!date)
+                                    return;
+
+                                const [y, m, d] = date.split("-").map(Number);
+                                const start = new Date(y, m - 1, d);
+                                if(Number.isNaN(start.getTime()))
+                                    return;
+
+                                const end = new Date(start.getTime() + 60 * 60 * 1000);
+
+                                setEvent((ev) => ev 
+                                    ? { 
+                                        ...ev, 
+                                        start_time: start.toISOString(), 
+                                        end_time: end.toISOString() 
+                                    } 
+                                    : ev
+                                );
+                            }}
+                        />
+                        <DateButton onBtnClick={ () => startDateInputRef.current?.showPicker() } />
+                    </div>
+                </div>
+                <div className="time-cont">
                     <h6>Start Time</h6>
                     <input
-                        type="datetime-local"
-                        value={ event?.start_time ? toLocalInputValue(event.start_time) : ""}
-                        onChange={(e) => {
+                        type="time"
+                        value={ event?.start_time ? toLocalTimeValue(event.start_time) : ""}
+                        onChange={ (e) => {
                             const time = e.target.value;
-                            setEvent((ev) => ev 
-                                ? { 
-                                    ...ev, 
-                                    start_time: new Date(time).toISOString(), 
-                                    end_time: new Date(new Date(time).getTime() + 60 * 60 * 1000).toISOString() 
-                                } 
-                                : ev
-                            );
+                            if(!time)
+                                return;
+
+                            const [hours, minutes] = time.split(":").map(Number);
+
+                            setEvent((ev) => {
+                                if(!ev) 
+                                    return ev;
+
+                                const base = ev.start_time ? new Date(ev.start_time) : new Date();
+                                if(Number.isNaN(base.getTime())) 
+                                    return ev;
+
+                                const start = new Date(base);
+                                start.setHours(hours, minutes, 0, 0);
+                                const end = new Date(start.getTime() + 60 * 60 * 1000);
+
+                                return {
+                                    ...ev,
+                                    start_time: start.toISOString(),
+                                    end_time: end.toISOString(),
+                                };
+                            });
                         }}
                     />
                 </div>
                 <div className="time-cont">
                     <h6>End Time</h6>
                     <input
-                        type="datetime-local"
-                        value={ event?.end_time ? toLocalInputValue(event.end_time) : ""}
-                        onChange={(e) => {
+                        type="time"
+                        value={ event?.end_time ? toLocalTimeValue(event.end_time) : ""}
+                        onChange={ (e) => {
                             const time = e.target.value;
+                            if(!time)
+                                return;
+
+                            const [hours, minutes] = time.split(":").map(Number);
+
                             setEvent((ev) => {
                                 if(!ev) 
                                     return ev;
 
-                                const newEnd = new Date(time);
-                                const start = new Date(ev.start_time);
-                                const finalEnd = newEnd < start ? start : newEnd;
+                                const base = ev.end_time ? new Date(ev.end_time) : new Date();
+                                if(Number.isNaN(base.getTime())) 
+                                    return ev;
 
-                                return { ...ev, end_time: finalEnd.toISOString() };
+                                const end = new Date(base);
+                                end.setHours(hours, minutes, 0, 0);
+
+                                return {
+                                    ...ev,
+                                    end_time: end.toISOString(),
+                                };
                             });
                         }}
                     />
