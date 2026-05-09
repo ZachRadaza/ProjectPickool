@@ -25,17 +25,26 @@ export async function getAllClubMembers(){
     return data;
 }
 
-export async function getClubMembers(club_id: string){
+export async function getClubMembers(club_id: string, page: number){
+    const pageSize = 20;
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
+
     const { data, error } = await supabase
         .from("club_members")
         .select(clubMemberBody)
         .eq("club_id", club_id)
-        .eq("role", "member");
+        .eq("role", "member")
+        .order("created_at", { ascending: false })
+        .range(from, to + 1);
 
     if(error)
         throw new Error(error.message);
 
-    return data;
+    const hasMore = data.length > pageSize;
+    const trimmedData = data.slice(0, pageSize);
+
+    return { data: trimmedData, hasMore };
 }
 
 export async function getClubAdmins(club_id: string){

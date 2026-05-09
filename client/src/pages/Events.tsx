@@ -6,6 +6,7 @@ import ErrorPage from "./Error";
 import { useOutletContext } from "react-router-dom";
 import { ExtensionService } from "../utils/ExtensionService";
 import "./Events.css";
+import Button from "../components/ui/buttons/Button";
 
 type EventContext = {
     userHeader: UserHeader | null;
@@ -15,31 +16,35 @@ export default function Events(){
     const { userHeader } = useOutletContext<EventContext>();
 
     const [events, setEvents] = useState<Events[]>([]);
+    const [currentEventPage, setCurrentEventPage] = useState<number>(1);
+    const [hasMoreEvents, setHasMoreEvents] = useState<boolean>(true);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        getEvents();
+    async function getEvents(firstLoad: boolean){
+        try{
+            if(!userHeader){
+                return;
+            }
 
-        async function getEvents(){
-            try{
+            if(firstLoad)
                 setIsLoading(true);
 
-                if(!userHeader){
-                    //show events near location
-                    return;
-                }
+            const { data, hasMore } = await ExtensionService.getPossibleUserEvents(userHeader.id, currentEventPage);
 
-                const eventsData = await ExtensionService.getPossibleUserEvents(userHeader.id);
-
-                setEvents(eventsData);
-                setIsLoading(false);
-            } catch(error){
-                setError("Error in getting events");
-                setIsLoading(false);
-            }
+            setEvents([...events, ...data]);
+            setIsLoading(false);
+            setCurrentEventPage(currentEventPage + 1);
+            setHasMoreEvents(hasMore);
+        } catch(error){
+            setError("Error in getting events");
+            setIsLoading(false);
         }
+    }
+
+    useEffect(() => {
+        getEvents(true);
     }, []);
 
     if(isLoading)
@@ -52,6 +57,12 @@ export default function Events(){
         <div className="events-cont">
             <h1 className="title">Events</h1>
             <CalendarComp events={ events } showClub={ true } userHeader={ userHeader }/>
+            { hasMoreEvents &&
+                <Button 
+                    content="Load More"
+                    onBtnClick={ () => getEvents(false) }
+                />
+            }
         </div>
     );
 }

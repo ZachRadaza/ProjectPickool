@@ -166,10 +166,6 @@
 }
 
 @media (max-width: 640px){
-    .opened-club{
-        height: 95vh;
-    }
-
     .opened-club .content .headers{ 
         margin-top: 2.5rem; 
         width: 100%;
@@ -196,5 +192,13 @@
 
     .opened-club .content .headers{
         padding-top: 1rem;
+    }
+}
+
+@media (max-width: 480px){
+    .opened-club{
+        max-height: 100%;
+        min-height: 100%;
+        height: 100%;
     }
 }

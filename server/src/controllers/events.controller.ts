@@ -3,6 +3,7 @@ import * as eventService from "../services/events.service.js";
 import { Recurring, type Events } from "../lib/schemas.js";
 import * as locationService from "../services/location.service.js";
 import * as eventSeriesService from "../services/event_series.service.js";
+import { parsePage } from "./clubs.controller.js";
 
 export async function getAllEvents(req: Request, res: Response){
     try{
@@ -73,16 +74,20 @@ export async function getClubEvents(req: Request, res: Response){
 
 export async function getPossibleUserEvents(req: Request, res: Response){
     try{
-        const { user_id } = req.params;
+        const { user_id, page } = req.params;
 
-        if(!user_id || typeof user_id !== "string")
+        if(
+            !user_id || typeof user_id !== "string" ||
+            !page || typeof page !== "string"
+        )
             return res.status(400).json({
                 success: false,
-                error: "Event id required"
+                error: "user id and page required"
             });
 
+        const pageNum = parsePage(page);
         const eventsClub = await eventService.getPossibleUserClubEvents(user_id);
-        const eventsLoc = await eventService.getPossibleUserLocationEvents(user_id);
+        const { data: eventsLoc, hasMore } = await eventService.getPossibleUserLocationEvents(user_id, pageNum);
         const events = [...eventsClub, ...eventsLoc];
 
         const uniqueEvents = Array.from(
@@ -91,7 +96,8 @@ export async function getPossibleUserEvents(req: Request, res: Response){
 
         res.status(200).json({
             success: true,
-            data: uniqueEvents
+            data: uniqueEvents,
+            hasMore: hasMore
         });
     } catch(error: any){
         console.error("getAllPossibleEvents Error: ", error.message);
@@ -104,19 +110,25 @@ export async function getPossibleUserEvents(req: Request, res: Response){
 
 export async function getNearbyUserEvents(req: Request, res: Response){
     try{
-        const { user_id } = req.params;
+        const { user_id, page } = req.params;
 
-        if(!user_id || typeof user_id !== "string")
+        if(
+            !user_id || typeof user_id !== "string" ||
+            !page || typeof page !== "string"
+
+        )
             return res.status(400).json({
                 success: false,
                 error: "Event id required"
             });
 
-        const events = await eventService.getPossibleUserLocationEvents(user_id);
+        const pageNum = parsePage(page)
+        const { data: events, hasMore } = await eventService.getPossibleUserLocationEvents(user_id, pageNum);
 
         res.status(200).json({
             success: true,
-            data: events
+            data: events,
+            hasMore: hasMore
         });
     } catch(error: any){
         console.error("getNearUserEvents Error: ", error.message);
@@ -129,19 +141,24 @@ export async function getNearbyUserEvents(req: Request, res: Response){
 
 export async function getQueryEvents(req: Request, res: Response){
     try{
-        const { query } = req.params;
+        const { query, page } = req.params;
 
-        if(!query || typeof query !== "string")
+        if(
+            !query || typeof query !== "string" ||
+            !page || typeof page !== "string"
+        )
             return res.status(400).json({
                 success: false,
                 error: "Event name required"
             });
 
-        const events = await eventService.getQueryEvents(query);
+        const pageNum = parsePage(page);
+        const { data: events, hasMore } = await eventService.getQueryEvents(query, pageNum);
 
         res.status(200).json({
             success: true,
-            data: events
+            data: events,
+            hasMore
         });
     } catch(error: any){
         console.error("getNearUserEvents Error: ", error.message);
@@ -154,23 +171,25 @@ export async function getQueryEvents(req: Request, res: Response){
 
 export async function getQueryNearbyEvents(req: Request, res: Response){
     try{
-        const { user_id, query } = req.params;
+        const { user_id, query, page } = req.params;
 
-        if(!query || 
-            typeof query !== "string" ||
-            !user_id || 
-            typeof user_id !== "string"
+        if(
+            !query || typeof query !== "string" ||
+            !user_id || typeof user_id !== "string" ||
+            !page || typeof page !== "string"
         )
             return res.status(400).json({
                 success: false,
                 error: "Event name and user id required"
             });
 
-        const events = await eventService.getQueryNearbyEvents(user_id, query);
+        const pageNum = parsePage(page);
+        const { data: events, hasMore } = await eventService.getQueryNearbyEvents(user_id, query, pageNum);
 
         res.status(200).json({
             success: true,
-            data: events
+            data: events,
+            hasMore: hasMore
         });
     } catch(error: any){
         console.error("getNearUserEvents Error: ", error.message);

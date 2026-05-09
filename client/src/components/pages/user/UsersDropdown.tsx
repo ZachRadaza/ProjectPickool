@@ -4,7 +4,7 @@ import DropdownButton from "../../ui/buttons/DropdownButton";
 import UserHeaderMiniComp from "../../ui/core/UserHeaderMiniComp";
 import "./UsersDropdown.css";
 import UserHeaderComp from "../../ui/core/UserHeaderComp";
-import CircleAddButton from "../../ui/buttons/AddButton";
+import AddButton from "../../ui/buttons/AddButton";
 
 type ShrunkPlayer = UserHeader & {
     paid?: boolean;
@@ -21,6 +21,7 @@ type UsersDropdownProp = {
     addButton?: boolean;
     onAddBtnClick?: () => void;
     showUnpaid?: boolean;
+    addIsShowMore?: boolean;
 };
 
 export default function UsersDropdown({ 
@@ -33,7 +34,8 @@ export default function UsersDropdown({
     isDisabled, 
     addButton, 
     onAddBtnClick,
-    showUnpaid
+    showUnpaid,
+    addIsShowMore
 }: UsersDropdownProp){
     const [isClosed, setIsClosed] = useState<boolean>(false);
     const [compHeight, setCompHeight] = useState<number>(0);
@@ -72,9 +74,10 @@ export default function UsersDropdown({
                             />
                     )}
                     { (addButton && onAddBtnClick) &&
-                        <CircleAddButton 
+                        <AddButton 
                             onBtnClick={ () => onAddBtnClick() }
                             isMini={ isMini }
+                            isMiniContent={ addIsShowMore ? "More" : "_" }
                         />
                     }
                 </div>

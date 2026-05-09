@@ -59,19 +59,6 @@ input[type="number"]::-webkit-inner-spin-button {
     width: 1fr;
 }
 
-.modify-event .additional-info .date-input{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    border-radius: 1rem;
-    border: 0.1rem solid var(--color-text);
-}
-
-.modify-event .additional-info .date-input input{
-    border: none;
-}
-
 .modify-event .additional-info .recurring{ z-index: 6; }
 
 .modify-event .additional-info .numbers-cont input{
@@ -136,11 +123,6 @@ input[type="number"]::-webkit-inner-spin-button {
     .modify-event .additional-info{
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-    }
-
-    .modify-event .additional-info .time-cont{
-        grid-column: span 2;
-        place-self: center;
     }
 }
 

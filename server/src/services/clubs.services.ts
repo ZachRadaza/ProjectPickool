@@ -39,49 +39,68 @@ export async function getClub(id: string){
     return data;
 }
 
-export async function getNearbyClubs(user_id: string) {
+export async function getNearbyClubs(user_id: string, page: number) {
+    const pageSize = 10;
     const { data, error } = await supabase.rpc("get_nearby_clubs", {
         p_user_id: user_id,
-        p_radius_km: 40
+        p_radius_km: 20,
+        p_page: page,
+        p_page_size: pageSize + 1
     });
 
     if(error)
         throw new Error(error.message);
 
-    return data ?? [];
+    const hasMore = (data?.length ?? 0) > pageSize;
+    const clubs = data?.slice(0, pageSize) ?? [];
+
+    return { data: clubs, hasMore };
 }
 
-export async function getQueryClubs(query: string){
+export async function getQueryClubs(query: string, page: number){
     if(!query.trim())
-        return [];
+        return { data: [], hasMore: false };
+
+    const pageSize = 10;
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
 
     const { data, error } = await supabase
         .from("clubs")
         .select(clubBody)
         .ilike("name", `%${query}%`)
-        .limit(50);
+        .order("created_at", { ascending: false })
+        .range(from, to + 1);
 
     if(error)
         throw new Error(error.message);
 
-    return data;
+    const hasMore = data.length > pageSize;
+    const trimmedData = data.slice(0, pageSize);
+
+    return { data: trimmedData, hasMore };
 }
 
-export async function getQueryNearbyClubs(user_id: string, query: string){
+export async function getQueryNearbyClubs(user_id: string, query: string, page: number){
     if(!query.trim())
-        return [];
+        return { data: [], hasMore: false };
 
+    const pageSize = 10;
     const { data, error } = await supabase.rpc("get_nearby_clubs", {
         p_user_id: user_id,
-        p_radius_km: 40
+        p_radius_km: 20,
+        p_page: page,
+        p_page_size: pageSize + 1
     });
 
     if(error)
         throw new Error(error.message);
 
-    const filtered = data.filter((club: Clubs) => club.name.toLowerCase().includes(query.toLowerCase()));
+    const hasMore = (data?.length ?? 0) > pageSize;
+    const clubs = data?.slice(0, pageSize) ?? [];
+    const filtered = clubs.filter((club: Clubs) => club.name.toLowerCase().includes(query.toLowerCase()));
 
-    return filtered;
+    return { data: filtered, hasMore };
 }
 
 export async function addClub(club: Clubs){

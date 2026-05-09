@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import * as clubMemberService from "../services/club_members.service.js";
+import { parsePage } from "./clubs.controller.js";
 
 export async function getAllClubMembers(req: Request, res: Response){
     try{
@@ -20,19 +21,24 @@ export async function getAllClubMembers(req: Request, res: Response){
 
 export async function getClubMembers(req: Request, res: Response){
     try{
-        const { club_id } = req.params;
+        const { club_id, page } = req.params;
 
-        if(!club_id || typeof club_id !== "string")
+        if(
+            !club_id || typeof club_id !== "string" ||
+            !page || typeof page !== "string"
+        )
             return res.status(400).json({
                 success: false,
                 error: "club id required"
             });
 
-        const data = await clubMemberService.getClubMembers(club_id);
+        const pageNum = parsePage(page);
+        const { data, hasMore } = await clubMemberService.getClubMembers(club_id, pageNum);
 
         res.status(200).json({
             success: true,
-            data: data
+            data: data,
+            hasMore: hasMore
         });
     } catch(error: any){
         console.error("getClubMembers error", error);

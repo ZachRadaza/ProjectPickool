@@ -4,9 +4,10 @@ type AddButtonProp = {
     onBtnClick: () => void;
     additionalClasses?: string;
     isMini?: boolean;
+    isMiniContent?: string | null;
 };
 
-export default function AddButton({ onBtnClick, additionalClasses, isMini }: AddButtonProp){
+export default function AddButton({ onBtnClick, additionalClasses, isMini, isMiniContent }: AddButtonProp){
     return (
         <div className="add-btn-cont">
             <button
@@ -18,7 +19,7 @@ export default function AddButton({ onBtnClick, additionalClasses, isMini }: Add
                 </svg>
             </button>
             { isMini &&
-                <h6 className="filler">_</h6>
+                <h6 className={isMiniContent?.trim() === "_" ? "filler" : "" }>{ isMiniContent ? isMiniContent : "_" }</h6>
             }
         </div>
     );

@@ -86,52 +86,71 @@ export async function getPossibleUserClubEvents(user_id: string){
     return eventData;
 }
 
-export async function getPossibleUserLocationEvents(user_id: string){
+export async function getPossibleUserLocationEvents(user_id: string, page: number){
+    const pageSize = 10;
     const { data, error } = await supabase.rpc("get_nearby_events", {
         p_user_id: user_id,
-        p_radius_km: 40
+        p_radius_km: 20,
+        p_page: page,
+        p_page_size: pageSize + 1
     });
 
     if(error) 
         throw new Error(error.message);
 
-    return data;
+    const hasMore = (data?.length ?? 0) > pageSize;
+    const events = data?.slice(0, pageSize) ?? [];
+
+    return { data: events, hasMore };
 }
 
-export async function getQueryEvents(query: string){
+export async function getQueryEvents(query: string, page: number){
     if(!query.trim()) 
-        return [];
+        return { data: [], hasMore: false };
+
+    const pageSize = 10;
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
 
     const { data, error } = await supabase
         .from("events")
         .select(eventBody)
-        .ilike("name", `%${query}%`)
-        .limit(50);
+        .ilike("name", `%${query.trim()}%`)
+        .order("created_at", { ascending: false })
+        .range(from, to + 1);
 
     if(error)
         throw new Error(error.message);
 
-    return data;
+    const hasMore = data.length > pageSize;
+    const trimmedData = data.slice(0, pageSize);
+
+    return { data: trimmedData, hasMore };
 }
 
-export async function getQueryNearbyEvents(user_id: string, query: string){
+export async function getQueryNearbyEvents(user_id: string, query: string, page: number){
     if(!query.trim())
-        return [];
+        return { data: [], hasMore: false };
 
+    const pageSize = 10;
     const { data, error } = await supabase.rpc("get_nearby_events", {
         p_user_id: user_id,
-        p_radius_km: 40
+        p_radius_km: 20,
+        p_page: page,
+        p_page_size: pageSize + 1
     });
 
     if(error)
         throw new Error(error.message);
 
     if(!data)
-        return [];
+        return { data: [], hasMore: false };
 
-    const filtered = data.filter((event: Events) => event.name.toLowerCase().includes(query.toLowerCase()));
+    const events = data?.slice(0, pageSize) ?? [];
+    const filtered = events.filter((event: Events) => event.name.toLowerCase().includes(query.toLowerCase()));
+    const hasMore = (data?.length ?? 0) > pageSize;
 
-    return filtered;
+    return { data: filtered, hasMore };
 }
 
 export async function addEvent(event: Event){

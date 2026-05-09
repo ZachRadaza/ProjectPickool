@@ -49,19 +49,24 @@ export async function getClub(req: Request, res: Response){
 
 export async function getNearbyClubs(req: Request, res: Response){
     try{
-        const { user_id } = req.params;
+        const { user_id, page } = req.params;
 
-        if(!user_id || typeof user_id !== "string")
+        if(
+            !user_id || typeof user_id !== "string" ||
+            !page || typeof page !== "string"
+        )
             return res.status(400).json({
                 success: false,
-                error: "id required"
+                error: "id and page required"
             });
 
-        const data = await clubsService.getNearbyClubs(user_id);
+        const pageNum = parsePage(page);
+        const { data, hasMore } = await clubsService.getNearbyClubs(user_id, pageNum);
 
         res.status(200).json({
             success: true,
-            data: data
+            data: data,
+            hasMore: hasMore
         });
     } catch(error){
         console.error("getNearbyClubs error", error);
@@ -74,19 +79,24 @@ export async function getNearbyClubs(req: Request, res: Response){
 
 export async function getQueryClubs(req: Request, res: Response){
     try{
-        const { query } = req.params;
+        const { query, page } = req.params;
 
-        if(!query || typeof query !== "string")
+        if(
+            !query || typeof query !== "string" ||
+            !page || typeof page !== "string"
+        )
             return res.status(400).json({
                 success: false,
-                error: "query required"
+                error: "query and page required"
             });
 
-        const data = await clubsService.getQueryClubs(query);
+        const pageNum = parsePage(page);
+        const { data, hasMore } = await clubsService.getQueryClubs(query, pageNum);
 
         res.status(200).json({
             success: true,
-            data: data
+            data: data,
+            hasMore: hasMore
         });
     } catch(error){
         console.error("getNearbyClubs error", error);
@@ -99,24 +109,25 @@ export async function getQueryClubs(req: Request, res: Response){
 
 export async function getQueryNearbyClubs(req: Request, res: Response){
     try{
-        const { user_id, query } = req.params;
+        const { user_id, query, page } = req.params;
 
         if(
-            !user_id || 
-            typeof user_id !== "string" ||
-            !query || 
-            typeof query !== "string"
+            !user_id || typeof user_id !== "string" ||
+            !query || typeof query !== "string" ||
+            !page || typeof page !== "string"
         )
             return res.status(400).json({
                 success: false,
-                error: "id required"
+                error: "id, query, page required"
             });
 
-        const data = await clubsService.getQueryNearbyClubs(user_id, query);
+        const pageNum = parsePage(page);
+        const { data, hasMore } = await clubsService.getQueryNearbyClubs(user_id, query, pageNum);
 
         res.status(200).json({
             success: true,
-            data: data
+            data: data,
+            hasMore: hasMore
         });
     } catch(error){
         console.error("getNearbyClubs error", error);
@@ -331,4 +342,13 @@ export async function deleteClub(req: Request, res: Response){
             error: error
         });
     }
+}
+
+export function parsePage(page: unknown): number {
+    const n = typeof page === "string" ? Number(page) : NaN;
+
+    if(!Number.isInteger(n) || n < 1)
+        return 1;
+
+    return n;
 }

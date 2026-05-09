@@ -16,30 +16,30 @@ export default function NotificationComp({ notification, closeNotifClicked, setI
     const content = () => {
         switch(notification.notification_type){
             case NotificationType.CLUB_ACCEPTED:
-                return `${notification.club?.name} has accepted your request.`;
+                return <span><span className="heading-font">{ notification.club?.name }</span> has accepted your request.</span>;
             case NotificationType.CLUB_ADMIN:
-                return `You are now an admin of ${notification.club?.name}.`;
+                return <span>You are now an admin of <span className="heading-cont">{notification.club?.name}</span>.</span>;
             case NotificationType.CLUB_NEW_EVENT:
-                return `${notification.club?.name} has posted a new event.`;
+                return <span><span className="heading-font">{notification.club?.name}</span> has posted a new event.</span>;
             case NotificationType.CLUB_LEVEL_APPROVED:
-                return `${notification.club?.name} has approved your club level.`;
+                return <span><span className="heading-font">{notification.club?.name}</span> has approved your club level.</span>;
             case NotificationType.CLUB_REQUEST:
-                return `${notification.club?.name} has new requests.`;
+                return <span><span className="heading-font">{notification.club?.name}</span> has new requests.</span>;
             case NotificationType.EVENT_ACCEPTED:
-                return <span>You have been accepted to join { notification.event?.name }. {
+                return <span>You have been accepted to join <span className="heading-font">{ notification.event?.name }</span>. {
                     notification.event?.price && notification.event.price > 0 
                         ? <span> You have <CountdownTimer lengthLeftSeconds={ notification.event.approve_window } timerStartsAt={ notification.created_at }/> to pay.</span>
                         : <></>
                 }</span>;
             case NotificationType.EVENT_HOST:
-                return `You are now a host for ${notification.event?.name}.`;
+                return <span>You are now a host for <span className="heading-font">{notification.event?.name}.</span></span>;
             case NotificationType.EVENT_REMINDER:
-                return `${notification.event?.name} starts tommorow at ${new Date(notification.event?.start_time!).toLocaleTimeString([], {
+                return <span><span className="heading-font">{ notification.event?.name }</span> starts tommorow at { new Date(notification.event?.start_time!).toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit" 
-                })}.`
+                })}.</span>
             case NotificationType.EVENT_REQUEST:
-                return `${notification.event?.name} has new requests.`;
+                return <span><span className="heading-font">{notification.event?.name}</span> has new requests.</span>;
         }
     }
 

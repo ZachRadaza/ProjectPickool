@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { EventType, Level, Recurring, Sex, type Events, type Locations, type UserHeader } from "../../../utils/schemas";
 import CloseButton from "../../ui/buttons/CloseButton";
 import "../popup.css";
@@ -13,7 +13,6 @@ import "./ModifyEventPopup.css";
 import LocationInput from "../../ui/inputs/LocationInput";
 import EventTypeChooser from "../../ui/choosers/EventTypeChooser";
 import { convertHoursToSeconds, convertSecondsToHours } from "../../../utils/random";
-import DateButton from "../../ui/buttons/DateButton";
 
 type ModifyEventPopup = {
     userHeader: UserHeader | null;
@@ -31,8 +30,6 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-
-    const startDateInputRef = useRef<HTMLInputElement>(null);
 
     let content;
 
@@ -241,37 +238,33 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
             <div className="additional-info">
                 <div className="time-cont">
                     <h6>Date</h6>
-                    <div className="date-input">
-                        <input
-                            type="date"
-                            min="2000-01-01T00:00"
-                            max="2100-12-31T23:59"
-                            ref={ startDateInputRef }
-                            value={ event?.start_time ? toLocalDateValue(event.start_time) : ""}
-                            onChange={ (e) => {
-                                const date = e.target.value;
-                                if(!date)
-                                    return;
+                    <input
+                        type="date"
+                        min="2000-01-01T00:00"
+                        max="2100-12-31T23:59"
+                        value={ event?.start_time ? toLocalDateValue(event.start_time) : ""}
+                        onChange={ (e) => {
+                            const date = e.target.value;
+                            if(!date)
+                                return;
 
-                                const [y, m, d] = date.split("-").map(Number);
-                                const start = new Date(y, m - 1, d);
-                                if(Number.isNaN(start.getTime()))
-                                    return;
+                            const [y, m, d] = date.split("-").map(Number);
+                            const start = new Date(y, m - 1, d);
+                            if(Number.isNaN(start.getTime()))
+                                return;
 
-                                const end = new Date(start.getTime() + 60 * 60 * 1000);
+                            const end = new Date(start.getTime() + 60 * 60 * 1000);
 
-                                setEvent((ev) => ev 
-                                    ? { 
-                                        ...ev, 
-                                        start_time: start.toISOString(), 
-                                        end_time: end.toISOString() 
-                                    } 
-                                    : ev
-                                );
-                            }}
-                        />
-                        <DateButton onBtnClick={ () => startDateInputRef.current?.showPicker() } />
-                    </div>
+                            setEvent((ev) => ev 
+                                ? { 
+                                    ...ev, 
+                                    start_time: start.toISOString(), 
+                                    end_time: end.toISOString() 
+                                } 
+                                : ev
+                            );
+                        }}
+                    />
                 </div>
                 <div className="time-cont">
                     <h6>Start Time</h6>
@@ -351,6 +344,7 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                         min={ 0 }
                         step="0.01"
                         value={ event?.price ?? "" }
+                        disabled={ isEditing }
                         onChange={ (e) => {
                             const value = e.target.value;
                             if(/^\d*\.?\d{0,2}$/.test(value))

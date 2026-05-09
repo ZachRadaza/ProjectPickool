@@ -28,9 +28,15 @@ export default function Search(){
     const [searchInput, setSearchInput] = useState<string>("");
     const [events, setEvents] = useState<Events[]>([]);
     const [clubs, setClubs] = useState<Clubs[]>([]);
+
     const [filters, setFilters] = useState<Filters | null>(null);
     const [filterOptionsOpen, setFilterOptionsOpen] = useState<boolean>(false);
     const [searchMessage, setSearchMessage] = useState<string | null>(null);
+    const [currentClubPage, setCurrentClubPage] = useState<number>(1);
+    const [currentEventPage, setCurrentEventPage] = useState<number>(1);
+    const [hasMoreClubs, setHasMoreClubs] = useState<boolean>(true);
+    const [hasMoreEvents, setHasMoreEvents] = useState<boolean>(true);
+
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -59,6 +65,57 @@ export default function Search(){
         const params = new URLSearchParams(location.search);
         params.set("query", searchInput ?? "");
         navigate(`${location.pathname}?${params.toString()}`);
+    }
+
+    async function getClubs(loadMore: boolean){
+        try{
+            if(!userHeader || !filters || (!hasMoreClubs && loadMore))
+                return;
+
+            if(!loadMore)
+                setCurrentClubPage(1);
+
+            const currentPage = !loadMore ? 1 : currentClubPage;
+            let res: { data: Clubs[], hasMore: boolean };
+
+            if(!searchInput.trim())
+                res = await ExtensionService.getNearbyClubs(userHeader.id, currentPage);
+            else
+                if(filters.showNearMe)
+                    res = await ExtensionService.getQueryNearbyClubs(userHeader.id, searchInput, currentPage);
+                else
+                    res = await ExtensionService.getQueryClubs(searchInput, currentPage);
+
+            loadMore ? setClubs([...clubs, ...res.data]) : setClubs(res.data);
+            setCurrentClubPage(currentPage + 1);
+            setHasMoreClubs(res.hasMore);
+        } catch(error){
+            setError("Error in loading clubs");
+        }
+    }
+
+    async function getEvents(loadMore: boolean){
+        try{
+            if(!userHeader || !filters || (!hasMoreEvents && loadMore))
+                return;
+
+            const currentPage = !loadMore ? 1 : currentEventPage;
+            let res: { data: Events[], hasMore: boolean };
+
+            if(!searchInput.trim())
+                res = await ExtensionService.getNearUserEvents(userHeader.id, currentPage);
+            else
+                if(filters.showNearMe)
+                    res = await ExtensionService.getQueryNearUserEvents(userHeader.id, searchInput, currentPage);
+                else
+                    res = await ExtensionService.getQueryEvents(searchInput, currentPage);
+
+            loadMore ? setEvents([...events, ...res.data]) : setEvents(res.data);
+            setCurrentEventPage(currentPage + 1);
+            setHasMoreEvents(res.hasMore);
+        } catch(error){
+            setError("Error in loading events");
+        }
     }
 
     useEffect(() => {
@@ -95,51 +152,17 @@ export default function Search(){
                 }
 
                 if(filters?.showClubs)
-                    await getClubs();
+                    await getClubs(false);
                 
 
                 if(filters?.showEvents)
-                    await getEvents();
+                    await getEvents(false);
                 
                 setIsLoading(false);
             } catch(error){
                 setIsLoading(false);
                 setError("Error in Loading Items");
             }
-        }
-
-        async function getClubs(){
-            if(!userHeader || !filters)
-                return;
-
-            let clubsData;
-
-            if(!searchInput.trim())
-                clubsData = await ExtensionService.getNearbyClubs(userHeader.id);
-            else
-                if(filters.showNearMe)
-                    clubsData = await ExtensionService.getQueryNearbyClubs(userHeader.id, searchInput);
-                else
-                    clubsData = await ExtensionService.getQueryClubs(searchInput);
-
-            setClubs(clubsData);
-        }
-
-        async function getEvents(){
-            if(!userHeader || !filters)
-                return;
-
-            let eventsData;
-
-            if(!searchInput.trim())
-                eventsData = await ExtensionService.getNearUserEvents(userHeader.id);
-            else
-                if(filters.showNearMe)
-                    eventsData = await ExtensionService.getQueryNearUserEvents(userHeader.id, searchInput);
-                else
-                    eventsData = await ExtensionService.getQueryEvents(searchInput);
-
-            setEvents(eventsData);
         }
     }, [searchParams.get("query"), filters]);
 
@@ -153,9 +176,21 @@ export default function Search(){
                 <div className="search-content">
                     <h2>Clubs</h2>
                     <div className="club-contents">
-                        { clubs.map((club) => 
-                            <ClubsComp club={ club } userClub={ null }/>
-                        )}
+                        { clubs.length > 0
+                            ? <>
+                                { clubs.map((club) => 
+                                    <ClubsComp club={ club } userClub={ null } key={ club.id }/>
+                                )}
+                            </>
+                            : <h6>No Clubs Found</h6>
+                        }
+                        { hasMoreClubs &&
+                            <Button
+                                content="Load More Clubs"
+                                onBtnClick={ () => getClubs(true) }
+                                additionalClasses="clubs-load-more"
+                            />
+                        }
                     </div>
                 </div>
             }
@@ -163,6 +198,13 @@ export default function Search(){
                 <div className="search-content">
                     <h2>Events</h2>
                     <CalendarComp events={ events } showClub={ true } userHeader={ userHeader }/>
+                    { hasMoreClubs &&
+                        <Button
+                            content="Load More Events"
+                            onBtnClick={ () => getEvents(true) }
+                            additionalClasses="clubs-load-more"
+                        />
+                    }
                 </div>
             }
         </>;

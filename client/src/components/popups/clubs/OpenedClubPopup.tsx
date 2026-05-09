@@ -297,11 +297,13 @@ export default function OpenedClubPopup({
                         content="Events"
                         additionalClasses={ tabClasses(TabType.EVENTS) }
                     />
+                    {/*
                     <Button
                         onBtnClick={ () => setCurrentTab(TabType.POSTS) }
                         content="Posts"
                         additionalClasses={ tabClasses(TabType.POSTS) }
                     />
+                    */}
                     <Button
                         onBtnClick={ () => setCurrentTab(TabType.MEMBERS) }
                         content="Members"

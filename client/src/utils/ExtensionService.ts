@@ -259,9 +259,9 @@ export const ExtensionService = {
         }
     },
 
-    async getNearbyClubs(user_id: string){
+    async getNearbyClubs(user_id: string, page: number){
         try{
-            const req = await fetch(`${clubApiUrl}/near/${user_id}`, {
+            const req = await fetch(`${clubApiUrl}/near/${user_id}/${page}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include"
@@ -269,17 +269,18 @@ export const ExtensionService = {
 
             const res = await req.json();
             const data: Clubs[] = res.data;
+            const hasMore: boolean = res.hasMore;
 
-            return data;
+            return { data, hasMore };
         } catch(error){
             console.error("error", error);
             throw error;
         }
     },
 
-    async getQueryClubs(query: string){
+    async getQueryClubs(query: string, page: number){
         try{
-            const req = await fetch(`${clubApiUrl}/query/${query}`, {
+            const req = await fetch(`${clubApiUrl}/query/${query}/${page}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include"
@@ -287,17 +288,18 @@ export const ExtensionService = {
 
             const res = await req.json();
             const data: Clubs[] = res.data;
+            const hasMore: boolean = res.hasMore;
 
-            return data;
+            return { data, hasMore };
         } catch(error){
             console.error("error", error);
             throw error;
         }
     },
 
-    async getQueryNearbyClubs(user_id: string, query: string){
+    async getQueryNearbyClubs(user_id: string, query: string, page: number){
         try{
-            const req = await fetch(`${clubApiUrl}/querynear/${user_id}/${query}`, {
+            const req = await fetch(`${clubApiUrl}/querynear/${user_id}/${query}/${page}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include"
@@ -305,8 +307,9 @@ export const ExtensionService = {
 
             const res = await req.json();
             const data: Clubs[] = res.data;
+            const hasMore: boolean = res.hasMore;
 
-            return data;
+            return { data, hasMore };
         } catch(error){
             console.error("error", error);
             throw error;
@@ -560,18 +563,18 @@ export const ExtensionService = {
         }
     },
 
-    async getClubMembers(club_id: string){
+    async getClubMembers(club_id: string, page: number){
         try{
-            const req = await fetch(`${clubMemberApiUrl}/${club_id}`, {
+            const req = await fetch(`${clubMemberApiUrl}/${club_id}/${page}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include"
             });
 
             const res = await req.json();
-            const data: Club_Members[] = res.data;
+            const { data, hasMore } = res;
 
-            return data;
+            return { data, hasMore };
         } catch(error){
             console.error("error", error);
             throw error;
@@ -817,9 +820,9 @@ export const ExtensionService = {
         }
     },
 
-    async getPossibleUserEvents(user_id: string){
+    async getPossibleUserEvents(user_id: string, page: number){
         try{
-            const req = await fetch(`${eventApiUrl}/user/${user_id}`, {
+            const req = await fetch(`${eventApiUrl}/user/${user_id}/${page}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include"
@@ -827,17 +830,18 @@ export const ExtensionService = {
 
             const res = await req.json();
             const data: Events[] = res.data;
+            const hasMore: boolean = res.hasMore;
 
-            return data;
+            return { data, hasMore };
         } catch(error){
             console.error("error", error);
             throw error;
         }
     },
 
-    async getNearUserEvents(user_id: string){
+    async getNearUserEvents(user_id: string, page: number){
         try{
-            const req = await fetch(`${eventApiUrl}/near/${user_id}`, {
+            const req = await fetch(`${eventApiUrl}/near/${user_id}/${page}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include"
@@ -845,17 +849,18 @@ export const ExtensionService = {
 
             const res = await req.json();
             const data: Events[] = res.data;
+            const hasMore: boolean = res.hasMore;
 
-            return data;
+            return { data, hasMore };
         } catch(error){
             console.error("error", error);
             throw error;
         }
     },
 
-    async getQueryEvents(query: string){
+    async getQueryEvents(query: string, page: number){
         try{
-            const req = await fetch(`${eventApiUrl}/query/${query}`, {
+            const req = await fetch(`${eventApiUrl}/query/${query}/${page}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include"
@@ -863,17 +868,18 @@ export const ExtensionService = {
 
             const res = await req.json();
             const data: Events[] = res.data;
+            const hasMore: boolean = res.data;
 
-            return data;
+            return { data, hasMore };
         } catch(error){
             console.error("error", error);
             throw error;
         }
     },
 
-    async getQueryNearUserEvents(user_id: string, query: string){
+    async getQueryNearUserEvents(user_id: string, query: string, page: number){
         try{
-            const req = await fetch(`${eventApiUrl}/querynear/${user_id}/${query}`, {
+            const req = await fetch(`${eventApiUrl}/querynear/${user_id}/${query}/${page}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include"
@@ -881,8 +887,9 @@ export const ExtensionService = {
 
             const res = await req.json();
             const data: Events[] = res.data;
+            const hasMore: boolean = res.hasMore;
 
-            return data;
+            return { data, hasMore };
         } catch(error){
             console.error("error", error);
             throw error;

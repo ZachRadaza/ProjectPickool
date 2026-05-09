@@ -14,9 +14,30 @@ export default function ClubMembersComp({ club_id }: ClubMembersComp){
     const [members, setMembers] = useState<Club_Members[]>([]);
     const [admins, setAdmins] = useState<Club_Members[]>([]);
     const [owner, setOwner] = useState<Club_Members | null>(null);
+    const [currentMemberPage, setCurrentMemberPage] = useState<number>(1);
+    const [membersPageHasMore, setMembersPageHasMore] = useState<boolean>(true);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    async function getMembers(){
+        try{
+            if(!club_id || !membersPageHasMore)
+                return;
+
+            const { data: membersFetched, hasMore } = await ExtensionService.getClubMembers(club_id, currentMemberPage);
+
+            if(!membersFetched){
+                setMembersPageHasMore(hasMore);
+                return;
+            }
+            setMembers([...members, ...membersFetched]);
+            setCurrentMemberPage(currentMemberPage + 1);
+            setMembersPageHasMore(hasMore);
+        } catch(error){
+            setError("Error in Loading Club Members");
+        }
+    }
 
     useEffect(() => {
         getAllClubMembers();
@@ -30,11 +51,10 @@ export default function ClubMembersComp({ club_id }: ClubMembersComp){
 
                 const owner = await ExtensionService.getClubOwner(club_id);
                 const admins = await ExtensionService.getClubAdmins(club_id);
-                const members = await ExtensionService.getClubMembers(club_id);
+                await getMembers();
 
                 setOwner(owner);
                 setAdmins(admins);
-                setMembers(members);
                 setIsLoading(false);
             } catch(error: any){
                 setError("Error in Loading Club Members");
@@ -68,6 +88,9 @@ export default function ClubMembersComp({ club_id }: ClubMembersComp){
                 content="Members"
                 isMini={ true }
                 showNum={ true }
+                addIsShowMore={ true }
+                addButton={ membersPageHasMore }
+                onAddBtnClick={ () => getMembers() }
             />
         </div>
     );

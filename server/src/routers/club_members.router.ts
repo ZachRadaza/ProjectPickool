@@ -15,7 +15,7 @@ clubMemberRouter.get("/owner/:club_id", clubMemberController.getClubOwner);
 clubMemberRouter.get("/unapproved/:club_id", clubMemberController.getClubUnapproved);
 clubMemberRouter.get("/query/:club_id/:query", clubMemberController.getQueryClubMembers);
 
-clubMemberRouter.get("/:club_id", clubMemberController.getClubMembers);
+clubMemberRouter.get("/:club_id/:page", clubMemberController.getClubMembers);
 clubMemberRouter.put("/:club_id/:user_id", clubMemberController.updateClubMember);
 clubMemberRouter.delete("/:club_id/:user_id", clubMemberController.deleteClubMember);
 

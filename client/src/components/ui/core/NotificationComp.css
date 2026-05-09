@@ -33,6 +33,11 @@
     line-height: 1.4;
 }
 
+.notif-comp .left-side .heading-font{
+    font-family: var(--font-heading);
+    font-size: clamp(1.2rem, 1.7vw, 1.5rem);
+}
+
 .notif-comp .right-side{
     display: flex;
     flex-direction: row;
