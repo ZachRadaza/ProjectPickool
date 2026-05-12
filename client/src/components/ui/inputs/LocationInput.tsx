@@ -1,5 +1,5 @@
 import { SearchBox } from '@mapbox/search-js-react';
-import type { Locations } from '../../utils/schemas';
+import type { Locations } from '../../../utils/schemas';
 import "./LocationInput.css";
 
 type LocationInputProps = {

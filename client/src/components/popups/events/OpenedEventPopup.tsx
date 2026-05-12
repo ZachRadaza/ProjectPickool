@@ -18,9 +18,9 @@ import TwoOptionPopup from "../general/TwoOptionPopup";
 import HostSearchPopup from "../../pages/events/HostSearchPopup";
 
 type OpenedEventPopupProp = {
-    setIsClosed: (closed: boolean) => void;
+    setIsClosed: React.Dispatch<React.SetStateAction<boolean>>;
     event_id: string | null;
-    setClosedModifyEvent: (closed: boolean) => void;
+    setClosedModifyEvent: React.Dispatch<React.SetStateAction<boolean>>;
     userHeader: UserHeader | null;
 }
 

@@ -12,6 +12,17 @@
     z-index: 125;
 }
 
+.container.no-pt-events{
+    pointer-events: all;
+    background-color: color-mix(in srgb, var(--color-text) 20%, transparent);
+    transition: opacity 100ms ease;
+}
+
+.container.no-pt-events:has(.closed){
+    pointer-events: none;;
+    opacity: 0;
+}
+
 .popup-wrapper{
     position: relative;
     transform: translateY(0);

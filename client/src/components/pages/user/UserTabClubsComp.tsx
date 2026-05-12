@@ -51,9 +51,12 @@ export default function UserTabClubsComp({ user }: UserTabClubsCompProp){
 
     return (
         <div className="user-tab-club-cont">
-            { userClubs.map((userClub) => 
-                <ClubsComp club={ userClub.club } userClub={ userClub } key={ userClub.club.id } />
-            )}
+            { userClubs.length > 0
+                ? userClubs.map((userClub) => 
+                    <ClubsComp club={ userClub.club } userClub={ userClub } key={ userClub.club.id } />
+                )
+                : <h5 className="no-clubs">{ user?.username } is not a member of any club</h5>
+            }
         </div>
     );
 }

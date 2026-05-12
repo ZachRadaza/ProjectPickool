@@ -6,6 +6,7 @@ const eventsRouter = Router();
 eventsRouter.get("/", eventsController.getAllEvents);
 eventsRouter.post("/", eventsController.addEvent);
 
+eventsRouter.get("/top/:page", eventsController.getTopEvents);
 eventsRouter.get("/clubs/:club_id", eventsController.getClubEvents);
 eventsRouter.get("/user/:user_id/:page", eventsController.getPossibleUserEvents);
 eventsRouter.get("/near/:user_id/:page", eventsController.getNearbyUserEvents);

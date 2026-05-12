@@ -35,8 +35,8 @@ type  OpenedClubPopupProp= {
     club_id: string | null;
     setIsClosed: (closed: boolean) => void;
     setIsEditClubClosed: (close: boolean) => void;
-    setIsSignUpClosed: (close: boolean) => void;
     setIsModifyEventClosed: (close: boolean) => void;
+    setClosedNoUserPopup: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function OpenedClubPopup({ 
@@ -44,8 +44,8 @@ export default function OpenedClubPopup({
     club_id, 
     setIsClosed, 
     setIsEditClubClosed, 
-    setIsSignUpClosed, 
-    setIsModifyEventClosed 
+    setIsModifyEventClosed,
+    setClosedNoUserPopup
 }: OpenedClubPopupProp){
     const [club, setClub] = useState<Clubs | null>(null);
     const [currentTab, setCurrentTab] = useState<TabType>(TabType.EVENTS);
@@ -137,7 +137,7 @@ export default function OpenedClubPopup({
             return;
 
         if(!userHeader?.id){
-            setIsSignUpClosed(false);
+            setClosedNoUserPopup(false);
             return;
         } 
           
@@ -158,26 +158,28 @@ export default function OpenedClubPopup({
 
         async function getUserClubMember(){
             try{
-                if(!userHeader || !club_id){
+                if(!club_id){
                     setUserClubMember(null);
+                    setIsLoading(false);
                     return;
                 }
 
-                setIsLoading(true);
-
                 await getClub();
 
-                const userClubMember: Club_Members = await ExtensionService.getSingleClubMember(club_id, userHeader.id);
+                const userClubMember: Club_Members | null = userHeader 
+                    ? await ExtensionService.getSingleClubMember(club_id, userHeader.id)
+                    : null;
 
-                if(!userClubMember){
+                if(!userClubMember && userHeader){
                     setUserClubMember(null);
                     await getUserClubRequest(userHeader.id!, club_id);
                     setIsLoading(false);
 
                     return;
-                } else if(userClubMember.role !== Role.MEMBER){
+                } else if(userClubMember?.role !== Role.MEMBER)
                     await getRequestNum(club_id);
-                }
+                else 
+                    return;
 
                 setRequested(false);
                 setUserClubMember(userClubMember);

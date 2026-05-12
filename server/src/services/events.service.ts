@@ -153,6 +153,25 @@ export async function getQueryNearbyEvents(user_id: string, query: string, page:
     return { data: filtered, hasMore };
 }
 
+export async function getTopEvents(page: number){
+    const pageSize = 10;
+    const { data, error } = await supabase.rpc('get_top_events', {
+        page_number: page,
+        page_size: pageSize + 1,
+    });
+
+    if(error)
+        throw new Error(error.message);
+    
+    if(!data)
+        return { data: [], hasMore: false };
+
+    const hasMore = (data?.length ?? 0) > pageSize;
+    const events = data?.slice(0, pageSize) ?? [];
+
+    return { data: events, hasMore };
+}
+
 export async function addEvent(event: Event){
     const { data, error } = await supabase
         .from("events")

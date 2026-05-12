@@ -7,7 +7,7 @@ import CloseButton from "../buttons/CloseButton";
 type NotificationCompProp = {
     notification: Notifications
     closeNotifClicked: () => void;
-    setIsClosed: (close: boolean) => void;
+    setIsClosed: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function NotificationComp({ notification, closeNotifClicked, setIsClosed }: NotificationCompProp){
@@ -78,7 +78,10 @@ export default function NotificationComp({ notification, closeNotifClicked, setI
                 <img
                     src={ notification.club?.profile_pic || import.meta.env.VITE_DEFAULT_CLUB_PIC }
                 />
-                <p>{ content() }</p>
+                <div className="notif-content">
+                    <p>{ content() }</p>
+                    <p className="date">{ new Date(notification.created_at).toLocaleDateString() }</p>
+                </div>
             </div>
             <div className="right-side">
                 <CloseButton setIsClosed={ () => closeNotifClicked() } additionalClasses="notif-close-btn"/>

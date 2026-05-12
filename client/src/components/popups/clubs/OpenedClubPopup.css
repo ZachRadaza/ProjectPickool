@@ -25,6 +25,7 @@
     align-items: center;
     justify-content: center;
     margin: -1.8rem 0px;
+    z-index: 10;
 }
 
 .opened-club .top-right-cont .close, .opened-club .top-right-cont .more{

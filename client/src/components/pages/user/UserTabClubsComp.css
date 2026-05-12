@@ -6,6 +6,10 @@
     width: auto;
 }
 
+.user-tab-club-cont .no-clubs{
+    margin: 4rem auto;
+}
+
 @media (max-width: 640px) {
     .user-tab-club-cont{
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

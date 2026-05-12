@@ -1,28 +1,25 @@
 import { useOutletContext, useNavigate } from "react-router-dom";
 import { type Club_Members, type UserClubRequests, type UserClubs, type UserHeader } from "../utils/schemas";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type SetStateAction } from "react";
 import { ExtensionService } from "../utils/ExtensionService";
 import ClubsComp from "../components/ui/core/ClubsComp";
 import Loading from "./Loading";
 import ErrorPage from "./Error";
 import "./Clubs.css";
-import NoUserOverlay from "../components/ui/NoUserOverlay";
 import Button from "../components/ui/buttons/Button";
 
 type ClubsContext = {
     userHeader: UserHeader | null;
-    setClosedModifyClub: (close:boolean) => void;
-    setClosedSignUp: (closed: boolean) => void;
-    setClosedSignIn: (closed: boolean) => void;
+    setClosedModifyClub: React.Dispatch<SetStateAction<boolean>>;
+    setClosedNoUserPopup: React.Dispatch<SetStateAction<boolean>>;
 };
 
 export default function Clubs(){
     const { 
         userHeader, 
         setClosedModifyClub,
-        setClosedSignIn,
-        setClosedSignUp 
-    } = useOutletContext<ClubsContext>();
+        setClosedNoUserPopup
+} = useOutletContext<ClubsContext>();
     
     const [userClubs, setUserClubs] = useState<UserClubs[]>([]);
     const [userClubRequests, setUserClubRequests] = useState<UserClubRequests[]>([]);
@@ -35,9 +32,7 @@ export default function Clubs(){
         if(!userHeader)
             return;
 
-        const updates: Partial<Club_Members> = {
-            is_favorite
-        };
+        const updates: Partial<Club_Members> = { is_favorite };
 
         setUserClubs((prev) => {
             const newUserClubs = prev.map((userClub) => 
@@ -62,6 +57,7 @@ export default function Clubs(){
             try{
                 if(!userHeader){
                     setIsLoading(false);
+                    setClosedNoUserPopup(false);
                     return;
                 }
 
@@ -87,6 +83,7 @@ export default function Clubs(){
             } catch(error){
                 setError("please contact support");
                 setIsLoading(false);
+                console.log(error);
             }
         }
     }, [userHeader]);
@@ -99,9 +96,6 @@ export default function Clubs(){
 
     return (
         <div className="club-cont">
-            { !userHeader &&
-                <NoUserOverlay setClosedSignIn={ setClosedSignIn } setClosedSignUp={ setClosedSignUp } />
-            }
             <h1 className="title">Clubs</h1>
             <div className="clubs">
                 { userClubs.length > 0 &&
@@ -123,7 +117,13 @@ export default function Clubs(){
                         userRequest={ userClubReq }
                     />
                 )}
-                <Button content="Create Club" onBtnClick={ () => setClosedModifyClub(false) }/>
+                <Button 
+                    content="Create Club" 
+                    onBtnClick={ () => !userHeader
+                        ? setClosedNoUserPopup(false)
+                        : setClosedModifyClub(false)
+                    }
+                />
                 <Button content="Join Clubs" onBtnClick={ () => navigate("/search") } />
             </div>
         </div>

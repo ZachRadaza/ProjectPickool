@@ -1,0 +1,12 @@
+.no-user-popup .title{
+    max-width: 25ch;
+    text-align: center;
+}
+
+.no-user-popup .sign-buttons{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}

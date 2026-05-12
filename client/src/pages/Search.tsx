@@ -69,7 +69,7 @@ export default function Search(){
 
     async function getClubs(loadMore: boolean){
         try{
-            if(!userHeader || !filters || (!hasMoreClubs && loadMore))
+            if(!filters || (!hasMoreClubs && loadMore))
                 return;
 
             if(!loadMore)
@@ -78,13 +78,19 @@ export default function Search(){
             const currentPage = !loadMore ? 1 : currentClubPage;
             let res: { data: Clubs[], hasMore: boolean };
 
-            if(!searchInput.trim())
-                res = await ExtensionService.getNearbyClubs(userHeader.id, currentPage);
+            const query = searchInput.trim();
+            const hasUser = Boolean(userHeader);
+            const nearMe = filters.showNearMe && hasUser;
+
+            if(query && nearMe)
+                res = await ExtensionService.getQueryNearbyClubs(userHeader!.id, query, currentPage);
+            else if(query)
+                res = await ExtensionService.getQueryClubs(query, currentPage);
+            else if(nearMe)
+                res = await ExtensionService.getNearbyClubs(userHeader!.id, currentPage);
             else
-                if(filters.showNearMe)
-                    res = await ExtensionService.getQueryNearbyClubs(userHeader.id, searchInput, currentPage);
-                else
-                    res = await ExtensionService.getQueryClubs(searchInput, currentPage);
+                res = await ExtensionService.getTopClubs(currentPage);
+
 
             loadMore ? setClubs([...clubs, ...res.data]) : setClubs(res.data);
             setCurrentClubPage(currentPage + 1);
@@ -96,19 +102,24 @@ export default function Search(){
 
     async function getEvents(loadMore: boolean){
         try{
-            if(!userHeader || !filters || (!hasMoreEvents && loadMore))
+            if(!filters || (!hasMoreEvents && loadMore))
                 return;
 
             const currentPage = !loadMore ? 1 : currentEventPage;
             let res: { data: Events[], hasMore: boolean };
 
-            if(!searchInput.trim())
-                res = await ExtensionService.getNearUserEvents(userHeader.id, currentPage);
+            const query = searchInput.trim();
+            const hasUser = Boolean(userHeader);
+            const nearMe = filters.showNearMe && hasUser;
+
+            if(query && nearMe)
+                res = await ExtensionService.getQueryNearUserEvents(userHeader!.id, query, currentPage);
+            else if(query)
+                res = await ExtensionService.getQueryEvents(query, currentPage);
+            else if(nearMe)
+                res = await ExtensionService.getNearUserEvents(userHeader!.id, currentPage);
             else
-                if(filters.showNearMe)
-                    res = await ExtensionService.getQueryNearUserEvents(userHeader.id, searchInput, currentPage);
-                else
-                    res = await ExtensionService.getQueryEvents(searchInput, currentPage);
+                res = await ExtensionService.getTopEvents(currentPage);
 
             loadMore ? setEvents([...events, ...res.data]) : setEvents(res.data);
             setCurrentEventPage(currentPage + 1);
@@ -145,11 +156,6 @@ export default function Search(){
         async function getQuery(){
             try{
                 setIsLoading(true);
-
-                if(!userHeader){
-                    setIsLoading(false);
-                    return;
-                }
 
                 if(filters?.showClubs)
                     await getClubs(false);
@@ -213,6 +219,7 @@ export default function Search(){
         <div className="search-cont">
             <h1 className="search-title">Explore</h1>
             <h6>{ searchMessage }</h6>
+            { !userHeader && <h6>Sign In to enable location search</h6>}
             <div className="search-area">
                 <SearchInput 
                     value={ searchInput }

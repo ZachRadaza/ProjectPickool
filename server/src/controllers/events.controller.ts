@@ -200,6 +200,33 @@ export async function getQueryNearbyEvents(req: Request, res: Response){
     }
 }
 
+export async function getTopEvents(req: Request, res: Response){
+    try{
+        const { page } = req.params;
+
+        if(!page || typeof page !== "string")
+            return res.status(400).json({
+                success: false,
+                error: "Page required"
+            });
+
+        const pageNum = parsePage(page);
+        const { data, hasMore } = await eventService.getTopEvents(pageNum);
+
+        res.status(200).json({
+            success: true,
+            data: data,
+            hasMore: hasMore
+        });
+    } catch(error: any){
+        console.error("getTopEvents Error: ", error);
+        res.status(500).json({
+            success: false,
+            error: error.message || "Internal Server Error"
+        });
+    }
+}
+
 export async function addEvent(req: Request, res: Response){
     try{
         const { event } = req.body;

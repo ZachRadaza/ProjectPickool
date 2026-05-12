@@ -12,6 +12,7 @@ clubsRouter.post("/",
     ]), 
     clubsController.addClub);
 
+clubsRouter.get("/top/:page", clubsController.getTopClubs);
 clubsRouter.get("/near/:user_id/:page", clubsController.getNearbyClubs);
 clubsRouter.get("/query/:query/:page", clubsController.getQueryClubs);
 clubsRouter.get("/querynear/:user_id/:query/:page", clubsController.getQueryNearbyClubs);

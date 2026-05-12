@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { ExtensionService } from "../../../utils/ExtensionService";
 import type { Users } from "../../../utils/schemas";
-import { wait } from "../../../utils/random";
 import "../popup.css";
 import "./SignActionPopup.css";
 import CloseButton from "../../ui/buttons/CloseButton";
@@ -9,13 +8,12 @@ import Button from "../../ui/buttons/Button";
 
 const MessageType = {
     NONE: "",
-    SUCCESS: "Account Successfully Created",
-    INCORRECT: "Email or Password in Use",
+    SUCCESS: "Verification Email Sent.",
+    INCORRECT: "Email in Use",
     EMPTY: "Please Enter All the Fields",
     USERNAMELENGTH: "Username must be 5-20 Characters",
     PASSWORDLENGTH: "Password must be atleast 5 Characters"
 } as const;
-
 type MessageType = (typeof MessageType)[keyof typeof MessageType];
 
 type SignUpPopupProp = {
@@ -28,9 +26,17 @@ export default function SignUpPopup({ setIsClosed }: SignUpPopupProp ){
     const [username, setUsername] = useState<string>("");
     const [buttonContent, setButtonContent] = useState<string>("Create Account");
     const [valid, setValid] = useState<MessageType>(MessageType.NONE);
+    const [resendContent, setResendContent] = useState<string>("Resend verification link to email.");
+
+    let content;
 
     function verifyInputs(){
         return (email && password && username);
+    }
+
+    async function resendVerificaiton(){
+        await ExtensionService.resendEmailUser(email);
+        setResendContent("Sent.");
     }
 
     async function btnClicked(){
@@ -59,13 +65,14 @@ export default function SignUpPopup({ setIsClosed }: SignUpPopupProp ){
 
         const data = await ExtensionService.addUser(user, password);
 
-        if(data) {  
+        if(data){  
             setValid(MessageType.SUCCESS);
-            
+            /*
             await wait(2000);
             setIsClosed(true);
 
             window.location.reload();
+            */
         } else {
             setValid(MessageType.INCORRECT);
             setPassword("");
@@ -73,6 +80,47 @@ export default function SignUpPopup({ setIsClosed }: SignUpPopupProp ){
 
         setButtonContent("Create Account");
     }
+
+    if(valid === MessageType.SUCCESS)
+        content = <>
+            <p>Please check your email for a verification link.</p>
+            <p className="did-not-recieve">Did not recieve it?</p>
+            <p><a onClick={ () => resendVerificaiton() }>{ resendContent }</a></p>
+        </>;
+    else
+        content = <>
+            <div className="input-pair">
+                <h6>Username</h6>
+                <input
+                    value={ username }
+                    onChange={ (event) => setUsername(event.target.value) }
+                    type="text"
+                    placeholder="MrPickle"
+                />
+            </div>
+            <div className="input-pair">
+                <h6>Email</h6>
+                <input
+                    value={ email }
+                    onChange={ (event) => setEmail(event.target.value) }
+                    type="email"
+                    placeholder="name@email.com"
+                />
+            </div>                
+            <div className="input-pair">
+                <h6>Password</h6>
+                <input
+                    value={ password }
+                    onChange={ (event) => setPassword(event.target.value) }
+                    type="password"
+                    placeholder="A winners passord"
+                />
+            </div>
+            <Button 
+                onBtnClick={ () =>  btnClicked() }
+                content={ buttonContent }
+            />
+        </>;
 
     return (
         <div className="popup sign-action">
@@ -82,42 +130,10 @@ export default function SignUpPopup({ setIsClosed }: SignUpPopupProp ){
                 <h6 className="subtitle">Join the Project</h6>
             </div>
             <div className="content">
-                <p 
-                    className={ valid === MessageType.SUCCESS ? "message" : "message invalid" }
-                >
+                <p className={ valid === MessageType.SUCCESS ? "message" : "message invalid" }>
                     { valid }
                 </p>
-                <div className="input-pair">
-                    <h6>Username</h6>
-                    <input
-                        value={ username }
-                        onChange={ (event) => setUsername(event.target.value) }
-                        type="text"
-                        placeholder="MrPickle"
-                    />
-                </div>
-                <div className="input-pair">
-                    <h6>Email</h6>
-                    <input
-                        value={ email }
-                        onChange={ (event) => setEmail(event.target.value) }
-                        type="email"
-                        placeholder="name@email.com"
-                    />
-                </div>                
-                <div className="input-pair">
-                    <h6>Password</h6>
-                    <input
-                        value={ password }
-                        onChange={ (event) => setPassword(event.target.value) }
-                        type="password"
-                        placeholder="A winners passord"
-                    />
-                </div>
-                <Button 
-                    onBtnClick={ () =>  btnClicked() }
-                    content={ buttonContent }
-                />
+                { content }
             </div>
         </div>
     )

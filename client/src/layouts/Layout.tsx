@@ -1,4 +1,4 @@
-import { Outlet, useSearchParams } from "react-router-dom";
+import { Outlet, useLocation, useSearchParams } from "react-router-dom";
 import Header from "../components/layout/header";
 import SignUpPopup from "../components/popups/user/SignUpPopup";
 import SignInPopup from "../components/popups/user/SignInPopup";
@@ -15,6 +15,7 @@ import ModifyEventPopup from "../components/popups/events/ModifyEventPopup";
 import OpenedEventPopup from "../components/popups/events/OpenedEventPopup";
 import PopupWrapper from "../components/popups/PopupWrapper";
 import NotificationsPopup from "../components/popups/notifications/NotificationsPopup";
+import NoUserPopup from "../components/popups/user/NoUserPopup";
 
 export default function Layout(){
     const [closedSignIn, setClosedSignIn] = useState<boolean>(true);
@@ -26,6 +27,7 @@ export default function Layout(){
     const [closedModifyEvent, setClosedModifyEvent] = useState<boolean>(true);
     const [closedOpenedEvent, setClosedOpenedEvent] = useState<boolean>(true);
     const [closedNotifsPopup, setClosedNotifsPopup] = useState<boolean>(true);
+    const [closedNoUserPopup, setClosedNoUserPopup] = useState<boolean>(true);
 
     const [userHeader, setUserHeader] = useState<UserHeader | null>(null);
     const [club_id, setClubId] = useState<string | null>(null);
@@ -37,6 +39,7 @@ export default function Layout(){
     const [error, setError] = useState<string | null>(null);
 
     const [searchParams] = useSearchParams();
+    const location = useLocation();
 
     useEffect(() => {
         getCurrentUser();
@@ -94,6 +97,10 @@ export default function Layout(){
         setClosedOpenedEvent(!eventId);
     }, [searchParams.get("event")]);
 
+    useEffect(() => {
+        setClosedNoUserPopup(true);
+    }, [location]);
+
     if(isLoading)
         return <Loading />
 
@@ -111,8 +118,8 @@ export default function Layout(){
                             club_id={ club_id } 
                             userHeader={ userHeader }
                             setIsEditClubClosed={ setClosedModifyClub }
-                            setIsSignUpClosed={ setClosedSignUp }
                             setIsModifyEventClosed={ setClosedModifyEvent }
+                            setClosedNoUserPopup={ setClosedNoUserPopup }
                         />
                     }
                     isMaxWidth={ true }
@@ -184,6 +191,17 @@ export default function Layout(){
                     }
                 />
                 <PopupWrapper 
+                    isClosed={ closedNoUserPopup }
+                    noBgPointerEvents={ true }
+                    popupComp={
+                        <NoUserPopup 
+                            setIsClosed={ setClosedNoUserPopup }
+                            setClosedSignIn={ setClosedSignIn }
+                            setClosedSignUp={ setClosedSignUp }
+                        />
+                    }
+                />
+                <PopupWrapper 
                     isClosed={ closedSignIn }
                     popupComp={ <SignInPopup setIsClosed={ setClosedSignIn }/>}
                 />
@@ -202,7 +220,8 @@ export default function Layout(){
                 </svg>
                 <Outlet 
                     context={{ 
-                        userHeader, setClosedSignIn, setClosedSignUp, setClosedModifyClub, setClosedEditUser,
+                        userHeader, setClosedSignIn, setClosedSignUp, setClosedModifyClub, setClosedEditUser, 
+                        setClosedNoUserPopup,
                         setClosedModifyEvent
                     }}
                 />

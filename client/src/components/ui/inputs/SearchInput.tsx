@@ -2,7 +2,7 @@ import "./SearchInput.css";
 
 type SearchInputProp = {
     value: string;
-    setValue: (value: string) => void;
+    setValue: React.Dispatch<React.SetStateAction<string>>;
     search: (query: string) => void;
 };
 

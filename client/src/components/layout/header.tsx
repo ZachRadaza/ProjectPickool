@@ -49,7 +49,7 @@ export default function Header({ userHeader, numberNotifs, setClosedNotifsPopup 
                         onClick={ () => setMenuClosed(true) }
                     >
                         <h5>{ userHeader?.username ?? "Guest" }</h5>
-                        <img src={ userHeader?.profile_pic ?? import.meta.env.VITE_DEFAULT_PROFILE_PIC } />
+                        <img src={ userHeader?.profile_pic ? userHeader.profile_pic :  import.meta.env.VITE_DEFAULT_PROFILE_PIC } />
                     </NavLink>
                 </div>
                 <div className="nav-section burger">

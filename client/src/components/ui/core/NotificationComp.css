@@ -38,6 +38,15 @@
     font-size: clamp(1.2rem, 1.7vw, 1.5rem);
 }
 
+.notif-comp .left-side .notif-content{
+    display: flex;
+    flex-direction: column;
+}
+
+.notif-comp .left-side .notif-content .date{
+    opacity: 0.6;
+}
+
 .notif-comp .right-side{
     display: flex;
     flex-direction: row;

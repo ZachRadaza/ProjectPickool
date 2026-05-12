@@ -51,7 +51,7 @@ p{
     height: min-content;
 }
 
-a{ color: var(--color-secondary); }
+a{ color: var(--color-secondary); text-decoration: underline; cursor: pointer; }
 a:hover{ color: var(--color-accent); }
 a:visited{ background-color: color-mix(in srgb, var(--color-accent) 50%, transparent); }
 

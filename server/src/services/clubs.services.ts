@@ -103,6 +103,22 @@ export async function getQueryNearbyClubs(user_id: string, query: string, page: 
     return { data: filtered, hasMore };
 }
 
+export async function getTopClubs(page: number){
+    const pageSize = 10;
+    const { data, error } = await supabase.rpc('get_top_clubs', {
+        page_number: page,
+        page_size: pageSize + 1
+    });
+
+    if(error)
+        throw new Error(error.message);
+
+    const hasMore = data.length > pageSize;
+    const trimmedData = data.slice(0, pageSize);
+
+    return { data: trimmedData, hasMore };
+}
+
 export async function addClub(club: Clubs){
     const { data, error } = await supabase
         .from("clubs")

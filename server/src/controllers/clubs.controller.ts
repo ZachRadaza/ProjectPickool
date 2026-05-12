@@ -138,6 +138,33 @@ export async function getQueryNearbyClubs(req: Request, res: Response){
     }
 }
 
+export async function getTopClubs(req: Request, res: Response){
+    try{
+        const { page } = req.params;
+
+        if(!page || typeof page !== "string")
+            return res.status(400).json({
+                success: false,
+                error: "id, query, page required"
+            });
+
+        const pageNum = parsePage(page);
+        const { data, hasMore } = await clubsService.getTopClubs(pageNum);
+
+        res.status(200).json({
+            success: true,
+            data: data,
+            hasMore: hasMore
+        });
+    } catch(error){
+        console.error("getTopClubs error", error);
+        res.status(500).json({
+            success: false,
+            error: error
+        });
+    }
+}
+
 export async function addClub(req: Request, res: Response){
     try{
         const { 

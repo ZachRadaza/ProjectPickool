@@ -127,6 +127,25 @@ export const ExtensionService = {
         }
     },
 
+    async resendEmailUser(email: string){
+        try{    
+            const { data, error } = await supabase
+                .auth
+                .resend({
+                    type: "signup",
+                    email: email
+                });
+
+            if(error)
+                return false;
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
     async loginUser(email: string, password: string){
         try{
             const { data, error } = await supabase
@@ -300,6 +319,25 @@ export const ExtensionService = {
     async getQueryNearbyClubs(user_id: string, query: string, page: number){
         try{
             const req = await fetch(`${clubApiUrl}/querynear/${user_id}/${query}/${page}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Clubs[] = res.data;
+            const hasMore: boolean = res.hasMore;
+
+            return { data, hasMore };
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getTopClubs(page: number){
+        try{
+            const req = await fetch(`${clubApiUrl}/top/${page}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include"
@@ -880,6 +918,25 @@ export const ExtensionService = {
     async getQueryNearUserEvents(user_id: string, query: string, page: number){
         try{
             const req = await fetch(`${eventApiUrl}/querynear/${user_id}/${query}/${page}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include"
+            });
+
+            const res = await req.json();
+            const data: Events[] = res.data;
+            const hasMore: boolean = res.hasMore;
+
+            return { data, hasMore };
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async getTopEvents(page: number){
+        try{
+            const req = await fetch(`${eventApiUrl}/top/${page}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include"

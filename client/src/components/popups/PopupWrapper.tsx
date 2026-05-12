@@ -6,9 +6,10 @@ type PopupWrapperProp = {
     popupComp: React.ReactNode;
     isClosed: boolean;
     isMaxWidth?: boolean;
+    noBgPointerEvents?: boolean;
 }
 
-export default function PopupWrapper({ popupComp, isClosed, isMaxWidth }: PopupWrapperProp){
+export default function PopupWrapper({ popupComp, isClosed, isMaxWidth, noBgPointerEvents }: PopupWrapperProp){
     const [isRendered, setIsRendered] = useState<boolean>(false);
     const [popupClosed, setPopupClosed] = useState<boolean>(true);
 
@@ -28,7 +29,7 @@ export default function PopupWrapper({ popupComp, isClosed, isMaxWidth }: PopupW
     }, [isClosed]);
 
     return (
-        <div className="container">
+        <div className={ `container ${noBgPointerEvents ? "no-pt-events" : ""}`}>
             <div className={`popup-wrapper ${popupClosed ? "closed" : ""} ${isMaxWidth ? "max-width" : ""}`}>
             { isRendered && popupComp }
             </div>

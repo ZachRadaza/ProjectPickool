@@ -1,11 +1,10 @@
 import type { UserHeader, Users } from "../utils/schemas";
 import { useOutletContext, useParams } from "react-router-dom";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, type SetStateAction } from "react";
 import "./User.css";
 import { ExtensionService } from "../utils/ExtensionService";
 import Loading from "./Loading";
 import ErrorPage from "./Error";
-import NoUserOverlay from "../components/ui/NoUserOverlay";
 import EditButton from "../components/ui/buttons/EditButton";
 import UserTabClubsComp from "../components/pages/user/UserTabClubsComp";
 import UserTabPostsComp from "../components/pages/user/UserTabPostsComp";
@@ -22,17 +21,15 @@ export type TabType = (typeof TabType)[keyof typeof TabType];
 type UserContext = {
     userHeader: UserHeader | null;
     previewUserId: string | null;
-    setClosedSignUp: (closed: boolean) => void;
-    setClosedSignIn: (closed: boolean) => void;
-    setClosedEditUser: (closed: boolean) => void;
+    setClosedNoUserPopup: React.Dispatch<SetStateAction<boolean>>;
+    setClosedEditUser: React.Dispatch<SetStateAction<boolean>>;
 };
 
 export default function User(){
     const {
         userHeader,
-        setClosedSignIn,
-        setClosedSignUp,
-        setClosedEditUser
+        setClosedEditUser,
+        setClosedNoUserPopup,
     } = useOutletContext<UserContext>();
     const { id } = useParams();
 
@@ -74,6 +71,7 @@ export default function User(){
                 setIsLoading(true);
                 if(id?.trim() === "guest" || !id){
                     setIsLoading(false);
+                    setClosedNoUserPopup(false);
                     return;
                 }
 
@@ -92,7 +90,7 @@ export default function User(){
                 setIsLoading(false);
             }
         }
-    }, [id]);
+    }, [id, userHeader]);
 
     if(isLoading)
         return <Loading />;
@@ -102,7 +100,6 @@ export default function User(){
 
     return (
         <div className="user-page">
-            { !userHeader && <NoUserOverlay setClosedSignIn={ setClosedSignIn } setClosedSignUp={ setClosedSignUp } /> }
             <div className="user-info-cont">
                 { isSelf && <EditButton onBtnClick={ () => setClosedEditUser(false) } /> }
                 <div className="content">
@@ -116,7 +113,8 @@ export default function User(){
                         <LocationIconComp location={ openedUser?.location ?? null }/>
                     </div>
                 </div>
-                { isSelf && <Button content={ !isLoggingOut ? "Log Out" : "Loggin Out" } onBtnClick={ logoutClicked }/> }
+                { (isSelf && userHeader) && <Button content={ !isLoggingOut ? "Log Out" : "Loggin Out" } onBtnClick={ logoutClicked }/> }
+                { !userHeader && <Button content="Sign In" onBtnClick={ () => setClosedNoUserPopup(false) }/> }
             </div>
             <div className="user-content-cont">
                 <div className="tabs">

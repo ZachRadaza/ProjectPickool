@@ -24,19 +24,19 @@ export default function Events(){
 
     async function getEvents(firstLoad: boolean){
         try{
-            if(!userHeader){
-                return;
-            }
-
             if(firstLoad)
                 setIsLoading(true);
 
-            const { data, hasMore } = await ExtensionService.getPossibleUserEvents(userHeader.id, currentEventPage);
+            let res;
+            if(!userHeader)
+                res = await ExtensionService.getTopEvents(currentEventPage);
+            else 
+                res = await ExtensionService.getPossibleUserEvents(userHeader.id, currentEventPage);
 
-            setEvents([...events, ...data]);
+            setEvents([...events, ...res.data]);
             setIsLoading(false);
             setCurrentEventPage(currentEventPage + 1);
-            setHasMoreEvents(hasMore);
+            setHasMoreEvents(res.hasMore);
         } catch(error){
             setError("Error in getting events");
             setIsLoading(false);

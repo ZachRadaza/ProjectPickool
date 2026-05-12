@@ -58,9 +58,8 @@ export default function EventButtonComp({
     }, [playersApproved, userMember]);
 
     const isDisabled = userPlayer?.approved_at && event?.approve_window != null
-        ? now >
-          new Date(userPlayer.approved_at).getTime() +
-            event.approve_window * 1000
+        ? (now > new Date(userPlayer.approved_at).getTime() + event.approve_window * 1000 ||
+            now > new Date(event.end_time).getTime())
         : false;
 
     async function joinEvent(){
@@ -140,6 +139,7 @@ export default function EventButtonComp({
                     : <Button
                         content={ joining ? "Joining Event..." : "Join Event" }
                         onBtnClick={() => joinEvent() }
+                        isDisabled={ event ? now > new Date(event?.end_time).getTime() : true }
                     />
                 : (buttonSituation === EventButtonSituation.NOT_MEMBER)
                     ? <Button 

@@ -93,7 +93,10 @@ export default function EventParticipantsComp({
                             isMini={ false }
                             appovedClicked={ (id: string) => approveRequest(id) }
                             denyClicked={ (id: string) => denyRequest(id) }
-                            isDisabled={ playersApproved.length >= (event?.max_players ?? 100) }
+                            isDisabled={ 
+                                playersApproved.length >= (event?.max_players ?? 100) ||
+                                (event !== null && Date.now() > new Date(event.end_time).getTime())
+                            }
                         />
                         : <UsersDropdown 
                             content="Requested"
