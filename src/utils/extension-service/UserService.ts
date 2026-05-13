@@ -1,5 +1,5 @@
 import type { UserClubs, UserHeader, Users } from "../schemas";
-import { supabase, supabaseAdmin } from "../supabase";
+import { supabase } from "../supabase";
 import { LocationService } from "./LocationService";
 import { StorageService } from "./StorageService";
 
@@ -92,7 +92,7 @@ export const UserService = {
 
             const user = { ...userRaw, id: id };
 
-            const { data: dataUser, error: errorUser } = await supabaseAdmin
+            const { data: dataUser, error: errorUser } = await supabase
                 .from("users")
                 .insert([user])
                 .select(userBody)
@@ -177,7 +177,7 @@ export const UserService = {
                 updates.location_id = locationNew.id;
             }
 
-            const { data, error } = await supabaseAdmin
+            const { data, error } = await supabase
                 .from("users")
                 .update(updates)
                 .eq("id", id)
@@ -196,7 +196,7 @@ export const UserService = {
 
     async deleteUser(id: string){
         try{
-            const { data, error } = await supabaseAdmin
+            const { data, error } = await supabase
                 .from("users")
                 .delete()
                 .eq("id", id)

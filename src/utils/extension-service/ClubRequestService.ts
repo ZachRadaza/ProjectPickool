@@ -1,5 +1,5 @@
 import type { Club_Requests, UserClubRequests } from "../schemas";
-import { supabase, supabaseAdmin } from "../supabase";
+import { supabase } from "../supabase";
 import { ClubMemberService } from "./ClubMemberService";
 
 const clubRequestBody = `
@@ -13,23 +13,6 @@ const clubRequestBody = `
 `;
 
 export const ClubRequestService = {
-    async getAllRequests(){
-        try{
-            const { data, error } = await supabaseAdmin
-                .from("club_requests")
-                .select(clubRequestBody);
-
-            if(error)
-                throw new Error(error.message);
-
-            const requests: Club_Requests[] = this.convertListOfClubRequests(data);
-
-            return requests;
-        } catch(error){
-            console.error("error", error);
-            throw error;
-        }
-    },
 
     async getClubRequests(club_id: string){
         try{

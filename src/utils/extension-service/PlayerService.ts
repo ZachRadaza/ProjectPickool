@@ -1,5 +1,5 @@
 import type { Players } from "../schemas";
-import { supabase, supabaseAdmin } from "../supabase";
+import { supabase } from "../supabase";
 
 const playerBody = `
     event_id,
@@ -15,21 +15,6 @@ const playerBody = `
 `;
 
 export const PlayerService = {
-    async getAllPlayers(){
-        try{
-            const { data ,error } = await supabaseAdmin
-                .from("players")
-                .select(playerBody);
-
-            if(error)
-                throw new Error(error.message);
-
-            return this.convertListOfPlayers(data);
-        } catch(error){
-            console.error("error", error);
-            throw error;
-        }
-    },
 
     async getPlayer(event_id: string, user_id: string){
         try{

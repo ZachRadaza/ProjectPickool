@@ -1,5 +1,5 @@
 import type { Events } from "../schemas";
-import { supabase, supabaseAdmin } from "../supabase";
+import { supabase } from "../supabase";
 
 const seriesBody = `
     id,
@@ -25,21 +25,6 @@ const seriesBody = `
 `;
 
 export const EventSeriesService = {
-    async getAllEventSeries(){
-        try{
-            const { data, error } = await supabaseAdmin
-                .from("event_series")
-                .select(seriesBody);
-
-            if(error)
-                throw new Error(error.message);
-
-            return data;
-        } catch(error){
-            console.error("error", error);
-            throw error;
-        }
-    },
 
     async getEventSeries(series_id: string){
         try{
@@ -87,7 +72,7 @@ export const EventSeriesService = {
             if(series_error)
                 throw new Error(series_error.message);
 
-            const { data: events, error: events_error } = await supabaseAdmin.rpc(
+            const { data: events, error: events_error } = await supabase.rpc(
                 "generate_recurring_events_for_series",
                 { p_series_id: event_series.id }
             );

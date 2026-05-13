@@ -1,4 +1,4 @@
-import { supabase, supabaseAdmin } from "../supabase";
+import { supabase } from "../supabase";
 
 const hostSeriesBody = `
     event_series_id,
@@ -11,16 +11,6 @@ const hostSeriesBody = `
 `;
 
 export const HostSeriesService = {
-    async getAllHostSeries(){
-        const { data, error } = await supabaseAdmin
-            .from("host_series")
-            .select(hostSeriesBody);
-
-        if(error)
-            throw new Error(error.message);
-
-        return data;
-    },
 
     async getHostSeries(event_series_id: string, user_id: string){
         const { data, error } = await supabase

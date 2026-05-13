@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "../supabase";
+import { supabase } from "../supabase";
 
 const BUCKET = "images";
 
@@ -42,7 +42,7 @@ export const StorageService = {
     },
 
     async uploadImage(file: File, path: string, upsert: boolean): Promise<UploadResult> {
-        const { error } = await supabaseAdmin.storage
+        const { error } = await supabase.storage
             .from(BUCKET)
             .upload(path, file, {
                 upsert,
@@ -52,14 +52,14 @@ export const StorageService = {
         if(error)
             throw new Error(`Failed to upload image: ${error.message}`);
 
-        const { data } = supabaseAdmin.storage.from(BUCKET).getPublicUrl(path);
+        const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
 
         return { path, publicUrl: data.publicUrl };
     },
 
     async deleteImage(path: string): Promise<void> {
         console.log(path);
-        const { error } = await supabaseAdmin.storage.from(BUCKET).remove([path]);
+        const { error } = await supabase.storage.from(BUCKET).remove([path]);
 
         if(error)
             throw new Error(`Failed to delete image: ${error.message}`);

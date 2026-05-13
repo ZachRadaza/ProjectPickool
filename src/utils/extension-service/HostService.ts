@@ -1,5 +1,5 @@
 import type { Hosts } from "../schemas";
-import { supabase, supabaseAdmin } from "../supabase";
+import { supabase } from "../supabase";
 import { HostSeriesService } from "./HostSeriesService";
 
 const hostBody = `
@@ -13,21 +13,6 @@ const hostBody = `
 `;
 
 export const HostService = {
-    async getAllHosts(){
-        try{
-            const { data, error } = await supabaseAdmin
-                .from("hosts")
-                .select(hostBody)
-
-            if(error)
-                throw new Error(error.message);
-
-            return this.convertListOfHosts(data);
-        } catch(error){
-            console.error("error", error);
-            throw error;
-        }
-    },
 
     async getHost(event_id: string, user_id: string){
         try{

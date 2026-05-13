@@ -1,5 +1,5 @@
 import { Recurring, type Events } from "../schemas";
-import { supabase, supabaseAdmin } from "../supabase";
+import { supabase } from "../supabase";
 import { EventSeriesService } from "./EventSeriesService";
 import { LocationService } from "./LocationService";
 
@@ -28,23 +28,6 @@ const eventBody = `
 `;
 
 export const EventService = {
-    async getAllEvents(){
-        try{
-            const { data, error } = await supabaseAdmin
-                .from("events")
-                .select(eventBody);
-
-            if(error)
-                throw new Error(error.message);
-
-            const events: Events[] = this.convertListOfEvents(data);
-
-            return events;
-        } catch(error){
-            console.error("error", error);
-            throw error;
-        }
-    },
 
     async getEvent(id: string){
         try{

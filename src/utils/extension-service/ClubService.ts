@@ -1,5 +1,5 @@
 import type { Clubs } from "../schemas";
-import { supabase, supabaseAdmin } from "../supabase";
+import { supabase } from "../supabase";
 import { ClubMemberService } from "./ClubMemberService";
 import { LocationService } from "./LocationService";
 import { StorageService } from "./StorageService";
@@ -19,23 +19,6 @@ const clubBody = `
 `;
 
 export const ClubService = {
-    async getAllClubs(){
-        try{
-            const { data, error } = await supabaseAdmin
-                .from("clubs")
-                .select(clubBody);
-
-            if(error)
-                throw new Error(error.message);
-
-            const clubs: Clubs[] = this.convertListOfClubs(data);
-
-            return clubs;
-        } catch(error){
-            console.error("error", error);
-            throw error;
-        }
-    },
 
     async getClub(id: string){
         try{
