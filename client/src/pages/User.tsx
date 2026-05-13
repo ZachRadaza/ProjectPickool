@@ -56,7 +56,7 @@ export default function User(){
     async function logoutClicked(){
         setIsLoggingOut(true);
 
-        await ExtensionService.logoutUser();
+        await ExtensionService.UserService.logoutUser();
 
         setIsLoggingOut(false);
 
@@ -75,7 +75,7 @@ export default function User(){
                     return;
                 }
 
-                const data = await ExtensionService.getUser(id);
+                const data = await ExtensionService.UserService.getUser(id);
 
                 if(!data){
                     setIsLoading(false);

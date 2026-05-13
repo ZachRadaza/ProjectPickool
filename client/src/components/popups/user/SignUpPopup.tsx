@@ -35,7 +35,7 @@ export default function SignUpPopup({ setIsClosed }: SignUpPopupProp ){
     }
 
     async function resendVerificaiton(){
-        await ExtensionService.resendEmailUser(email);
+        await ExtensionService.UserService.resendEmailUser(email);
         setResendContent("Sent.");
     }
 
@@ -63,7 +63,7 @@ export default function SignUpPopup({ setIsClosed }: SignUpPopupProp ){
             email: email.trim()
         };
 
-        const data = await ExtensionService.addUser(user, password);
+        const data = await ExtensionService.UserService.addUser(user, password);
 
         if(data){  
             setValid(MessageType.SUCCESS);

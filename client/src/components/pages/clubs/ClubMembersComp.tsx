@@ -25,7 +25,7 @@ export default function ClubMembersComp({ club_id }: ClubMembersComp){
             if(!club_id || !membersPageHasMore)
                 return;
 
-            const { data: membersFetched, hasMore } = await ExtensionService.getClubMembers(club_id, currentMemberPage);
+            const { data: membersFetched, hasMore } = await ExtensionService.ClubMemberService.getClubMembers(club_id, currentMemberPage);
 
             if(!membersFetched){
                 setMembersPageHasMore(hasMore);
@@ -49,8 +49,8 @@ export default function ClubMembersComp({ club_id }: ClubMembersComp){
 
                 setIsLoading(true);
 
-                const owner = await ExtensionService.getClubOwner(club_id);
-                const admins = await ExtensionService.getClubAdmins(club_id);
+                const owner = await ExtensionService.ClubMemberService.getClubOwner(club_id);
+                const admins = await ExtensionService.ClubMemberService.getClubAdmins(club_id);
                 await getMembers();
 
                 setOwner(owner);

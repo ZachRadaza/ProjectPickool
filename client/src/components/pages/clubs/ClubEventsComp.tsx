@@ -30,7 +30,7 @@ export default function ClubEventsComp({ club_id, setClosedModifyEvent, userClub
                     return;
                 }
 
-                const clubEvents = await ExtensionService.getClubEvents(club_id);
+                const clubEvents = await ExtensionService.EventService.getClubEvents(club_id);
 
                 if(!clubEvents){
                     setIsLoading(false);

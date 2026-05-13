@@ -24,14 +24,13 @@ export default function Events(){
 
     async function getEvents(firstLoad: boolean){
         try{
-            if(firstLoad)
-                setIsLoading(true);
+            firstLoad ? setIsLoading(true) : setIsLoading(false);
 
             let res;
             if(!userHeader)
-                res = await ExtensionService.getTopEvents(currentEventPage);
+                res = await ExtensionService.EventService.getTopEvents(currentEventPage);
             else 
-                res = await ExtensionService.getPossibleUserEvents(userHeader.id, currentEventPage);
+                res = await ExtensionService.EventService.getPossibleUserEvents(userHeader.id, currentEventPage);
 
             setEvents([...events, ...res.data]);
             setIsLoading(false);

@@ -101,7 +101,7 @@ export async function updateUser(id: string, updates: Partial<Omit<Users, "id">>
 }
 
 export async function deleteUser(id: string){
-        const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin
         .from("users")
         .delete()
         .eq("id", id)

@@ -8,7 +8,7 @@ import { ExtensionService } from "../../../utils/ExtensionService";
 import "./NotificationsPopup.css";
 
 type NotificationsPopupProp = {
-    setIsClosed: (close: boolean) => void;
+    setIsClosed: React.Dispatch<React.SetStateAction<boolean>>;
     userHeader: UserHeader | null;
     setNumNotifs: React.Dispatch<React.SetStateAction<number>>;
 };
@@ -22,7 +22,10 @@ export default function NotificationsPopup({ setIsClosed, userHeader, setNumNoti
         if(!id)
             return;
 
-        const removed = await ExtensionService.deleteNotification(id);
+        setNumNotifs(notifications.length - 1);
+        setNotifications(notifications.filter((notif) => notif.id !== id));
+
+        const removed = await ExtensionService.NotificationService.deleteNotification(id);
 
         if(!removed){
             setError("Error in removing notification");
@@ -43,7 +46,7 @@ export default function NotificationsPopup({ setIsClosed, userHeader, setNumNoti
                     return;
                 }
 
-                const notifs = await ExtensionService.getAllNotifications(userHeader.id);
+                const notifs = await ExtensionService.NotificationService.getAllNotifications(userHeader.id);
 
                 setNotifications(notifs);
                 setIsLoading(false);

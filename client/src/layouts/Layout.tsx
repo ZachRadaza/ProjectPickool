@@ -48,7 +48,7 @@ export default function Layout(){
             try{
                 setIsLoading(true);
                 
-                const userFetch = await ExtensionService.getCurrentUser();
+                const userFetch = await ExtensionService.UserService.getCurrentUser();
 
                 if(userFetch){
                     setUserHeader(userFetch);
@@ -68,7 +68,7 @@ export default function Layout(){
                     return;
                 }
 
-                const numberNotifs = await ExtensionService.getNumNotifications(user_id);
+                const numberNotifs = await ExtensionService.NotificationService.getNumNotifications(user_id);
                 setNumberNotifs(numberNotifs || 0);
             } catch(error){
                 setError("Error in Getting Number of notificaitons");

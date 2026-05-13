@@ -86,7 +86,7 @@ export async function getUserClubs(req: Request, res: Response){
 
         const clubs = await userService.getUserClubs(id);
 
-        res.setMaxListeners(200).json({
+        res.status(200).json({
             success: true,
             data: clubs
         });

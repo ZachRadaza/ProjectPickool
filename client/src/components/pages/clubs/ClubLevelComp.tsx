@@ -33,7 +33,7 @@ export default function ClubLevelComp({ userHeader, userClubMember, club_id, set
 
         const updates: Partial<Club_Members_Basic> = { is_level_approved, level };
 
-        const updatedMem = await ExtensionService.updateClubMember(club_id, userHeader.id, updates);
+        const updatedMem = await ExtensionService.ClubMemberService.updateClubMember(club_id, userHeader.id, updates);
 
         if(!updatedMem){
             setButtonMsg("Failed to Send");
@@ -67,7 +67,7 @@ export default function ClubLevelComp({ userHeader, userClubMember, club_id, set
 
                 setIsLoading(true);
 
-                const unapproved = await ExtensionService.getClubUnapproved(club_id);
+                const unapproved = await ExtensionService.ClubMemberService.getClubUnapproved(club_id);
 
                 setUnapprovedUsers(unapproved ?? []);
                 setIsLoading(false);

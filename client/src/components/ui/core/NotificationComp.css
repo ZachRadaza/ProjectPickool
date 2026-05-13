@@ -45,6 +45,7 @@
 
 .notif-comp .left-side .notif-content .date{
     opacity: 0.6;
+    font-size: clamp(0.6rem, 0.6rem + 0.4vw, 0.8rem);
 }
 
 .notif-comp .right-side{

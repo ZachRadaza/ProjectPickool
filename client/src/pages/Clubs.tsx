@@ -44,7 +44,7 @@ export default function Clubs(){
             return newUserClubs;
         });
 
-        const data = await ExtensionService.updateClubMember(club_id, userHeader.id, updates);
+        const data = await ExtensionService.ClubMemberService.updateClubMember(club_id, userHeader.id, updates);
 
         if(!data)
             setError("Error is setting favorite");
@@ -64,8 +64,10 @@ export default function Clubs(){
                 setError(null);
                 setIsLoading(true);
 
-                const fetchedClubs: UserClubs[] = await ExtensionService.getUserClubs(userHeader.id);
-                const requestedClubs: UserClubRequests[] = await ExtensionService.getUserRequests(userHeader.id);
+                const fetchedClubs: UserClubs[] = await ExtensionService.UserService.getUserClubs(userHeader.id);
+                const requestedClubs: UserClubRequests[] = await ExtensionService.ClubRequestService.getUserRequests(userHeader.id);
+
+                console.log(fetchedClubs);
 
                 if(!fetchedClubs || !requestedClubs){
                     setError("Failed to Fetch User Clubs");

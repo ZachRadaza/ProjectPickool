@@ -18,7 +18,7 @@ type ModifyClubPopup = {
 };
 
 export default function ModifyClubPopup({ setIsClosed, userHeader, isEditing, club_id }: ModifyClubPopup){
-    const [club, setClub] = useState<Clubs>();
+    const [club, setClub] = useState<Clubs | null>();
     const [clubCopy, setClubCopy] = useState<Clubs | null>(null);
 
     const [isLoading, setisLoading] = useState<boolean>(false);
@@ -39,7 +39,7 @@ export default function ModifyClubPopup({ setIsClosed, userHeader, isEditing, cl
 
         setisLoading(true);
 
-        const createdClub = await ExtensionService.addClub(club, userHeader.id);
+        const createdClub = await ExtensionService.ClubService.addClub(club, userHeader.id);
 
         if(createdClub){
             wait(2000);
@@ -76,7 +76,7 @@ export default function ModifyClubPopup({ setIsClosed, userHeader, isEditing, cl
         )
             updatedClub.location = club?.location;
 
-        const data = await ExtensionService.updateClub(club.id!, updatedClub, userHeader.id);
+        const data = await ExtensionService.ClubService.updateClub(club.id!, updatedClub);
 
         if(data){
             wait(2000);
@@ -107,7 +107,7 @@ export default function ModifyClubPopup({ setIsClosed, userHeader, isEditing, cl
                     return;
                 }
 
-                const clubFetched: Clubs = await ExtensionService.getClub(club_id);
+                const clubFetched: Clubs | null = await ExtensionService.ClubService.getClub(club_id);
 
                 if(!clubFetched)
                     setMessage("error in fetching club");

@@ -52,7 +52,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
 
         const updates: Partial<Club_Members_Basic> = { is_level_approved: isApproved };
 
-        const approve = await ExtensionService.updateClubMember(club_id, userCardId, updates);
+        const approve = await ExtensionService.ClubMemberService.updateClubMember(club_id, userCardId, updates);
 
         if(!approve){
             setError("Error in approving rating");
@@ -69,7 +69,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
         if(!club_id || !userCardId)
             return;
 
-        const approve = await ExtensionService.approveClubRequest(club_id, userCardId);
+        const approve = await ExtensionService.ClubRequestService.approveClubRequest(club_id, userCardId);
 
         if(!approve){
             setError("Error in Approving User");
@@ -84,7 +84,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
         if(!club_id || !userCardId)
             return;
 
-        const deny = await ExtensionService.denyClubRequest(club_id, userCardId);
+        const deny = await ExtensionService.ClubRequestService.denyClubRequest(club_id, userCardId);
 
         if(!deny){
             setError("Error in Denying User");
@@ -98,7 +98,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
         if(!userCardId || !event_id)
             return;
 
-        const removed = await ExtensionService.deletePlayer(event_id, userCardId);
+        const removed = await ExtensionService.PlayerService.deletePlayer(event_id, userCardId);
 
         if(!removed){
             setError("Error in Removing PLayer from event");
@@ -114,7 +114,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
 
         const updates: Partial<Players> = { approved };
 
-        const updatedPlayer = await ExtensionService.updatePlayer(event_id, userCardId, updates);
+        const updatedPlayer = await ExtensionService.PlayerService.updatePlayer(event_id, userCardId, updates);
 
         if(!updatedPlayer){
             setError("Error in Player Update");
@@ -135,7 +135,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
             role: Role.ADMIN
         };
 
-        const admin = await ExtensionService.updateClubMember(club_id, userCardId, updates);
+        const admin = await ExtensionService.ClubMemberService.updateClubMember(club_id, userCardId, updates);
 
         if(!admin){
             setError("Error in Promoting User");
@@ -152,7 +152,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
             role: Role.MEMBER
         };
 
-        const member = await ExtensionService.updateClubMember(club_id, userCardId, updates);
+        const member = await ExtensionService.ClubMemberService.updateClubMember(club_id, userCardId, updates);
 
         if(!member){
             setError("Error in Promoting User");
@@ -165,7 +165,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
         if(!club_id || !userCardId)
             return;
 
-        const kicked = await ExtensionService.deleteClubMember(club_id, userCardId);
+        const kicked = await ExtensionService.ClubMemberService.deleteClubMember(club_id, userCardId);
 
         if(!kicked){
             setError("Error in Promoting User");
@@ -179,7 +179,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
         if(!userCardId || !event_id)
             return;
 
-        const added = await ExtensionService.addHost(event_id, userCardId);
+        const added = await ExtensionService.HostService.addHost(event_id, userCardId);
 
         if(!added){
             setError("Error in removing host");
@@ -193,7 +193,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
         if(!userCardId || !event_id)
             return;
 
-        const removed = await ExtensionService.deleteHost(event_id, userCardId);
+        const removed = await ExtensionService.HostService.deleteHost(event_id, userCardId);
 
         if(!removed){
             setError("Error in removing host");
@@ -207,7 +207,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
         if(!userCardId || !eventSeriesId)
             return;
 
-        const removed = await ExtensionService.deleteHostSeries(eventSeriesId, userCardId);
+        const removed = await ExtensionService.HostService.deleteHostSeries(eventSeriesId, userCardId);
 
         if(!removed){
             setError("Error in removing host from recurring event");
@@ -230,7 +230,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
                 setIsLoading(true);
                 setIsClosed(false);
 
-                const userInCardData = await ExtensionService.getUserHeader(userCardId);
+                const userInCardData = await ExtensionService.UserService.getUserHeader(userCardId);
 
                 if(!userInCardData){
                     setError("Error in getting user");
@@ -266,7 +266,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
                 if(!event_id)
                     return null;
 
-                const event = await ExtensionService.getEvent(event_id);
+                const event = await ExtensionService.EventService.getEvent(event_id);
 
                 if(!event)
                     return null;
@@ -284,7 +284,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
                 if(!clubId || !userCardId)
                     return;
 
-                const clubReq = await ExtensionService.getUserClubRequest(userCardId, clubId);
+                const clubReq = await ExtensionService.ClubRequestService.getUserClubRequest(userCardId, clubId);
 
                 setUserClubRequests(clubReq ?? null);
                 return clubReq
@@ -299,7 +299,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
                 if(!clubId || !userCardId)
                     return;
                 
-                const clubMember = await ExtensionService.getBasicClubMember(clubId, userCardId);
+                const clubMember = await ExtensionService.ClubMemberService.getBasicClubMember(clubId, userCardId);
 
                 setClubMember(clubMember ?? null);
             } catch(error){
@@ -313,7 +313,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
                 if(!userHeader || !clubId)
                     return;
 
-                const userMember = await ExtensionService.getBasicClubMember(clubId, userHeader.id);
+                const userMember = await ExtensionService.ClubMemberService.getBasicClubMember(clubId, userHeader.id);
 
                 setUserClubMember(userMember ?? null);
             } catch(error){
@@ -327,7 +327,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
                 if(!userCardId || !event_id)
                     return;
 
-                const player = await ExtensionService.getPlayer(event_id, userCardId);
+                const player = await ExtensionService.PlayerService.getPlayer(event_id, userCardId);
 
                 setPlayer(player ?? null);
             } catch(error){
@@ -341,11 +341,11 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
                 if(!event_id || !userCardId)
                     return;
                 
-                const host = await ExtensionService.getHost(event_id, userCardId);
-                const event = await ExtensionService.getEvent(event_id);
+                const host = await ExtensionService.HostService.getHost(event_id, userCardId);
+                const event = await ExtensionService.EventService.getEvent(event_id);
 
                 setIsCardHost(host !== null);
-                setEventSeriesId(event.series_id ?? null);
+                setEventSeriesId(event?.series_id || null);
             } catch(error){
                 setError("Error in Fetching Profile Info");
                 setIsLoading(false);
@@ -357,7 +357,7 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
                 if(!event_id || !userHeader)
                     return
                 
-                const host = await ExtensionService.getHost(event_id, userHeader.id);
+                const host = await ExtensionService.HostService.getHost(event_id, userHeader.id);
                 setIsUserHost(host !== null);
             } catch(error){
                 setError("Error in Fetching Profile Info");

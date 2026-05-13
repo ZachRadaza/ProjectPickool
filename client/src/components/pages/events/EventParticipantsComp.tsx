@@ -35,7 +35,7 @@ export default function EventParticipantsComp({
         const paid = event.price !== null && event.price <= 0;
         const updates: Partial<Players> = { approved: true, paid };
 
-        const approved = await ExtensionService.updatePlayer(event?.id, memberId, updates);
+        const approved = await ExtensionService.PlayerService.updatePlayer(event?.id, memberId, updates);
 
         if(!approved){
             setError("Error in approving player");
@@ -50,7 +50,7 @@ export default function EventParticipantsComp({
         if(!event?.id || !memberId)
             return;
 
-        const denied = await ExtensionService.deletePlayer(event.id, memberId);
+        const denied = await ExtensionService.PlayerService.deletePlayer(event.id, memberId);
 
         if(!denied){
             setError("Error in denying player");

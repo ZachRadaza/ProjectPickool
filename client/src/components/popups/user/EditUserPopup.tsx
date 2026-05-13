@@ -50,10 +50,12 @@ export default function EditUserPopup({ userHeader, setUserHeader, setIsClosed }
         if(user?.phone !== userTemp?.phone)
             updatedUser.phone = userTemp?.phone;
 
-        if(userTemp?.profile_pic_file instanceof File)
+        if(userTemp?.profile_pic_file instanceof File){
             updatedUser.profile_pic_file = userTemp.profile_pic_file;
+            updatedUser.profile_pic_path = userTemp.profile_pic_path;
+        }
 
-        const userData = await ExtensionService.updateUser(userHeader.id, updatedUser);
+        const userData = await ExtensionService.UserService.updateUser(userHeader.id, updatedUser);
 
         if(!userData){
             setError("Error in saving changes");
@@ -85,7 +87,7 @@ export default function EditUserPopup({ userHeader, setUserHeader, setIsClosed }
                     return;
                 }
 
-                const userData = await ExtensionService.getUser(userHeader.id);
+                const userData = await ExtensionService.UserService.getUser(userHeader.id);
 
                 if(!userData){
                     setError("Error in Getting User");
@@ -94,7 +96,7 @@ export default function EditUserPopup({ userHeader, setUserHeader, setIsClosed }
 
                 setIsLoading(false);
                 setUser(userData);
-                setUserTemp({...userData});
+                setUserTemp(userData ? { ...userData } : null);
             } catch(error){
                 setIsLoading(false);
                 setError("Error in Getting User");

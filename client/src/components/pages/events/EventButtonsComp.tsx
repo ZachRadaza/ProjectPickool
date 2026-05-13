@@ -71,7 +71,7 @@ export default function EventButtonComp({
         setJoining(true);
         let approved = userMember.role === Role.OWNER || event.is_auto_approve || userIsHost;
         let paid = approved; 
-        const player = await ExtensionService.addPlayer(event.id, userMember.user.id, approved, paid);
+        const player = await ExtensionService.PlayerService.addPlayer(event.id, userMember.user.id, approved, paid);
 
         if(!player){
             setError("Error in joining Event");
@@ -93,7 +93,7 @@ export default function EventButtonComp({
             return;
         }
 
-        const player = await ExtensionService.updatePlayer(event.id, userMember.user.id, { paid: true });
+        const player = await ExtensionService.PlayerService.updatePlayer(event.id, userMember.user.id, { paid: true });
 
         if(!player){
             setError("Error in joining Event");

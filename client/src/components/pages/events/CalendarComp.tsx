@@ -41,7 +41,7 @@ export default function CalendarComp({ events, setClosedModifyEvent, showClub, u
                     return;
                 }
 
-                const userPlayers = await ExtensionService.getUserPlayers(userHeader.id);
+                const userPlayers = await ExtensionService.PlayerService.getUserPlayers(userHeader.id);
 
                 if(!userPlayers || userPlayers.length === 0){
                     sortEvents([]);

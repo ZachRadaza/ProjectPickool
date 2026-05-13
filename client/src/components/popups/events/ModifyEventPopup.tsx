@@ -99,8 +99,8 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
         )
             updates.location = event?.location;
 
-        const updated = await ExtensionService.updateEvent(event_id, updates);
-        if(saveFuture && event.series_id) ExtensionService.updateEventSeries(event_id, event.series_id, updates);
+        const updated = await ExtensionService.EventService.updateEvent(event_id, updates);
+        if(saveFuture && event.series_id) await ExtensionService.EventService.updateEventSeries(event.series_id, updates);
 
         if(!updated){
             setIsSaving(false);
@@ -137,7 +137,7 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
 
         const eventHoursUpdated: Events = { ...event, approve_window: convertHoursToSeconds(event.approve_window || 0) };
 
-        const newEvent = await ExtensionService.addEvent(eventHoursUpdated);
+        const newEvent = await ExtensionService.EventService.addEvent(eventHoursUpdated);
 
         if(!newEvent || !newEvent.id){
             setIsSaving(false);
@@ -146,9 +146,9 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
         }
 
         if(newEvent.series_id)
-            await ExtensionService.addHostSeries(newEvent.series_id, userHeader.id);
+            await ExtensionService.HostService.addHostSeries(newEvent.series_id, userHeader.id);
         else
-            await ExtensionService.addHost(newEvent.id, userHeader.id);
+            await ExtensionService.HostService.addHost(newEvent.id, userHeader.id);
 
         setIsSaving(false);
         setIsClosed(true);
@@ -194,11 +194,12 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                     setEvent(eventNew);
                     setEventCopy({ ...eventNew });
                 } else {
-                    const eventData = await ExtensionService.getEvent(event_id);
+                    const eventData = await ExtensionService.EventService.getEvent(event_id);
 
                     if(!eventData){
                         setIsLoading(false);
                         setError("Error in Getting Event");
+                        return;
                     }
 
                     setEvent({... eventData, approve_window: convertSecondsToHours(eventData.approve_window || 0) });

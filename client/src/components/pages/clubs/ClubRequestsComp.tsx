@@ -21,7 +21,7 @@ export default function ClubRequestsComp({ club_id, setNumRequests }: ClubReques
         if(!club_id)
             return;
 
-        const approve = await ExtensionService.approveClubRequest(club_id, user_id);
+        const approve = await ExtensionService.ClubRequestService.approveClubRequest(club_id, user_id);
 
         if(!approve){
             setError("Error in Approving User");
@@ -37,7 +37,7 @@ export default function ClubRequestsComp({ club_id, setNumRequests }: ClubReques
         if(!club_id)
             return;
 
-        const deny = await ExtensionService.denyClubRequest(club_id, user_id);
+        const deny = await ExtensionService.ClubRequestService.denyClubRequest(club_id, user_id);
 
         if(!deny){
             setError("Error in Denying User");
@@ -59,7 +59,7 @@ export default function ClubRequestsComp({ club_id, setNumRequests }: ClubReques
                     return;
                 }
 
-                const clubRequests = await ExtensionService.getClubRequests(club_id);
+                const clubRequests = await ExtensionService.ClubRequestService.getClubRequests(club_id);
 
                 if(!clubRequests){
                     setError("Error in Loading Club Requests");

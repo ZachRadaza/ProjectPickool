@@ -37,7 +37,7 @@ export default function SignUpPopup({ setIsClosed }: SignInPopupProp){
 
         setButtonContent("Logging In...");
 
-        const data = await ExtensionService.loginUser(email.trim(), password.trim())
+        const data = await ExtensionService.UserService.loginUser(email.trim(), password.trim())
 
         if(data){
             setValid(MessageType.SUCCESS);

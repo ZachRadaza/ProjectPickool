@@ -83,13 +83,13 @@ export default function Search(){
             const nearMe = filters.showNearMe && hasUser;
 
             if(query && nearMe)
-                res = await ExtensionService.getQueryNearbyClubs(userHeader!.id, query, currentPage);
+                res = await ExtensionService.ClubService.getQueryNearbyClubs(userHeader!.id, query, currentPage);
             else if(query)
-                res = await ExtensionService.getQueryClubs(query, currentPage);
+                res = await ExtensionService.ClubService.getQueryClubs(query, currentPage);
             else if(nearMe)
-                res = await ExtensionService.getNearbyClubs(userHeader!.id, currentPage);
+                res = await ExtensionService.ClubService.getNearbyClubs(userHeader!.id, currentPage);
             else
-                res = await ExtensionService.getTopClubs(currentPage);
+                res = await ExtensionService.ClubService.getTopClubs(currentPage);
 
 
             loadMore ? setClubs([...clubs, ...res.data]) : setClubs(res.data);
@@ -113,13 +113,13 @@ export default function Search(){
             const nearMe = filters.showNearMe && hasUser;
 
             if(query && nearMe)
-                res = await ExtensionService.getQueryNearUserEvents(userHeader!.id, query, currentPage);
+                res = await ExtensionService.EventService.getQueryNearUserEvents(userHeader!.id, query, currentPage);
             else if(query)
-                res = await ExtensionService.getQueryEvents(query, currentPage);
+                res = await ExtensionService.EventService.getQueryEvents(query, currentPage);
             else if(nearMe)
-                res = await ExtensionService.getNearUserEvents(userHeader!.id, currentPage);
+                res = await ExtensionService.EventService.getNearUserEvents(userHeader!.id, currentPage);
             else
-                res = await ExtensionService.getTopEvents(currentPage);
+                res = await ExtensionService.EventService.getTopEvents(currentPage);
 
             loadMore ? setEvents([...events, ...res.data]) : setEvents(res.data);
             setCurrentEventPage(currentPage + 1);

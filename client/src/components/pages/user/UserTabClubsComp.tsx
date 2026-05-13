@@ -26,7 +26,7 @@ export default function UserTabClubsComp({ user }: UserTabClubsCompProp){
                     return;
                 }
 
-                const clubs = await ExtensionService.getUserClubs(user.id!);
+                const clubs = await ExtensionService.UserService.getUserClubs(user.id!);
 
                 if(!clubs){
                     setError("Error in Loading Clubs");

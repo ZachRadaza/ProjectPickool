@@ -7,6 +7,7 @@ import SearchInput from "../../ui/inputs/SearchInput";
 import UserHeaderComp from "../../ui/core/UserHeaderComp";
 import { ExtensionService } from "../../../utils/ExtensionService";
 import "./UserSearchPopup.css";
+import Button from "../../ui/buttons/Button";
 
 type UserSearchPopup = {
     club_id: string | null;
@@ -21,12 +22,15 @@ export default function UserSearchPopup({ club_id, canApprove, setIsClosed, appr
     const [searchInput, setSearchInput] = useState<string>("");
     const [searchedMembers, setSearchedMembers] = useState<Club_Members[]>([]);
     const [message, setMessage] = useState<string | null>("Search Club Members");
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [hasMorePages, setHasMorePages] = useState<boolean>(true);
+
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     let content;
 
-    async function searchUser(){
+    async function searchUser(loadMore: boolean){
         try{
             setIsLoading(true);
 
@@ -42,7 +46,10 @@ export default function UserSearchPopup({ club_id, canApprove, setIsClosed, appr
                 return;
             }
 
-            let members = await ExtensionService.getQueryClubMembers(club_id, searchInput);
+            if(!hasMorePages)
+                return;
+
+            let { data: members, hasMore } = await ExtensionService.ClubMemberService.getQueryClubMembers(club_id, searchInput, currentPage);
             
             if(usersApproved){
                 const approvedIds = new Set(usersApproved.map(user => user.id));
@@ -52,8 +59,16 @@ export default function UserSearchPopup({ club_id, canApprove, setIsClosed, appr
                 );
             }
 
-            setSearchedMembers(members);
+            if(loadMore)
+                setSearchedMembers([...searchedMembers, ...members]);
+            else {
+                setSearchedMembers(members);
+                setCurrentPage(1);
+            }
+
             setMessage(!searchInput ? "Search Club Members" : `No Club Members For "${searchInput}"`);
+            setCurrentPage(currentPage + 1);
+            setHasMorePages(hasMore);
 
             setIsLoading(false);
         } catch(error){
@@ -82,21 +97,24 @@ export default function UserSearchPopup({ club_id, canApprove, setIsClosed, appr
     else
         content = <>
             { searchedMembers.length > 0
-                ? searchedMembers.map((member) => 
-                    canApprove
-                        ? <UserHeaderComp 
-                            userHeader={ member.user }
-                            clubInfoHeader={ member }
-                            approveClicked={ () => { if(approveClicked) approveClicked(member.user.id) }}
-                            key={ member.user.id }
-                            approveContent={ approveContent }
-                        />
-                        : <UserHeaderComp 
-                            userHeader={ member.user }
-                            clubInfoHeader={ member }
-                            key={ member.user.id }
-                        />
-                )
+                ? <>
+                    { searchedMembers.map((member) => 
+                        canApprove
+                            ? <UserHeaderComp 
+                                userHeader={ member.user }
+                                clubInfoHeader={ member }
+                                approveClicked={ () => { if(approveClicked) approveClicked(member.user.id) }}
+                                key={ member.user.id }
+                                approveContent={ approveContent }
+                            />
+                            : <UserHeaderComp 
+                                userHeader={ member.user }
+                                clubInfoHeader={ member }
+                                key={ member.user.id }
+                            />
+                    )}
+                    { hasMorePages && <Button content="Load More" onBtnClick={ () => searchUser(true) } />}
+                </>
                 : <h6>{ message }</h6>
             }
         </>
@@ -108,7 +126,7 @@ export default function UserSearchPopup({ club_id, canApprove, setIsClosed, appr
             <SearchInput 
                 value={ searchInput }
                 setValue={ setSearchInput }
-                search={ searchUser }
+                search={ () => searchUser(false) }
             />
             <div className="content-cont">
                 { content }

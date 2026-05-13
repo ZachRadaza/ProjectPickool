@@ -36,7 +36,7 @@ export default function HostSearchPopup({ event, setError, setHosts, setSearchHo
         if(!user_id || !event?.id)
             return;
 
-        const host = await ExtensionService.addHost(event.id, user_id);
+        const host = await ExtensionService.HostService.addHost(event.id, user_id);
 
         if(!host){
             setError("Error In adding host");
@@ -50,7 +50,7 @@ export default function HostSearchPopup({ event, setError, setHosts, setSearchHo
         if(!user_id || !event?.series_id)
             return;
 
-        const host = await ExtensionService.addHostSeries(event.series_id, user_id);
+        const host = await ExtensionService.HostService.addHostSeries(event.series_id, user_id);
 
         if(!host){
             setError("Error In adding host");

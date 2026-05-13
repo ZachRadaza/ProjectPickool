@@ -84,7 +84,9 @@ export type Users = {
     profile_pic_path?: string | null;
     phone?: string | null;
     location?: Locations | null;
+    location_id?: string;
     description?: string | null;
+    created_at?: string;
 };
 
 export type UserHeader = {
@@ -105,17 +107,20 @@ export type Club_Members_Basic = {
 
 export type Club_Members = Club_Members_Basic & {
     user: UserHeader;
+    created_at: string;
 };
 
 export type Club_Requests = {
     user?: UserHeader;
+    user_id?: string;
     club_id: string
+    created_at?: string;
 };
 
 export type UserClubRequests = {
-    id: string;
-    user_id: string;
+    user: UserHeader;
     club: Clubs;
+    created_at?: string;
 };
 
 export type Clubs = {
@@ -132,6 +137,7 @@ export type Clubs = {
     banner?: string | null;
     banner_path?: string | null;
     banner_file?: File | null;
+    created_at?: string;
 };
 
 export type ClubHeader = {
@@ -147,6 +153,7 @@ export type UserClubs = {
     level?: Level;
     is_level_approved: boolean;
     club: Clubs;
+    created_at: string;
 };
 
 export type Events = {
@@ -186,11 +193,13 @@ export type Players = {
     approved: boolean;
     approved_at: string;
     paid: boolean;
+    created_at: string
 };
 
 export type Hosts = {
     user: UserHeader | null;
     event_id: string;
+    created_at: string;
 };
 
 export type EventPlayer = {

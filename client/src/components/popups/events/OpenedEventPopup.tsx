@@ -113,7 +113,7 @@ export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModif
         if(!event?.id)
             return;
 
-        const deleted = await ExtensionService.deleteEvent(event.id);
+        const deleted = await ExtensionService.EventService.deleteEvent(event.id);
 
         if(!deleted){
             setError("error in deleting event");
@@ -128,7 +128,7 @@ export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModif
         if(!event?.id || !event.series_id)
             return;
 
-        const deleted = await ExtensionService.deleteEventSeries(event.id, event.series_id);
+        const deleted = await ExtensionService.EventService.deleteEventSeries(event.id, event.series_id);
 
         if(!deleted){
             setError("error in deleting event");
@@ -153,9 +153,9 @@ export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModif
                     return;
                 }
 
-                const eventData = await ExtensionService.getEvent(event_id);
-                const hostsData = await ExtensionService.getEventHosts(event_id);
-                const playersData = await ExtensionService.getEventPlayers(event_id);
+                const eventData = await ExtensionService.EventService.getEvent(event_id);
+                const hostsData = await ExtensionService.HostService.getEventHosts(event_id);
+                const playersData = await ExtensionService.PlayerService.getEventPlayers(event_id);
 
                 if(!eventData || !playersData || !hostsData){
                     setIsLoading(false);
@@ -181,7 +181,7 @@ export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModif
             if(!userHeader || !eventData.club?.id)
                 return;
 
-            const member = await ExtensionService.getSingleClubMember(eventData.club.id, userHeader.id);
+            const member = await ExtensionService.ClubMemberService.getSingleClubMember(eventData.club.id, userHeader.id);
 
             if(!member)
                 setUserMember(null);

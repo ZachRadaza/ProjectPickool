@@ -9,6 +9,7 @@ const hostSeriesBody = `
     ),
     created_at
 `;
+
 export async function getAllHostSeries(){
     const { data, error } = await supabaseAdmin
         .from("host_series")

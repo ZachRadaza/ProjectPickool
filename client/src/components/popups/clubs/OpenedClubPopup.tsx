@@ -98,7 +98,7 @@ export default function OpenedClubPopup({
         const is_favorite = !userClubMember?.is_favorite;
 
         setUserClubMember((prev) => prev ? {...prev, is_favorite } : prev);
-        const fav = await ExtensionService.updateClubMember(club_id, userHeader?.id, { is_favorite });
+        const fav = await ExtensionService.ClubMemberService.updateClubMember(club_id, userHeader?.id, { is_favorite });
 
         if(!fav){
             setError("Error in Favoriting Club");
@@ -109,7 +109,7 @@ export default function OpenedClubPopup({
         if(!club_id || !userHeader?.id)
             return;
 
-        const left = await ExtensionService.deleteClubMember(club_id, userHeader.id);
+        const left = await ExtensionService.ClubMemberService.deleteClubMember(club_id, userHeader.id);
 
         if(!left)
             setError("Error in Leaving Club");
@@ -121,7 +121,7 @@ export default function OpenedClubPopup({
         if(!club_id || !userHeader?.id)
             return;
 
-        const deleted = await ExtensionService.deleteClub(club_id, userHeader.id);
+        const deleted = await ExtensionService.ClubService.deleteClub(club_id);
 
         if(deleted){
             setIsClosed(true);
@@ -143,9 +143,9 @@ export default function OpenedClubPopup({
           
         let attemptJoin;
         if(club?.is_public){
-            attemptJoin = await ExtensionService.addClubMember(club_id, userHeader.id);
+            attemptJoin = await ExtensionService.ClubMemberService.addClubMember(club_id, userHeader.id, false);
         } else
-            attemptJoin = await ExtensionService.addClubRequests(club_id, userHeader.id);
+            attemptJoin = await ExtensionService.ClubRequestService.addClubRequests(club_id, userHeader.id);
 
         if(!attemptJoin)
             setError("error in joining club");
@@ -167,7 +167,7 @@ export default function OpenedClubPopup({
                 await getClub();
 
                 const userClubMember: Club_Members | null = userHeader 
-                    ? await ExtensionService.getSingleClubMember(club_id, userHeader.id)
+                    ? await ExtensionService.ClubMemberService.getSingleClubMember(club_id, userHeader.id)
                     : null;
 
                 if(!userClubMember && userHeader){
@@ -196,7 +196,7 @@ export default function OpenedClubPopup({
 
             setIsClosed(false);
 
-            const data: Clubs = await ExtensionService.getClub(club_id);
+            const data: Clubs | null = await ExtensionService.ClubService.getClub(club_id);
 
             if(!data){
                 setError("Error occured in opening club");
@@ -206,14 +206,14 @@ export default function OpenedClubPopup({
         }
 
         async function getRequestNum(club_id: string){
-            const reqs = await ExtensionService.getNumClubRequests(club_id);
+            const reqs = await ExtensionService.ClubRequestService.getNumClubRequests(club_id);
 
             if(reqs)
                 setNumRequests(reqs);
         }
 
         async function getUserClubRequest(user_id: string, club_id: string){
-            const userRequested: Club_Requests = await ExtensionService.getUserClubRequest(user_id, club_id);
+            const userRequested: Club_Requests | null = await ExtensionService.ClubRequestService.getUserClubRequest(user_id, club_id);
 
             if(userRequested)
                 setRequested(true);
@@ -282,13 +282,12 @@ export default function OpenedClubPopup({
                         { club?.description }
                     </p>
                     { userClubMember === null &&
-                        <button
-                            className="join-club-btn club-action-btn"
-                            onClick={ () => joinClub() }
-                            disabled={ requested ? true : false }
-                        >
-                            { requested ? "Requested" : "Join Club" }
-                        </button>
+                        <Button 
+                            content={ requested ? "Requested" : "Join Club" }
+                            additionalClasses="join-club-btn club-action-btn"
+                            onBtnClick={ () => joinClub() }
+                            isDisabled={ requested ? true : false }
+                        />
                     }
                 </div>
             </div>

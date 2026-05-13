@@ -3,6 +3,7 @@ import { NotificationType, type Notifications } from "../../../utils/schemas";
 import CountdownTimer from "../CountdownTimer";
 import "./NotificationComp.css";
 import CloseButton from "../buttons/CloseButton";
+import { timeAgo } from "../../../utils/random";
 
 type NotificationCompProp = {
     notification: Notifications
@@ -80,7 +81,7 @@ export default function NotificationComp({ notification, closeNotifClicked, setI
                 />
                 <div className="notif-content">
                     <p>{ content() }</p>
-                    <p className="date">{ new Date(notification.created_at).toLocaleDateString() }</p>
+                    <p className="date">{ timeAgo(notification.created_at) }</p>
                 </div>
             </div>
             <div className="right-side">
