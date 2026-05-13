@@ -123,11 +123,13 @@ export default function User(){
                         content="Clubs"
                         additionalClasses={ tabClasses(TabType.CLUBS) }
                     />
+                    { /*
                     <Button
                         onBtnClick={ () => setCurrentTab(TabType.POSTS) }
                         content="Posts"
                         additionalClasses={ tabClasses(TabType.POSTS) }                   
                     />
+                    */ }
                 </div>
                 <div className="content">
                     { currentTab ? tabMap[currentTab] : null }
