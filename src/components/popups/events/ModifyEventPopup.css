@@ -6,7 +6,6 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .modify-event{
     gap: 2rem;
-    min-width: min(80%, 800px);
 }
 
 .modify-event .message{ color: var(--color-red); }
@@ -46,7 +45,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .modify-event .additional-info{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     place-items: start;
     gap: 1rem;
     width: 100%;

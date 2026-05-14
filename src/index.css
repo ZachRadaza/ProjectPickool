@@ -55,16 +55,22 @@ a{ color: var(--color-secondary); text-decoration: underline; cursor: pointer; }
 a:hover{ color: var(--color-accent); }
 a:visited{ background-color: color-mix(in srgb, var(--color-accent) 50%, transparent); }
 
+body{
+    min-height: 100vh;
+}
+
 main{ 
     position: relative; 
     height: min-content;
     overflow: hidden;
-    min-height: 100vh;
+    min-height: 105vh;
+    height: 100%;
 }
 
 main > *{ 
     z-index: 1; 
     overflow: scroll;
+    height: 100%;
 }
 
 .bg-icon{
@@ -102,11 +108,11 @@ button{
     background: var(--color-primary);
     border: 0.1rem solid var(--color-text);
     padding: 0.3rem 0.8rem;
-    font-size: clamp(1rem, 1.5vw, 1.5rem);
+    font-size: clamp(1.2rem, 1.7vw, 1.5rem);
     text-align: center;
     border-radius: 1rem;
     cursor: pointer;
-    min-height: clamp(1.2rem, 2vw, 2rem);
+    min-height: clamp(1.4rem, 2vw, 2rem);
     transition: background 200ms ease;
 }
 

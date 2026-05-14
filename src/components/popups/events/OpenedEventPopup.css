@@ -39,6 +39,10 @@
     width: 100%;
 }
 
+.opened-event .icon-comp-cont{
+    max-width: 440px;
+}
+
 .opened-event .desc-cont{
     display: flex;
     flex-direction: column;
@@ -49,5 +53,5 @@
 .opened-event .popup-wrapper{
     position: absolute;
     left: 0px;
-    height: 100vh;
+    max-height: 100vh;
 }

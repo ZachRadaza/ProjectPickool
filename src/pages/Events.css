@@ -1,12 +1,18 @@
 .events-cont{
     display: flex;
     flex-direction: column;
+    align-items: center;
     padding: 2rem;
     gap: 1rem;
 }
 
 .events-cont .title{
     margin: 1rem 3rem;
+}
+
+.events-cont .calendar-comp-cont{
+    max-width: 150ch;
+    width: 100%;
 }
 
 @media (max-width: 1024px) {

@@ -5,6 +5,7 @@ import "../popup.css";
 import "./SignActionPopup.css";
 import CloseButton from "../../ui/buttons/CloseButton";
 import Button from "../../ui/buttons/Button";
+import { useParams } from "react-router";
 
 const MessageType = {
     NONE: "",
@@ -25,6 +26,8 @@ export default function SignUpPopup({ setIsClosed }: SignInPopupProp){
     const [buttonContent, setButtonContent] = useState<string>("Login");
     const [valid, setValid] = useState<MessageType>(MessageType.NONE);
     
+    const { id } = useParams();
+
     function verifyInputs(){
         return (email && password);
     }
@@ -46,7 +49,8 @@ export default function SignUpPopup({ setIsClosed }: SignInPopupProp){
 
             setIsClosed(true);
 
-            window.location.reload();
+            if(id === "guest")
+                window.location.href = `/user/${data.user.id}`;
         } else {
             setValid(MessageType.INCORRECT);
             setPassword("");

@@ -14,18 +14,23 @@ export default function PopupWrapper({ popupComp, isClosed, isMaxWidth, noBgPoin
     const [popupClosed, setPopupClosed] = useState<boolean>(true);
 
     useEffect(() => {
-        closePopup();
+        let cancelled = false;
 
-        async function closePopup(){
+        async function closePopup() {
             if(isClosed){
                 setPopupClosed(true);
                 await wait(400);
-                setIsRendered(false);
+
+                if(!cancelled)
+                    setIsRendered(false);
             } else {
                 setIsRendered(true);
                 setPopupClosed(false);
             }
         }
+
+        closePopup();
+        return () => { cancelled = true; };
     }, [isClosed]);
 
     return (

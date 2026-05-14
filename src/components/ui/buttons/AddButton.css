@@ -14,7 +14,7 @@
 .add-btn-cont .add-btn.mini{
     border-radius: 999px;
     aspect-ratio: 1 / 1;
-    width: clamp(3rem, 8vw, 5rem);
+    width: clamp(3rem, 20vw, 5rem);
     height: auto;
     padding: 0px;
     align-items: center;

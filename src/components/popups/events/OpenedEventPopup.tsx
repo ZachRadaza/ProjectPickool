@@ -277,31 +277,31 @@ export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModif
             <div className="popup opened-event">
                 <CloseButton setIsClosed={ closeEventPopup } />
                 { content }
-                <HostSearchPopup 
-                    hosts={ hosts }
-                    setSearchHostsClosed={ setSearchHostsClosed }
-                    searchHostsClosed={ searchHostsClosed }
-                    setError={ setError }
-                    setHosts={ setHosts }
-                    event={ event }
-                />
-                <PopupWrapper 
-                    popupComp={
-                        <TwoOptionPopup 
-                            title={ deleteConfirmationPopupContents.title }
-                            body={ deleteConfirmationPopupContents.body }
-                            btn1Content="Delete this event"
-                            btn2Content={ deleteConfirmationPopupContents.btn2Content }
-                            btn1Click={ () => deleteEvent() }
-                            btn2Click={ deleteConfirmationPopupContents.btn2Click }
-                            setIsClosed={ setDeleteConfirmationClosed }
-                            btn1Red={ true }
-                            btn2Red={ deleteConfirmationPopupContents.btn2Red }
-                        />
-                    }
-                    isClosed={ deleteConfirmationClosed }
-                />
             </div>
+            <HostSearchPopup 
+                hosts={ hosts }
+                setSearchHostsClosed={ setSearchHostsClosed }
+                searchHostsClosed={ searchHostsClosed }
+                setError={ setError }
+                setHosts={ setHosts }
+                event={ event }
+            />
+            <PopupWrapper 
+                popupComp={
+                    <TwoOptionPopup 
+                        title={ deleteConfirmationPopupContents.title }
+                        body={ deleteConfirmationPopupContents.body }
+                        btn1Content="Delete this event"
+                        btn2Content={ deleteConfirmationPopupContents.btn2Content }
+                        btn1Click={ () => deleteEvent() }
+                        btn2Click={ deleteConfirmationPopupContents.btn2Click }
+                        setIsClosed={ setDeleteConfirmationClosed }
+                        btn1Red={ true }
+                        btn2Red={ deleteConfirmationPopupContents.btn2Red }
+                    />
+                }
+                isClosed={ deleteConfirmationClosed }
+            />
         </>
     );
 }

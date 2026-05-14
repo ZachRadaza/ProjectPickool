@@ -2,9 +2,10 @@
     pointer-events: none;
     width: 100vw;
     height: 100vh;
-    position: absolute;
-    top: 0px;
-    left: 0px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
     background: transparent;
     display: flex;
     align-items: center;
@@ -25,9 +26,7 @@
 
 .popup-wrapper{
     position: relative;
-    transform: translateY(0);
     transition: transform 400ms ease-in-out;
-
     display: inline-block;
 }
 
@@ -59,6 +58,7 @@
     max-height: calc(100vh - 5rem);
     overflow-y: scroll;
     transition: transform 400ms ease-in-out;
+    position: relative;
 }
 
 .popup.max-width{
@@ -92,13 +92,16 @@
 }
 
 @media (max-width: 480px) { 
+    .container{ align-items: end; }
+
     .popup-wrapper{
-        display: block;
+        display: flex;
+        align-items: end;
         width: 100%;
         margin: 0;
         height: 95vh;
 
-        position: fixed;
+        position: absolute;
         bottom: 0;
         left: 0;
 
