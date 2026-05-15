@@ -173,7 +173,6 @@ export default function OpenedClubPopup({
                     : null;
 
                 if(!userClubMember && userHeader){
-                    console.log("here");
                     setUserClubMember(null);
                     await getUserClubRequest(userHeader.id!, club_id);
                     setIsLoading(false);
