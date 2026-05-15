@@ -1,6 +1,6 @@
 import { useNavigate, useOutletContext, useSearchParams } from "react-router-dom";
 import type { Clubs, Events, UserHeader } from "../utils/schemas";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import Button from "../components/ui/buttons/Button";
 import FilterButton from "../components/ui/buttons/FilterButton";
 import "./Search.css";
@@ -20,10 +20,11 @@ type Filters = {
 type SearchContext = {
     userHeader: UserHeader | null;
     setClosedEditUser: (closed: boolean) => void;
+    setClosedNoUserPopup: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function Search(){
-    const { userHeader, setClosedEditUser } = useOutletContext<SearchContext>();
+    const { userHeader, setClosedEditUser, setClosedNoUserPopup } = useOutletContext<SearchContext>();
 
     const [searchInput, setSearchInput] = useState<string>("");
     const [events, setEvents] = useState<Events[]>([]);
@@ -249,7 +250,9 @@ export default function Search(){
                     </div>
                     <Button 
                         content="Edit User Location"
-                        onBtnClick={ () => setClosedEditUser(false) }
+                        onBtnClick={ () => {
+                            userHeader ? setClosedEditUser(false) : setClosedNoUserPopup(false);
+                        }}
                         additionalClasses="edit-loc"
                     />
                 </div>

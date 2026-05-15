@@ -1,3 +1,4 @@
+import type { Dispatch, SetStateAction } from "react";
 import { ExtensionService } from "../../../utils/ExtensionService";
 import { Role, type Club_Members, type Events, type Hosts, type Players } from "../../../utils/schemas";
 import UsersDropdown from "../user/UsersDropdown";
@@ -11,9 +12,9 @@ type EventUsersCompProp = {
     playersNotApproved: Players[];
     setSearchHostsClosed: (closed: boolean) => void;
     userIsHost: boolean;
-    setPlayersNotApproved: React.Dispatch<React.SetStateAction<Players[]>>;
-    setPlayersApproved: React.Dispatch<React.SetStateAction<Players[]>>;
-    setError: React.Dispatch<React.SetStateAction<string | null>>
+    setPlayersNotApproved: Dispatch<SetStateAction<Players[]>>;
+    setPlayersApproved: Dispatch<SetStateAction<Players[]>>;
+    setError: Dispatch<SetStateAction<string | null>>
 }
 
 export default function EventParticipantsComp({ 

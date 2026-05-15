@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { ExtensionService } from "../../../utils/ExtensionService";
-import { wait } from "../../../utils/random";
+import { ExtensionService } from "../../utils/ExtensionService";
+import { wait } from "../../utils/random";
 import "../popup.css";
 import "./SignActionPopup.css";
-import CloseButton from "../../ui/buttons/CloseButton";
-import Button from "../../ui/buttons/Button";
+import CloseButton from "../../components/ui/buttons/CloseButton";
+import Button from "../../components/ui/buttons/Button";
 import { useParams } from "react-router";
 
 const MessageType = {
@@ -51,6 +51,8 @@ export default function SignUpPopup({ setIsClosed }: SignInPopupProp){
 
             if(id === "guest")
                 window.location.href = `/user/${data.user.id}`;
+            else
+                window.location.reload();
         } else {
             setValid(MessageType.INCORRECT);
             setPassword("");

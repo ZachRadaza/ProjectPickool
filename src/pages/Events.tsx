@@ -18,13 +18,19 @@ export default function Events(){
     const [events, setEvents] = useState<Events[]>([]);
     const [currentEventPage, setCurrentEventPage] = useState<number>(1);
     const [hasMoreEvents, setHasMoreEvents] = useState<boolean>(true);
+    const [buttonLoading, setButtonLoading] = useState<boolean>(false);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     async function getEvents(firstLoad: boolean){
         try{
-            firstLoad ? setIsLoading(true) : setIsLoading(false);
+            if(firstLoad)
+                setIsLoading(true)
+            else { 
+                setIsLoading(false);
+                setButtonLoading(true);
+            }
 
             let res;
             if(!userHeader)
@@ -34,6 +40,7 @@ export default function Events(){
 
             setEvents([...events, ...res.data]);
             setIsLoading(false);
+            setButtonLoading(false);
             setCurrentEventPage(currentEventPage + 1);
             setHasMoreEvents(res.hasMore);
         } catch(error){
@@ -58,7 +65,7 @@ export default function Events(){
             <CalendarComp events={ events } showClub={ true } userHeader={ userHeader }/>
             { hasMoreEvents &&
                 <Button 
-                    content="Load More"
+                    content={ buttonLoading ? "Loading More..." : "Load More"}
                     onBtnClick={ () => getEvents(false) }
                 />
             }

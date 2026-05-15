@@ -67,6 +67,17 @@ export const LikeType = {
 } as const;
 export type LikeType = (typeof LikeType)[keyof typeof LikeType];
 
+export const SignUpMessageType = {
+    NONE: "",
+    SUCCESS: "Verification Email Sent.",
+    EMAILUSED: "Email is already in use",
+    USERNAMEUSED: "Username in already in use",
+    EMPTY: "Please Enter All the Fields",
+    USERNAMELENGTH: "Username must be 5-20 Characters",
+    PASSWORDLENGTH: "Password must be atleast 5 Characters"
+} as const;
+export type SignUpMessageType = (typeof SignUpMessageType)[keyof typeof SignUpMessageType];
+
 export type Locations = {
     id?: string | null;
     name?: string;

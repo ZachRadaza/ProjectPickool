@@ -1,20 +1,10 @@
 import { useState } from "react";
-import { ExtensionService } from "../../../utils/ExtensionService";
-import type { Users } from "../../../utils/schemas";
+import { ExtensionService } from "../../utils/ExtensionService";
+import { SignUpMessageType, type Users } from "../../utils/schemas";
 import "../popup.css";
 import "./SignActionPopup.css";
-import CloseButton from "../../ui/buttons/CloseButton";
-import Button from "../../ui/buttons/Button";
-
-const MessageType = {
-    NONE: "",
-    SUCCESS: "Verification Email Sent.",
-    INCORRECT: "Email in Use",
-    EMPTY: "Please Enter All the Fields",
-    USERNAMELENGTH: "Username must be 5-20 Characters",
-    PASSWORDLENGTH: "Password must be atleast 5 Characters"
-} as const;
-type MessageType = (typeof MessageType)[keyof typeof MessageType];
+import CloseButton from "../../components/ui/buttons/CloseButton";
+import Button from "../../components/ui/buttons/Button";
 
 type SignUpPopupProp = {
     setIsClosed: (closed: boolean) => void;
@@ -25,7 +15,7 @@ export default function SignUpPopup({ setIsClosed }: SignUpPopupProp ){
     const [password, setPassword] = useState<string>("");
     const [username, setUsername] = useState<string>("");
     const [buttonContent, setButtonContent] = useState<string>("Create Account");
-    const [valid, setValid] = useState<MessageType>(MessageType.NONE);
+    const [valid, setValid] = useState<SignUpMessageType>(SignUpMessageType.NONE);
     const [resendContent, setResendContent] = useState<string>("Resend verification link to email.");
 
     let content;
@@ -41,17 +31,17 @@ export default function SignUpPopup({ setIsClosed }: SignUpPopupProp ){
 
     async function btnClicked(){
         if(!verifyInputs()){
-            setValid(MessageType.EMPTY);
+            setValid(SignUpMessageType.EMPTY);
             return;
         }
 
         if(!(username.length >= 5 && username.length < 20)){
-            setValid(MessageType.USERNAMELENGTH);
+            setValid(SignUpMessageType.USERNAMELENGTH);
             return;
         }
 
         if(password.length < 5){
-            setValid(MessageType.PASSWORDLENGTH);
+            setValid(SignUpMessageType.PASSWORDLENGTH);
             return;
         }
 
@@ -65,23 +55,23 @@ export default function SignUpPopup({ setIsClosed }: SignUpPopupProp ){
 
         const data = await ExtensionService.UserService.addUser(user, password);
 
-        if(data){  
-            setValid(MessageType.SUCCESS);
+        if(data === SignUpMessageType.EMAILUSED || data === SignUpMessageType.USERNAMEUSED){
+            setValid(data);
+            setPassword("");
+        } else {  
+            setValid(SignUpMessageType.SUCCESS);
             /*
             await wait(2000);
             setIsClosed(true);
 
             window.location.reload();
             */
-        } else {
-            setValid(MessageType.INCORRECT);
-            setPassword("");
         }
 
         setButtonContent("Create Account");
     }
 
-    if(valid === MessageType.SUCCESS)
+    if(valid === SignUpMessageType.SUCCESS)
         content = <>
             <p>Please check your email for a verification link.</p>
             <p className="did-not-recieve">Did not recieve it?</p>
@@ -130,7 +120,7 @@ export default function SignUpPopup({ setIsClosed }: SignUpPopupProp ){
                 <h6 className="subtitle">Join the Project</h6>
             </div>
             <div className="content">
-                <p className={ valid === MessageType.SUCCESS ? "message" : "message invalid" }>
+                <p className={ valid === SignUpMessageType.SUCCESS ? "message" : "message invalid" }>
                     { valid }
                 </p>
                 { content }

@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { EventType, Level, Recurring, Sex, type Events, type Locations, type UserHeader } from "../../../utils/schemas";
-import CloseButton from "../../ui/buttons/CloseButton";
+import { EventType, Level, Recurring, Sex, type Events, type Locations, type UserHeader } from "../../utils/schemas";
+import CloseButton from "../../components/ui/buttons/CloseButton";
 import "../popup.css";
-import Loading from "../../../pages/Loading";
-import ErrorPage from "../../../pages/Error";
-import { ExtensionService } from "../../../utils/ExtensionService";
-import Button from "../../ui/buttons/Button";
-import LevelChooser from "../../ui/choosers/LevelChooser";
-import RecurringChooser from "../../ui/choosers/RecurringChooser";
-import SexChooser from "../../ui/choosers/SexChooser";
+import Loading from "../../pages/Loading";
+import ErrorPage from "../../pages/Error";
+import { ExtensionService } from "../../utils/ExtensionService";
+import Button from "../../components/ui/buttons/Button";
+import LevelChooser from "../../components/ui/choosers/LevelChooser";
+import RecurringChooser from "../../components/ui/choosers/RecurringChooser";
+import SexChooser from "../../components/ui/choosers/SexChooser";
 import "./ModifyEventPopup.css";
-import LocationInput from "../../ui/inputs/LocationInput";
-import EventTypeChooser from "../../ui/choosers/EventTypeChooser";
-import { convertHoursToSeconds, convertSecondsToHours } from "../../../utils/random";
+import LocationInput from "../../components/ui/inputs/LocationInput";
+import EventTypeChooser from "../../components/ui/choosers/EventTypeChooser";
+import { convertHoursToSeconds, convertSecondsToHours } from "../../utils/random";
 
 type ModifyEventPopup = {
     userHeader: UserHeader | null;

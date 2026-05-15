@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import type { Locations, UserHeader, Users } from "../../../utils/schemas";
-import Loading from "../../../pages/Loading";
-import ErrorPage from "../../../pages/Error";
-import CloseButton from "../../ui/buttons/CloseButton";
-import { ExtensionService } from "../../../utils/ExtensionService";
+import type { Locations, UserHeader, Users } from "../../utils/schemas";
+import Loading from "../../pages/Loading";
+import ErrorPage from "../../pages/Error";
+import CloseButton from "../../components/ui/buttons/CloseButton";
+import { ExtensionService } from "../../utils/ExtensionService";
 import "./EditUserPopup.css";
 import "../popup.css";
-import Button from "../../ui/buttons/Button";
-import LocationInput from "../../ui/inputs/LocationInput";
+import Button from "../../components/ui/buttons/Button";
+import LocationInput from "../../components/ui/inputs/LocationInput";
 
 type EditUserPopupProp = {
     userHeader: UserHeader | null;
@@ -117,6 +117,7 @@ export default function EditUserPopup({ userHeader, setUserHeader, setIsClosed }
                     <div className="input-cont">
                         <input 
                             type="file"
+                            accept="image/*"
                             className="profile-pic-edit"
                             onChange={ (event) => {
                                 const file = event.target.files?.[0] ?? null;
@@ -130,9 +131,10 @@ export default function EditUserPopup({ userHeader, setUserHeader, setIsClosed }
                     </div>
                     <img 
                         className="profile-pic" 
-                        src={ userTemp?.profile_pic ?? (
-                            userTemp?.profile_pic_file 
-                                ? URL.createObjectURL(userTemp.profile_pic_file)
+                        src={ userTemp?.profile_pic_file
+                            ? URL.createObjectURL(userTemp.profile_pic_file)
+                            : (userTemp?.profile_pic
+                                ? userTemp.profile_pic
                                 : import.meta.env.VITE_DEFAULT_PROFILE_PIC 
                             )
                         } 

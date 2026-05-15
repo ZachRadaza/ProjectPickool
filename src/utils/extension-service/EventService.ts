@@ -47,19 +47,26 @@ export const EventService = {
         }
     },
 
-    async getClubEvents(club_id: string){
+    async getClubEvents(club_id: string, page: number){
         try{
+            const pageSize = 10;
+            const from = (page - 1) * pageSize;
+            const to = from + pageSize - 1;
             const { data, error } = await supabase
                 .from("events")
                 .select(eventBody)
-                .eq("club_id", club_id);
+                .eq("club_id", club_id)
+                .order("created_at", { ascending: false })
+                .range(from, to + 1);
 
             if(error)
                 throw new Error(error.message);
 
-            const events: Events[] = this.convertListOfEvents(data);
+            const hasMore = data.length > pageSize;
+            const trimmedData = data.slice(0, pageSize);
+            const events: Events[] = this.convertListOfEvents(trimmedData);
 
-            return events;
+            return { data: events, hasMore };
         } catch(error){
             console.error("error", error);
             throw error;

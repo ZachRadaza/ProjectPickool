@@ -1,14 +1,14 @@
 import "./ModifyClubPopup.css";
 import { useEffect, useState, useRef } from "react";
-import { ExtensionService } from "../../../utils/ExtensionService";
-import { Level, type Clubs, type Locations, type UserHeader } from "../../../utils/schemas";
-import { wait } from "../../../utils/random";
-import CloseButton from "../../ui/buttons/CloseButton";
-import LevelChooser from "../../ui/choosers/LevelChooser";
+import { ExtensionService } from "../../utils/ExtensionService";
+import { Level, type Clubs, type Locations, type UserHeader } from "../../utils/schemas";
+import { wait } from "../../utils/random";
+import CloseButton from "../../components/ui/buttons/CloseButton";
+import LevelChooser from "../../components/ui/choosers/LevelChooser";
 import { useNavigate } from "react-router-dom";
-import Button from "../../ui/buttons/Button";
+import Button from "../../components/ui/buttons/Button";
 import "../popup.css";
-import LocationInput from "../../ui/inputs/LocationInput";
+import LocationInput from "../../components/ui/inputs/LocationInput";
 
 type ModifyClubPopup = {
     userHeader: UserHeader | null;
@@ -145,6 +145,7 @@ export default function ModifyClubPopup({ setIsClosed, userHeader, isEditing, cl
                 <div className="input-cont">
                     <input 
                         type="file"
+                        accept="image/*"
                         className="image"
                         onChange={(event) => {
                             const file = event.target.files?.[0] ?? null;
@@ -170,6 +171,7 @@ export default function ModifyClubPopup({ setIsClosed, userHeader, isEditing, cl
                     <div className="input-cont">
                         <input 
                             type="file"
+                            accept="image/*"
                             className="image"
                             onChange={ (event) => {
                                 const file = event.target.files?.[0] ?? null;
@@ -179,11 +181,12 @@ export default function ModifyClubPopup({ setIsClosed, userHeader, isEditing, cl
                         />
                     </div>
                     <img 
-                        src={club?.profile_pic_file 
+                        src={ club?.profile_pic_file 
                             ? URL.createObjectURL(club.profile_pic_file) 
                             : ( club?.profile_pic 
                                 ? club.profile_pic
-                                : import.meta.env.VITE_DEFAULT_CLUB_PIC) 
+                                : import.meta.env.VITE_DEFAULT_CLUB_PIC
+                            ) 
                         }                            
                         alt="Club Profile Picture"
                     />

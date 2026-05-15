@@ -1,6 +1,6 @@
 import { useOutletContext, useNavigate } from "react-router-dom";
 import { type Club_Members, type UserClubRequests, type UserClubs, type UserHeader } from "../utils/schemas";
-import { useEffect, useState, type SetStateAction } from "react";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import { ExtensionService } from "../utils/ExtensionService";
 import ClubsComp from "../components/ui/core/ClubsComp";
 import Loading from "./Loading";
@@ -10,8 +10,8 @@ import Button from "../components/ui/buttons/Button";
 
 type ClubsContext = {
     userHeader: UserHeader | null;
-    setClosedModifyClub: React.Dispatch<SetStateAction<boolean>>;
-    setClosedNoUserPopup: React.Dispatch<SetStateAction<boolean>>;
+    setClosedModifyClub: Dispatch<SetStateAction<boolean>>;
+    setClosedNoUserPopup: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function Clubs(){
@@ -67,8 +67,6 @@ export default function Clubs(){
                 const fetchedClubs: UserClubs[] = await ExtensionService.UserService.getUserClubs(userHeader.id);
                 const requestedClubs: UserClubRequests[] = await ExtensionService.ClubRequestService.getUserRequests(userHeader.id);
 
-                console.log(fetchedClubs);
-
                 if(!fetchedClubs || !requestedClubs){
                     setError("Failed to Fetch User Clubs");
                     setIsLoading(false);
@@ -85,7 +83,6 @@ export default function Clubs(){
             } catch(error){
                 setError("please contact support");
                 setIsLoading(false);
-                console.log(error);
             }
         }
     }, [userHeader]);

@@ -1,31 +1,32 @@
-import { useEffect, useState } from "react";
-import CloseButton from "../../ui/buttons/CloseButton";
-import { Role, type Club_Members, type Club_Requests, type Clubs, type UserHeader } from "../../../utils/schemas";
-import Loading from "../../../pages/Loading";
-import ErrorPage from "../../../pages/Error";
-import { ExtensionService } from "../../../utils/ExtensionService";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
+import CloseButton from "../../components/ui/buttons/CloseButton";
+import { Role, type Club_Members, type Club_Requests, type Clubs, type UserHeader } from "../../utils/schemas";
+import Loading from "../../pages/Loading";
+import ErrorPage from "../../pages/Error";
+import { ExtensionService } from "../../utils/ExtensionService";
 import { useNavigate, useLocation } from "react-router-dom";
-import ClubEventsComp from "../../pages/clubs/ClubEventsComp";
-import ClubPostsComp from "../../pages/clubs/ClubPostsComp";
-import ClubMembersComp from "../../pages/clubs/ClubMembersComp";
+import ClubEventsComp from "../../components/pages/clubs/ClubEventsComp";
+import ClubPostsComp from "../../components/pages/clubs/ClubPostsComp";
+import ClubMembersComp from "../../components/pages/clubs/ClubMembersComp";
 import "./OpenedClubPopup.css";
-import EditButton from "../../ui/buttons/EditButton";
-import DeleteButton from "../../ui/buttons/DeleteButton";
+import EditButton from "../../components/ui/buttons/EditButton";
+import DeleteButton from "../../components/ui/buttons/DeleteButton";
 import "../popup.css";
-import ClubRequestsComp from "../../pages/clubs/ClubRequestsComp";
-import ClubLevelComp from "../../pages/clubs/ClubLevelComp";
-import MoreButton from "../../ui/buttons/MoreButton";
-import Button from "../../ui/buttons/Button";
-import { capitalizeWords } from "../../../utils/random";
-import FavoriteButton from "../../ui/buttons/FavoriteButton";
-import LocationIconComp from "../../ui/icons/LocationIconComp";
+import ClubRequestsComp from "../../components/pages/clubs/ClubRequestsComp";
+import ClubLevelComp from "../../components/pages/clubs/ClubLevelComp";
+import MoreButton from "../../components/ui/buttons/MoreButton";
+import Button from "../../components/ui/buttons/Button";
+import { capitalizeWords } from "../../utils/random";
+import FavoriteButton from "../../components/ui/buttons/FavoriteButton";
+import ClubInfoComp from "../../components/pages/clubs/ClubInfoComp";
 
 export const TabType = {
     EVENTS: "events",
     POSTS: "posts",
     MEMBERS: "members",
     REQUESTS: "requests",
-    LEVEL: "level"
+    LEVEL: "level",
+    INFO: "info"
 } as const;
 
 export type TabType = (typeof TabType)[keyof typeof TabType];
@@ -36,7 +37,7 @@ type  OpenedClubPopupProp= {
     setIsClosed: (closed: boolean) => void;
     setIsEditClubClosed: (close: boolean) => void;
     setIsModifyEventClosed: (close: boolean) => void;
-    setClosedNoUserPopup: React.Dispatch<React.SetStateAction<boolean>>;
+    setClosedNoUserPopup: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function OpenedClubPopup({ 
@@ -63,7 +64,8 @@ export default function OpenedClubPopup({
         [TabType.POSTS]: <ClubPostsComp />,
         [TabType.MEMBERS]: <ClubMembersComp club_id={ club_id } />,
         [TabType.REQUESTS]: <ClubRequestsComp club_id={ club_id } setNumRequests={ setNumRequests }/>,
-        [TabType.LEVEL]: <ClubLevelComp userHeader={ userHeader } userClubMember={ userClubMember } club_id={ club_id } setUserClubMember={ setUserClubMember }/>
+        [TabType.LEVEL]: <ClubLevelComp userHeader={ userHeader } userClubMember={ userClubMember } club_id={ club_id } setUserClubMember={ setUserClubMember }/>,
+        [TabType.INFO]: <ClubInfoComp club={ club } editClubBtn={ editClubBtn } deleteClubBtn={ deleteClubBtn }/>
     };
 
     const navigate = useNavigate();
@@ -277,10 +279,6 @@ export default function OpenedClubPopup({
                         <p className="attribute-tag secondary">{ club?.is_public ? "Public" : "Private" }</p>
                         <p className="attribute-tag secondary">{ capitalizeWords(club?.level) }</p>
                     </div>
-                    <LocationIconComp location={ club?.location ?? null } />
-                    <p className="desc">
-                        { club?.description }
-                    </p>
                     { userClubMember === null &&
                         <Button 
                             content={ requested ? "Requested" : "Join Club" }
@@ -309,6 +307,11 @@ export default function OpenedClubPopup({
                         onBtnClick={ () => setCurrentTab(TabType.MEMBERS) }
                         content="Members"
                         additionalClasses={ tabClasses(TabType.MEMBERS) }
+                    />
+                    <Button 
+                        onBtnClick={ () => setCurrentTab(TabType.INFO) }
+                        content="Info"
+                        additionalClasses={ tabClasses(TabType.INFO) }
                     />
                     { (userClubMember?.role === Role.OWNER || userClubMember?.role === Role.ADMIN) &&
                         <Button

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type Dispatch, type SetStateAction } from "react";
 import { EventButtonSituation, Role, type Club_Members, type Events, type Players } from "../../../utils/schemas";
 import Button from "../../ui/buttons/Button";
 import GCashButton from "../../ui/buttons/GCashButton";
@@ -14,9 +14,9 @@ type EventButtonCompProp = {
     playersApproved: Players[];
     playersNotApproved: Players[];
     openClub: () => void;
-    setError: React.Dispatch<React.SetStateAction<string | null>>
-    setPlayersApproved: React.Dispatch<React.SetStateAction<Players[]>>;
-    setPlayersNotApproved: React.Dispatch<React.SetStateAction<Players[]>>;
+    setError: Dispatch<SetStateAction<string | null>>
+    setPlayersApproved: Dispatch<SetStateAction<Players[]>>;
+    setPlayersNotApproved: Dispatch<SetStateAction<Players[]>>;
 };
 
 export default function EventButtonComp({ 
