@@ -1,8 +1,9 @@
+import type { Dispatch, SetStateAction } from "react";
 import "./SearchInput.css";
 
 type SearchInputProp = {
     value: string;
-    setValue: React.Dispatch<React.SetStateAction<string>>;
+    setValue: Dispatch<SetStateAction<string>>;
     search: (query: string) => void;
 };
 

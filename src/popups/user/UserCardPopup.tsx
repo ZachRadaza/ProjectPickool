@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { Level, Role, type Club_Members, type Club_Members_Basic, type Club_Requests, type Players, type UserHeader } from "../../../utils/schemas";
-import CloseButton from "../../ui/buttons/CloseButton";
-import Loading from "../../../pages/Loading";
-import ErrorPage from "../../../pages/Error";
-import { ExtensionService } from "../../../utils/ExtensionService";
+import { Level, Role, type Club_Members, type Club_Members_Basic, type Club_Requests, type Players, type UserHeader } from "../../utils/schemas";
+import CloseButton from "../../components/ui/buttons/CloseButton";
+import Loading from "../../pages/Loading";
+import ErrorPage from "../../pages/Error";
+import { ExtensionService } from "../../utils/ExtensionService";
 import { useNavigate } from "react-router-dom";
 import "./UserCardPopup.css";
 import "../popup.css";
-import Button from "../../ui/buttons/Button";
-import { capitalizeWords } from "../../../utils/random";
+import Button from "../../components/ui/buttons/Button";
+import { capitalizeWords } from "../../utils/random";
 
 type UserCardPopupProp = {
     userCardId: string | null;

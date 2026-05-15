@@ -1,18 +1,17 @@
 # Changelog
 
-## [0.1.0] - 2026-05-13
+## [0.1.1] - 2026-05-14
 
 ### Added
- - Row Level Security on Supabase
+ - Username/Email in use on Account Creation
+ - Club Info Tab added, moving extra content on club header to tab.
+ - Pagination for events on Club Event Tab.
 
 ### Fixed
- - Pop-up component on mobile not fully attached to the bottom of the screen.
- - `NoUserPopup.tsx` component bug causing an opaque screen with no interactiveness.
- - `PopupWrapper.tsx` animation timing causing bugs.
- - Popups used on `OpenedEventPopup.tsx` are now visually centered.
+ - Disabled `Edit User Location` button on Explore pages for Guests.
 
 ### Changed
- - Users redirected to their account if they sign in on `/user/guest` page.
- - `CalendarComp.tsx` width reduced to ease readibility.
- - Increased size of `UserHeaderMiniComp.tsx` for better aesthetics.
- - Increased font of buttons for eased readibility.
+ - File Uploads for User and Club Profile Pictures and Banners are now restricted to images only.
+ - Picture updates when uplaoding image on `EditUserPopup.tsx`.
+ - `OpenedClubPopup.tsx` moved the tiniest bit downwards for mobile.
+ - `CalendarComp.tsx` does not have a loading screen anymore, allowing for smooth visibilities.

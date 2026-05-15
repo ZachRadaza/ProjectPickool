@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { type Club_Members, type UserHeader } from "../../../utils/schemas";
-import CloseButton from "../../ui/buttons/CloseButton";
-import Loading from "../../../pages/Loading";
-import ErrorPage from "../../../pages/Error";
-import SearchInput from "../../ui/inputs/SearchInput";
-import UserHeaderComp from "../../ui/core/UserHeaderComp";
-import { ExtensionService } from "../../../utils/ExtensionService";
+import { type Club_Members, type UserHeader } from "../../utils/schemas";
+import CloseButton from "../../components/ui/buttons/CloseButton";
+import Loading from "../../pages/Loading";
+import ErrorPage from "../../pages/Error";
+import SearchInput from "../../components/ui/inputs/SearchInput";
+import UserHeaderComp from "../../components/ui/core/UserHeaderComp";
+import { ExtensionService } from "../../utils/ExtensionService";
 import "./UserSearchPopup.css";
-import Button from "../../ui/buttons/Button";
+import Button from "../../components/ui/buttons/Button";
 
 type UserSearchPopup = {
     club_id: string | null;

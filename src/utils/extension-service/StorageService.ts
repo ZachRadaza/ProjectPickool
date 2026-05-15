@@ -58,7 +58,6 @@ export const StorageService = {
     },
 
     async deleteImage(path: string): Promise<void> {
-        console.log(path);
         const { error } = await supabase.storage.from(BUCKET).remove([path]);
 
         if(error)

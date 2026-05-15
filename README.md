@@ -70,7 +70,7 @@ npm run preview
 
 ## Project Structure
 
-As of May 13, 2026
+As of May 14, 2026
 
 ```bash
 src/
@@ -78,7 +78,6 @@ src/
 ├── components/
 │   ├── layout/
 │   ├── pages/
-│   ├── popups/
 │   └── ui/
 ├── layouts/
 ├── pages/
@@ -86,6 +85,12 @@ src/
 │   ├── Events.tsx
 │   ├── Search.tsx
 │   └── User.tsx
+├── popups/
+│   ├── clubs
+│   ├── events
+│   ├── general
+│   ├── notifications
+│   └── user
 ├── utils/
 │   ├── extension-service/
 │   ├── ExtensionService.ts

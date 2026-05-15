@@ -1,5 +1,5 @@
-import Button from "../../ui/buttons/Button";
-import CloseButton from "../../ui/buttons/CloseButton";
+import Button from "../../components/ui/buttons/Button";
+import CloseButton from "../../components/ui/buttons/CloseButton";
 import "./TwoOptionPopup.css";
 
 type TwoOptionPopupProp = {

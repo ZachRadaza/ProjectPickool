@@ -1,4 +1,4 @@
-import type { UserClubs, UserHeader, Users } from "../schemas";
+import { SignUpMessageType, type UserClubs, type UserHeader, type Users } from "../schemas";
 import { supabase } from "../supabase";
 import { LocationService } from "./LocationService";
 import { StorageService } from "./StorageService";
@@ -80,6 +80,31 @@ export const UserService = {
     async addUser(userRaw: Users, password: string){
         try{
             const email = userRaw.email;
+
+            const { data: emailCheck, error: emailError} = await supabase
+                .from("users")
+                .select("id")
+                .eq("email", email)
+                .maybeSingle();
+
+            if(emailError)
+                throw new Error(emailError?.message);
+
+            if(emailCheck)
+                return SignUpMessageType.EMAILUSED;
+
+            const { data: usernameCheck, error: usernameError } = await supabase
+                .from("users")
+                .select("id")
+                .eq("username", userRaw.username)
+                .maybeSingle();
+
+            if(usernameError)
+                throw new Error(usernameError?.message);
+
+            if(usernameCheck)
+                return SignUpMessageType.USERNAMEUSED;
+
 
             const { data: dataAuth, error: errorAuth } = await supabase
                 .auth

@@ -1,21 +1,21 @@
 import { Outlet, useLocation, useSearchParams } from "react-router-dom";
 import Header from "../components/layout/header";
-import SignUpPopup from "../components/popups/user/SignUpPopup";
-import SignInPopup from "../components/popups/user/SignInPopup";
+import SignUpPopup from "../popups/user/SignUpPopup";
+import SignInPopup from "../popups/user/SignInPopup";
 import { useState, useEffect } from "react";
 import type { UserHeader } from "../utils/schemas";
 import { ExtensionService } from "../utils/ExtensionService";
 import Loading from "../pages/Loading";
 import ErrorPage from "../pages/Error";
-import OpenedClubPopup from "../components/popups/clubs/OpenedClubPopup";
-import ModifyClubPopup from "../components/popups/clubs/ModifyClubPopup";
-import UserCardPopup from "../components/popups/user/UserCardPopup";
-import EditUserPopup from "../components/popups/user/EditUserPopup";
-import ModifyEventPopup from "../components/popups/events/ModifyEventPopup";
-import OpenedEventPopup from "../components/popups/events/OpenedEventPopup";
-import PopupWrapper from "../components/popups/PopupWrapper";
-import NotificationsPopup from "../components/popups/notifications/NotificationsPopup";
-import NoUserPopup from "../components/popups/user/NoUserPopup";
+import OpenedClubPopup from "../popups/clubs/OpenedClubPopup";
+import ModifyClubPopup from "../popups/clubs/ModifyClubPopup";
+import UserCardPopup from "../popups/user/UserCardPopup";
+import EditUserPopup from "../popups/user/EditUserPopup";
+import ModifyEventPopup from "../popups/events/ModifyEventPopup";
+import OpenedEventPopup from "../popups/events/OpenedEventPopup";
+import PopupWrapper from "../popups/PopupWrapper";
+import NotificationsPopup from "../popups/notifications/NotificationsPopup";
+import NoUserPopup from "../popups/user/NoUserPopup";
 
 export default function Layout(){
     const [closedSignIn, setClosedSignIn] = useState<boolean>(true);

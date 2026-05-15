@@ -4,11 +4,12 @@ import CountdownTimer from "../CountdownTimer";
 import "./NotificationComp.css";
 import CloseButton from "../buttons/CloseButton";
 import { timeAgo } from "../../../utils/random";
+import type { Dispatch, SetStateAction } from "react";
 
 type NotificationCompProp = {
     notification: Notifications
     closeNotifClicked: () => void;
-    setIsClosed: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsClosed: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function NotificationComp({ notification, closeNotifClicked, setIsClosed }: NotificationCompProp){

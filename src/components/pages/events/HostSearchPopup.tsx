@@ -1,17 +1,17 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState, type Dispatch, type SetStateAction } from "react";
 import { Recurring, type Events, type Hosts } from "../../../utils/schemas";
-import UserSearchPopup from "../../popups/clubs/UserSearchPopup";
-import TwoOptionPopup from "../../popups/general/TwoOptionPopup";
-import PopupWrapper from "../../popups/PopupWrapper";
+import UserSearchPopup from "../../../popups/clubs/UserSearchPopup";
+import TwoOptionPopup from "../../../popups/general/TwoOptionPopup";
+import PopupWrapper from "../../../popups/PopupWrapper";
 import { ExtensionService } from "../../../utils/ExtensionService";
 
 type HostSearchPopup = {
     event: Events | null;
     hosts: Hosts[];
-    setError: React.Dispatch<React.SetStateAction<string | null>>;
-    setHosts: React.Dispatch<React.SetStateAction<Hosts[]>>;
+    setError: Dispatch<SetStateAction<string | null>>;
+    setHosts: Dispatch<SetStateAction<Hosts[]>>;
     searchHostsClosed: boolean;
-    setSearchHostsClosed: React.Dispatch<boolean>;
+    setSearchHostsClosed: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function HostSearchPopup({ event, setError, setHosts, setSearchHostsClosed, searchHostsClosed, hosts }: HostSearchPopup){

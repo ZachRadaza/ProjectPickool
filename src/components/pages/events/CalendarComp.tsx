@@ -3,7 +3,6 @@ import type { EventPlayer, Events, Players, UserHeader } from "../../../utils/sc
 import EventsComp from "../../ui/core/EventsComp";
 import Button from "../../ui/buttons/Button";
 import "./CalendarComp.css";
-import Loading from "../../../pages/Loading";
 import ErrorPage from "../../../pages/Error";
 import { ExtensionService } from "../../../utils/ExtensionService";
 
@@ -19,7 +18,6 @@ export default function CalendarComp({ events, setClosedModifyEvent, showClub, u
     const [pastEventsSorted, setPastEventsSorted] = useState<Map<string, EventPlayer[]>>(new Map());
     const [isEventsSorted, setIsEventSorted] = useState<boolean>(true);
 
-    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     const currentSorted = isEventsSorted ? eventsSorted : pastEventsSorted;
@@ -34,10 +32,8 @@ export default function CalendarComp({ events, setClosedModifyEvent, showClub, u
         
         async function getEventUserPlayer(){
             try{
-                setIsLoading(true);
                 if(!userHeader){
                     sortEvents([]);
-                    setIsLoading(false);
                     return;
                 }
 
@@ -45,14 +41,11 @@ export default function CalendarComp({ events, setClosedModifyEvent, showClub, u
 
                 if(!userPlayers || userPlayers.length === 0){
                     sortEvents([]);
-                    setIsLoading(false);
                     return;
                 }
 
                 sortEvents(userPlayers);
-                setIsLoading(false);
             } catch(error){
-                setIsLoading(false);
                 setError("Error in loading user event information");
             }
         }
@@ -94,8 +87,6 @@ export default function CalendarComp({ events, setClosedModifyEvent, showClub, u
         }
     }, [events]);
 
-    if(isLoading)
-        return <Loading />;
 
     if(error)
         return <ErrorPage error={ error } />;

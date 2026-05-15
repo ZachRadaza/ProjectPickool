@@ -1,12 +1,12 @@
-import type { SetStateAction } from "react";
-import CloseButton from "../../ui/buttons/CloseButton";
-import Button from "../../ui/buttons/Button";
+import type { Dispatch, SetStateAction } from "react";
+import CloseButton from "../../components/ui/buttons/CloseButton";
+import Button from "../../components/ui/buttons/Button";
 import "./NoUserPopup.css";
 
 type NoUserPopupProp = {
-    setClosedSignUp: React.Dispatch<SetStateAction<boolean>>;
-    setClosedSignIn: React.Dispatch<SetStateAction<boolean>>;
-    setIsClosed: React.Dispatch<SetStateAction<boolean>>;
+    setClosedSignUp: Dispatch<SetStateAction<boolean>>;
+    setClosedSignIn: Dispatch<SetStateAction<boolean>>;
+    setIsClosed: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function NoUserPopup({ setIsClosed, setClosedSignIn, setClosedSignUp }: NoUserPopupProp){

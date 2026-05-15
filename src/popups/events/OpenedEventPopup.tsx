@@ -1,26 +1,26 @@
-import { useEffect, useMemo, useState } from "react";
-import { EventType, type Hosts, Role, type Club_Members, type Events, type Players, type UserHeader, EventButtonSituation, Recurring } from "../../../utils/schemas";
-import CloseButton from "../../ui/buttons/CloseButton";
-import Loading from "../../../pages/Loading";
-import ErrorPage from "../../../pages/Error";
-import { ExtensionService } from "../../../utils/ExtensionService";
+import { useEffect, useMemo, useState, type Dispatch, type SetStateAction } from "react";
+import { EventType, type Hosts, Role, type Club_Members, type Events, type Players, type UserHeader, EventButtonSituation, Recurring } from "../../utils/schemas";
+import CloseButton from "../../components/ui/buttons/CloseButton";
+import Loading from "../../pages/Loading";
+import ErrorPage from "../../pages/Error";
+import { ExtensionService } from "../../utils/ExtensionService";
 import { useNavigate } from "react-router-dom";
 import "../popup.css";
-import { capitalizeWords } from "../../../utils/random";
+import { capitalizeWords } from "../../utils/random";
 import "./OpenedEventPopup.css";
-import EditButton from "../../ui/buttons/EditButton";
-import DeleteButton from "../../ui/buttons/DeleteButton";
+import EditButton from "../../components/ui/buttons/EditButton";
+import DeleteButton from "../../components/ui/buttons/DeleteButton";
 import PopupWrapper from "../PopupWrapper";
-import EventIconsComp from "../../pages/events/EventIconsComp";
-import EventParticipantsComp from "../../pages/events/EventParticipantsComp";
-import EventButtonComp from "../../pages/events/EventButtonsComp";
+import EventIconsComp from "../../components/pages/events/EventIconsComp";
+import EventParticipantsComp from "../../components/pages/events/EventParticipantsComp";
+import EventButtonComp from "../../components/pages/events/EventButtonsComp";
 import TwoOptionPopup from "../general/TwoOptionPopup";
-import HostSearchPopup from "../../pages/events/HostSearchPopup";
+import HostSearchPopup from "../../components/pages/events/HostSearchPopup";
 
 type OpenedEventPopupProp = {
-    setIsClosed: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsClosed: Dispatch<SetStateAction<boolean>>;
     event_id: string | null;
-    setClosedModifyEvent: React.Dispatch<React.SetStateAction<boolean>>;
+    setClosedModifyEvent: Dispatch<SetStateAction<boolean>>;
     userHeader: UserHeader | null;
 }
 

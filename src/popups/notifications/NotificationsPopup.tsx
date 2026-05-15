@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import type { Notifications, UserHeader } from "../../../utils/schemas";
-import CloseButton from "../../ui/buttons/CloseButton";
-import NotificationComp from "../../ui/core/NotificationComp";
-import Loading from "../../../pages/Loading";
-import ErrorPage from "../../../pages/Error";
-import { ExtensionService } from "../../../utils/ExtensionService";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
+import type { Notifications, UserHeader } from "../../utils/schemas";
+import CloseButton from "../../components/ui/buttons/CloseButton";
+import NotificationComp from "../../components/ui/core/NotificationComp";
+import Loading from "../../pages/Loading";
+import ErrorPage from "../../pages/Error";
+import { ExtensionService } from "../../utils/ExtensionService";
 import "./NotificationsPopup.css";
 
 type NotificationsPopupProp = {
-    setIsClosed: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsClosed: Dispatch<SetStateAction<boolean>>;
     userHeader: UserHeader | null;
-    setNumNotifs: React.Dispatch<React.SetStateAction<number>>;
+    setNumNotifs: Dispatch<SetStateAction<number>>;
 };
 
 export default function NotificationsPopup({ setIsClosed, userHeader, setNumNotifs }: NotificationsPopupProp){

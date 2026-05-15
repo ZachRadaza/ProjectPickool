@@ -1,6 +1,6 @@
 import type { UserHeader, Users } from "../utils/schemas";
 import { useOutletContext, useParams } from "react-router-dom";
-import { useEffect, useState, useMemo, type SetStateAction } from "react";
+import { useEffect, useState, useMemo, type SetStateAction, type Dispatch } from "react";
 import "./User.css";
 import { ExtensionService } from "../utils/ExtensionService";
 import Loading from "./Loading";
@@ -21,8 +21,8 @@ export type TabType = (typeof TabType)[keyof typeof TabType];
 type UserContext = {
     userHeader: UserHeader | null;
     previewUserId: string | null;
-    setClosedNoUserPopup: React.Dispatch<SetStateAction<boolean>>;
-    setClosedEditUser: React.Dispatch<SetStateAction<boolean>>;
+    setClosedNoUserPopup: Dispatch<SetStateAction<boolean>>;
+    setClosedEditUser: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function User(){

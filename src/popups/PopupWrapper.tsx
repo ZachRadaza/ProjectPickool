@@ -1,9 +1,8 @@
-import type React from "react"
-import { useEffect, useState } from "react";
-import { wait } from "../../utils/random";
+import { useEffect, useState, type ReactNode } from "react";
+import { wait } from "../utils/random";
 
 type PopupWrapperProp = {
-    popupComp: React.ReactNode;
+    popupComp: ReactNode;
     isClosed: boolean;
     isMaxWidth?: boolean;
     noBgPointerEvents?: boolean;
