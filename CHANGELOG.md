@@ -9,6 +9,7 @@
 
 ### Fixed
  - Disabled `Edit User Location` button on Explore pages for Guests.
+ - Club Members stuck on loading when opening club.
 
 ### Changed
  - File Uploads for User and Club Profile Pictures and Banners are now restricted to images only.

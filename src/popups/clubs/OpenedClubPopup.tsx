@@ -180,8 +180,6 @@ export default function OpenedClubPopup({
                     return;
                 } else if(userClubMember?.role !== Role.MEMBER)
                     await getRequestNum(club_id);
-                else 
-                    return;
 
                 setRequested(false);
                 setUserClubMember(userClubMember);
