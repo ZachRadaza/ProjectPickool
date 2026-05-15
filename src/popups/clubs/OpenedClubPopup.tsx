@@ -173,6 +173,7 @@ export default function OpenedClubPopup({
                     : null;
 
                 if(!userClubMember && userHeader){
+                    console.log("here");
                     setUserClubMember(null);
                     await getUserClubRequest(userHeader.id!, club_id);
                     setIsLoading(false);
@@ -180,8 +181,6 @@ export default function OpenedClubPopup({
                     return;
                 } else if(userClubMember?.role !== Role.MEMBER)
                     await getRequestNum(club_id);
-                else 
-                    return;
 
                 setRequested(false);
                 setUserClubMember(userClubMember);
