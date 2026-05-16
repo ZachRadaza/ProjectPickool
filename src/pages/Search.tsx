@@ -4,7 +4,7 @@ import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import Button from "../components/ui/buttons/Button";
 import FilterButton from "../components/ui/buttons/FilterButton";
 import "./Search.css";
-import CalendarComp from "../components/pages/events/CalendarComp";
+import CalendarComp from "../components/events/CalendarComp";
 import ClubsComp from "../components/ui/core/ClubsComp";
 import SearchInput from "../components/ui/inputs/SearchInput";
 import Loading from "./Loading";

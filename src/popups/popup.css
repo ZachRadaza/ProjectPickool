@@ -110,6 +110,7 @@
 
     .popup{
         border-width: 0.1rem;
+        border-bottom: 0px;
         padding: 1rem 1.5rem;
         width: calc(100vw - 3rem);
         max-width: 100vw;

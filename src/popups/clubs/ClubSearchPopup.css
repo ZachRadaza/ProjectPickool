@@ -1,0 +1,23 @@
+.choose-clubs {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    text-align: center;
+}
+
+.choose-clubs .club-comp-cont .banner{
+    display: none;
+}
+
+.choose-clubs .club-comp-cont .profile-pic{
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 3rem;
+}
+
+.choose-clubs .club-comp-cont .titles{
+    width: auto;
+    margin: 0px;
+}

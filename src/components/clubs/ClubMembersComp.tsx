@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import type { Club_Members } from "../../../utils/schemas";
-import { ExtensionService } from "../../../utils/ExtensionService";
-import Loading from "../../../pages/Loading";
-import ErrorPage from "../../../pages/Error";
+import type { Club_Members } from "../../utils/schemas";
+import { ExtensionService } from "../../utils/ExtensionService";
+import Loading from "../../pages/Loading";
+import ErrorPage from "../../pages/Error";
 import "./ClubMembersComp.css";
 import UsersDropdown from "../user/UsersDropdown";
 

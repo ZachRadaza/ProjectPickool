@@ -19,7 +19,7 @@ export default function Header({ userHeader, numberNotifs, setClosedNotifsPopup 
         <header>
             <nav>
                 <div className="logo-section">
-                    <NavLink to="/events" className="nav-link" onClick={ () => setMenuClosed(true) }>
+                    <NavLink to="/" className="nav-link" onClick={ () => setMenuClosed(true) }>
                         <img />
                         <h4 className="brand-title">Project Pickool</h4>
                     </NavLink>
@@ -39,6 +39,7 @@ export default function Header({ userHeader, numberNotifs, setClosedNotifsPopup 
                             <path d="M19 5L4.99998 19M5.00001 5L19 19" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                     </button>
+                    <NavLink to="/" className={ navClass } onClick={ () => setMenuClosed(true) }><h5>Home</h5></NavLink>
                     <NavLink to="/clubs" className={ navClass } onClick={ () => setMenuClosed(true) }><h5>Clubs</h5></NavLink>
                     <NavLink to="/events" className={ navClass } onClick={ () => setMenuClosed(true) }><h5>Events</h5></NavLink>
                     <NavLink to="/search" className={ navClass } onClick={ () => setMenuClosed(true) }><h5>Explore</h5></NavLink>

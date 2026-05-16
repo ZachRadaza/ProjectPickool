@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import CalendarComp from "../components/pages/events/CalendarComp";
+import CalendarComp from "../components/events/CalendarComp";
 import type { Events, UserHeader } from "../utils/schemas";
 import Loading from "./Loading";
 import ErrorPage from "./Error";

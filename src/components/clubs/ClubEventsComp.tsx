@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Role, type Club_Members, type Events } from "../../../utils/schemas";
-import Loading from "../../../pages/Loading";
-import ErrorPage from "../../../pages/Error";
-import { ExtensionService } from "../../../utils/ExtensionService";
+import { Role, type Club_Members, type Events } from "../../utils/schemas";
+import Loading from "../../pages/Loading";
+import ErrorPage from "../../pages/Error";
+import { ExtensionService } from "../../utils/ExtensionService";
 import CalendarComp from "../events/CalendarComp";
-import Button from "../../ui/buttons/Button";
+import Button from "../ui/buttons/Button";
 import "./ClubEventsComp.css";
 
 type ClubsEventCompProp = {

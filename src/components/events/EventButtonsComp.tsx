@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState, type Dispatch, type SetStateAction } from "react";
-import { EventButtonSituation, Role, type Club_Members, type Events, type Players } from "../../../utils/schemas";
-import Button from "../../ui/buttons/Button";
-import GCashButton from "../../ui/buttons/GCashButton";
-import { ExtensionService } from "../../../utils/ExtensionService";
+import { EventButtonSituation, Role, type Club_Members, type Events, type Players } from "../../utils/schemas";
+import Button from "../ui/buttons/Button";
+import GCashButton from "../ui/buttons/GCashButton";
+import { ExtensionService } from "../../utils/ExtensionService";
 import "./EventButtonComp.css";
-import CountdownTimer from "../../ui/CountdownTimer";
+import CountdownTimer from "../ui/CountdownTimer";
 
 type EventButtonCompProp = {
     event: Events | null;

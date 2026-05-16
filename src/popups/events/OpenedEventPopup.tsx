@@ -11,11 +11,11 @@ import "./OpenedEventPopup.css";
 import EditButton from "../../components/ui/buttons/EditButton";
 import DeleteButton from "../../components/ui/buttons/DeleteButton";
 import PopupWrapper from "../PopupWrapper";
-import EventIconsComp from "../../components/pages/events/EventIconsComp";
-import EventParticipantsComp from "../../components/pages/events/EventParticipantsComp";
-import EventButtonComp from "../../components/pages/events/EventButtonsComp";
+import EventIconsComp from "../../components/events/EventIconsComp";
+import EventParticipantsComp from "../../components/events/EventParticipantsComp";
+import EventButtonComp from "../../components/events/EventButtonsComp";
 import TwoOptionPopup from "../general/TwoOptionPopup";
-import HostSearchPopup from "../../components/pages/events/HostSearchPopup";
+import HostSearchPopup from "../../components/events/HostSearchPopup";
 
 type OpenedEventPopupProp = {
     setIsClosed: Dispatch<SetStateAction<boolean>>;

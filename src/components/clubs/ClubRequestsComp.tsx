@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import type { Club_Requests } from "../../../utils/schemas";
-import Loading from "../../../pages/Loading";
-import ErrorPage from "../../../pages/Error";
-import { ExtensionService } from "../../../utils/ExtensionService";
-import UserHeaderComp from "../../ui/core/UserHeaderComp";
+import type { Club_Requests } from "../../utils/schemas";
+import Loading from "../../pages/Loading";
+import ErrorPage from "../../pages/Error";
+import { ExtensionService } from "../../utils/ExtensionService";
+import UserHeaderComp from "../ui/core/UserHeaderComp";
 import "./ClubRequestsComp.css";
 
 type ClubRequestsCompProp = {

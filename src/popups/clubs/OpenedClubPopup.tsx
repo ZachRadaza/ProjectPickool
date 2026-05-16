@@ -5,20 +5,20 @@ import Loading from "../../pages/Loading";
 import ErrorPage from "../../pages/Error";
 import { ExtensionService } from "../../utils/ExtensionService";
 import { useNavigate, useLocation } from "react-router-dom";
-import ClubEventsComp from "../../components/pages/clubs/ClubEventsComp";
-import ClubPostsComp from "../../components/pages/clubs/ClubPostsComp";
-import ClubMembersComp from "../../components/pages/clubs/ClubMembersComp";
+import ClubEventsComp from "../../components/clubs/ClubEventsComp";
+import ClubPostsComp from "../../components/clubs/ClubPostsComp";
+import ClubMembersComp from "../../components/clubs/ClubMembersComp";
 import "./OpenedClubPopup.css";
 import EditButton from "../../components/ui/buttons/EditButton";
 import DeleteButton from "../../components/ui/buttons/DeleteButton";
 import "../popup.css";
-import ClubRequestsComp from "../../components/pages/clubs/ClubRequestsComp";
-import ClubLevelComp from "../../components/pages/clubs/ClubLevelComp";
+import ClubRequestsComp from "../../components/clubs/ClubRequestsComp";
+import ClubLevelComp from "../../components/clubs/ClubLevelComp";
 import MoreButton from "../../components/ui/buttons/MoreButton";
 import Button from "../../components/ui/buttons/Button";
 import { capitalizeWords } from "../../utils/random";
 import FavoriteButton from "../../components/ui/buttons/FavoriteButton";
-import ClubInfoComp from "../../components/pages/clubs/ClubInfoComp";
+import ClubInfoComp from "../../components/clubs/ClubInfoComp";
 
 export const TabType = {
     EVENTS: "events",

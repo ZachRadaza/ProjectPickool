@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import type { UserHeader } from "../../../utils/schemas";
-import DropdownButton from "../../ui/buttons/DropdownButton";
-import UserHeaderMiniComp from "../../ui/core/UserHeaderMiniComp";
+import type { UserHeader } from "../../utils/schemas";
+import DropdownButton from "../ui/buttons/DropdownButton";
+import UserHeaderMiniComp from "../ui/core/UserHeaderMiniComp";
 import "./UsersDropdown.css";
-import UserHeaderComp from "../../ui/core/UserHeaderComp";
-import AddButton from "../../ui/buttons/AddButton";
+import UserHeaderComp from "../ui/core/UserHeaderComp";
+import AddButton from "../ui/buttons/AddButton";
 
 type ShrunkPlayer = UserHeader & {
     paid?: boolean;

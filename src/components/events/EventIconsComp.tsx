@@ -1,9 +1,9 @@
-import { convertSecondsToHours } from "../../../utils/random";
-import type { Events } from "../../../utils/schemas";
-import DateIconComp from "../../ui/icons/DateIconComp";
-import EventInfoIconComp from "../../ui/icons/EventInfoIconComp";
-import LocationIconComp from "../../ui/icons/LocationIconComp";
-import PriceIconComp from "../../ui/icons/PriceIconComp";
+import { convertSecondsToHours } from "../../utils/random";
+import type { Events } from "../../utils/schemas";
+import DateIconComp from "../ui/icons/DateIconComp";
+import EventInfoIconComp from "../ui/icons/EventInfoIconComp";
+import LocationIconComp from "../ui/icons/LocationIconComp";
+import PriceIconComp from "../ui/icons/PriceIconComp";
 import "./EventIconsComp.css";
 
 type EventIconsCompProp = {

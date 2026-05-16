@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import type { EventPlayer, Events, Players, UserHeader } from "../../../utils/schemas";
-import EventsComp from "../../ui/core/EventsComp";
-import Button from "../../ui/buttons/Button";
+import type { EventPlayer, Events, Players, UserHeader } from "../../utils/schemas";
+import EventsComp from "../ui/core/EventsComp";
+import Button from "../ui/buttons/Button";
 import "./CalendarComp.css";
-import ErrorPage from "../../../pages/Error";
-import { ExtensionService } from "../../../utils/ExtensionService";
+import ErrorPage from "../../pages/Error";
+import { ExtensionService } from "../../utils/ExtensionService";
 
 type CalendarCompProp = {
     events: Events[];
