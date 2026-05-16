@@ -6,8 +6,8 @@ import { ExtensionService } from "../utils/ExtensionService";
 import Loading from "./Loading";
 import ErrorPage from "./Error";
 import EditButton from "../components/ui/buttons/EditButton";
-import UserTabClubsComp from "../components/pages/user/UserTabClubsComp";
-import UserTabPostsComp from "../components/pages/user/UserTabPostsComp";
+import UserTabClubsComp from "../components/user/UserTabClubsComp";
+import UserTabPostsComp from "../components/user/UserTabPostsComp";
 import Button from "../components/ui/buttons/Button";
 import LocationIconComp from "../components/ui/icons/LocationIconComp";
 

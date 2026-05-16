@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import type { Clubs, UserHeader } from "../../../utils/schemas";
-import UserHeaderMiniComp from "../../ui/core/UserHeaderMiniComp";
-import Loading from "../../../pages/Loading";
-import ErrorPage from "../../../pages/Error";
-import { ExtensionService } from "../../../utils/ExtensionService";
-import LocationIconComp from "../../ui/icons/LocationIconComp";
+import type { Clubs, UserHeader } from "../../utils/schemas";
+import UserHeaderMiniComp from "../ui/core/UserHeaderMiniComp";
+import Loading from "../../pages/Loading";
+import ErrorPage from "../../pages/Error";
+import { ExtensionService } from "../../utils/ExtensionService";
+import LocationIconComp from "../ui/icons/LocationIconComp";
 import "./ClubInfoComp.css";
-import EditButton from "../../ui/buttons/EditButton";
-import DeleteButton from "../../ui/buttons/DeleteButton";
+import EditButton from "../ui/buttons/EditButton";
+import DeleteButton from "../ui/buttons/DeleteButton";
 
 type ClubInfoCompProp = {
     club: Clubs | null;

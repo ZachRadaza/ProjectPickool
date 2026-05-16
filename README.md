@@ -70,19 +70,22 @@ npm run preview
 
 ## Project Structure
 
-As of May 14, 2026
+As of May 16, 2026
 
 ```bash
 src/
 ├── assets/
 ├── components/
 │   ├── layout/
-│   ├── pages/
+│   ├── clubs/
+│   ├── events/
+│   ├── user/
 │   └── ui/
 ├── layouts/
 ├── pages/
 │   ├── Clubs.tsx
 │   ├── Events.tsx
+│   ├── Home.tsx
 │   ├── Search.tsx
 │   └── User.tsx
 ├── popups/

@@ -76,7 +76,6 @@ export const UserService = {
             throw error;
         }
     },
-
     async addUser(userRaw: Users, password: string){
         try{
             const email = userRaw.email;
@@ -105,7 +104,6 @@ export const UserService = {
             if(usernameCheck)
                 return SignUpMessageType.USERNAMEUSED;
 
-
             const { data: dataAuth, error: errorAuth } = await supabase
                 .auth
                 .signUp({ email, password });
@@ -121,7 +119,27 @@ export const UserService = {
                 .from("users")
                 .insert([user])
                 .select(userBody)
-                .single();
+                .maybeSingle();
+
+            if(errorUser)
+                throw new Error(errorUser.message);
+
+            return this.convertToUser(dataUser);
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
+    async addUserHelper(id: string, userRaw: Users){
+        try{
+            const user = { ...userRaw, id: id };
+
+            const { data: dataUser, error: errorUser } = await supabase
+                .from("users")
+                .insert([user])
+                .select(userBody)
+                .maybeSingle();
 
             if(errorUser)
                 throw new Error(errorUser.message);

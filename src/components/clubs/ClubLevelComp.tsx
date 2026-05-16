@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { Level, Role, type Club_Members, type Club_Members_Basic, type UserHeader } from "../../../utils/schemas";
-import LevelChooser from "../../ui/choosers/LevelChooser";
-import { ExtensionService } from "../../../utils/ExtensionService";
-import Button from "../../ui/buttons/Button";
+import { Level, Role, type Club_Members, type Club_Members_Basic, type UserHeader } from "../../utils/schemas";
+import LevelChooser from "../ui/choosers/LevelChooser";
+import { ExtensionService } from "../../utils/ExtensionService";
+import Button from "../ui/buttons/Button";
 import "./ClubLevelComp.css";
-import Loading from "../../../pages/Loading";
-import ErrorPage from "../../../pages/Error";
-import UserHeaderMiniComp from "../../ui/core/UserHeaderMiniComp";
+import Loading from "../../pages/Loading";
+import ErrorPage from "../../pages/Error";
+import UserHeaderMiniComp from "../ui/core/UserHeaderMiniComp";
 
 type ClubLevelCompProp = {
     userHeader: UserHeader | null;

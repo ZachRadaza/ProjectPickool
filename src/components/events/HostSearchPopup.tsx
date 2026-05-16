@@ -1,9 +1,9 @@
 import { useMemo, useState, type Dispatch, type SetStateAction } from "react";
-import { Recurring, type Events, type Hosts } from "../../../utils/schemas";
-import UserSearchPopup from "../../../popups/clubs/UserSearchPopup";
-import TwoOptionPopup from "../../../popups/general/TwoOptionPopup";
-import PopupWrapper from "../../../popups/PopupWrapper";
-import { ExtensionService } from "../../../utils/ExtensionService";
+import { Recurring, type Events, type Hosts } from "../../utils/schemas";
+import UserSearchPopup from "../../popups/clubs/UserSearchPopup";
+import TwoOptionPopup from "../../popups/general/TwoOptionPopup";
+import PopupWrapper from "../../popups/PopupWrapper";
+import { ExtensionService } from "../../utils/ExtensionService";
 
 type HostSearchPopup = {
     event: Events | null;

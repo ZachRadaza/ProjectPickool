@@ -70,6 +70,7 @@ export type LikeType = (typeof LikeType)[keyof typeof LikeType];
 export const SignUpMessageType = {
     NONE: "",
     SUCCESS: "Verification Email Sent.",
+    SUCCESSNOVERIFICATION: "Account Successfully Created",
     EMAILUSED: "Email is already in use",
     USERNAMEUSED: "Username in already in use",
     EMPTY: "Please Enter All the Fields",

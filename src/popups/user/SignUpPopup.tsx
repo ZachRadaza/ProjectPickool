@@ -5,6 +5,7 @@ import "../popup.css";
 import "./SignActionPopup.css";
 import CloseButton from "../../components/ui/buttons/CloseButton";
 import Button from "../../components/ui/buttons/Button";
+import { wait } from "../../utils/random";
 
 type SignUpPopupProp = {
     setIsClosed: (closed: boolean) => void;
@@ -16,7 +17,7 @@ export default function SignUpPopup({ setIsClosed }: SignUpPopupProp ){
     const [username, setUsername] = useState<string>("");
     const [buttonContent, setButtonContent] = useState<string>("Create Account");
     const [valid, setValid] = useState<SignUpMessageType>(SignUpMessageType.NONE);
-    const [resendContent, setResendContent] = useState<string>("Resend verification link to email.");
+    // const [resendContent, setResendContent] = useState<string>("Resend verification link to email.");
 
     let content;
 
@@ -24,10 +25,12 @@ export default function SignUpPopup({ setIsClosed }: SignUpPopupProp ){
         return (email && password && username);
     }
 
+    /*
     async function resendVerificaiton(){
         await ExtensionService.UserService.resendEmailUser(email);
         setResendContent("Sent.");
     }
+    */
 
     async function btnClicked(){
         if(!verifyInputs()){
@@ -59,25 +62,26 @@ export default function SignUpPopup({ setIsClosed }: SignUpPopupProp ){
             setValid(data);
             setPassword("");
         } else {  
-            setValid(SignUpMessageType.SUCCESS);
-            /*
+            //setValid(SignUpMessageType.SUCCESS);
+            setValid(SignUpMessageType.SUCCESSNOVERIFICATION);
             await wait(2000);
             setIsClosed(true);
 
             window.location.reload();
-            */
+            
         }
 
         setButtonContent("Create Account");
     }
-
+    /*
     if(valid === SignUpMessageType.SUCCESS)
         content = <>
             <p>Please check your email for a verification link.</p>
             <p className="did-not-recieve">Did not recieve it?</p>
             <p><a onClick={ () => resendVerificaiton() }>{ resendContent }</a></p>
         </>;
-    else
+    */
+    // else
         content = <>
             <div className="input-pair">
                 <h6>Username</h6>
@@ -120,7 +124,7 @@ export default function SignUpPopup({ setIsClosed }: SignUpPopupProp ){
                 <h6 className="subtitle">Join the Project</h6>
             </div>
             <div className="content">
-                <p className={ valid === SignUpMessageType.SUCCESS ? "message" : "message invalid" }>
+                <p className={ valid === SignUpMessageType.SUCCESS || valid === SignUpMessageType.SUCCESSNOVERIFICATION ? "message" : "message invalid" }>
                     { valid }
                 </p>
                 { content }

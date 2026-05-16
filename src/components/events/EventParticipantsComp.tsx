@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
-import { ExtensionService } from "../../../utils/ExtensionService";
-import { Role, type Club_Members, type Events, type Hosts, type Players } from "../../../utils/schemas";
+import { ExtensionService } from "../../utils/ExtensionService";
+import { Role, type Club_Members, type Events, type Hosts, type Players } from "../../utils/schemas";
 import UsersDropdown from "../user/UsersDropdown";
 import "./EventParticipantsComp.css";
 
