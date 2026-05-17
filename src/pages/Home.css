@@ -9,6 +9,9 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
+    max-width: 150ch;
+    margin: auto;
+    width: 100%;
 }
 
 .home-cont .main-btns > *{

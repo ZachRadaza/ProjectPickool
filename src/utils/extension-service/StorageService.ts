@@ -10,35 +10,39 @@ type UploadResult = {
 export const StorageService = {
 
     async uploadProfilePic(file: File, userId: string): Promise<UploadResult> {
-        const ext = this.getFileExtension(file.name);
+        const compressed = await this.compressImage(file, 400);
+        const ext = this.getFileExtension(compressed.name);
         const fileName = `${crypto.randomUUID()}.${ext}`;
         const path = `profile_pics/${userId}/${fileName}`;
 
-        return this.uploadImage(file, path, false);
+        return this.uploadImage(compressed, path, false);
     },
 
     async uploadClubProfilePic(file: File, clubId: string): Promise<UploadResult> {
-        const ext = this.getFileExtension(file.name);
+        const compressed = await this.compressImage(file, 400);
+        const ext = this.getFileExtension(compressed.name);
         const fileName = `${crypto.randomUUID()}.${ext}`;
         const path = `clubs/${clubId}/${fileName}`;
 
-        return this.uploadImage(file, path, false);
+        return this.uploadImage(compressed, path, false);
     },
 
     async uploadClubBanner(file: File, clubId: string): Promise<UploadResult> {
-        const ext = this.getFileExtension(file.name);
+        const compressed = await this.compressImage(file);
+        const ext = this.getFileExtension(compressed.name);
         const fileName = `${crypto.randomUUID()}.${ext}`;
         const path = `clubs/${clubId}/${fileName}`;
 
-        return this.uploadImage(file, path, false);
+        return this.uploadImage(compressed, path, false);
     },
 
     async uploadPostImage(file: File, postId: string): Promise<UploadResult> {
-        const ext = this.getFileExtension(file.name);
+        const compressed = await this.compressImage(file);
+        const ext = this.getFileExtension(compressed.name);
         const fileName = `${crypto.randomUUID()}.${ext}`;
         const path = `posts/${postId}/${fileName}`;
 
-        return this.uploadImage(file, path, false);
+        return this.uploadImage(compressed, path, false);
     },
 
     async uploadImage(file: File, path: string, upsert: boolean): Promise<UploadResult> {
@@ -62,6 +66,58 @@ export const StorageService = {
 
         if(error)
             throw new Error(`Failed to delete image: ${error.message}`);
+    },
+
+    async compressImage(file: File, maxWidth = 1200, quality = 0.8): Promise<File> {
+        const bitmap = await createImageBitmap(file);
+
+        let width = bitmap.width;
+        let height = bitmap.height;
+
+        if(width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+
+        if(!ctx)
+            throw new Error("Could not get canvas context");
+
+        ctx.drawImage(bitmap, 0, 0, width, height);
+
+        const blob = await new Promise<Blob | null>((resolve) =>
+            canvas.toBlob(resolve, "image/webp", quality)
+        );
+
+        if(!blob) {
+            const fallbackBlob = await new Promise<Blob | null>((resolve) =>
+                canvas.toBlob(resolve, "image/jpeg", quality)
+            );
+
+            if(!fallbackBlob)
+                throw new Error("Failed to compress image");
+
+            return new File(
+                [fallbackBlob],
+                file.name.replace(/\.\w+$/, ".jpg"),
+                {
+                    type: "image/jpeg",
+                }
+            );
+        }
+
+        return new File(
+            [blob],
+            file.name.replace(/\.\w+$/, ".webp"),
+            {
+                type: "image/webp",
+            }
+        );
     },
 
     getFileExtension(fileName: string): string {

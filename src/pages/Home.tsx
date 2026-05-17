@@ -83,11 +83,19 @@ export default function Home(){
                     />
                     <Button
                         content="My Account"
-                        onBtnClick={ () => navigate(`/user/${userHeader?.id ? userHeader?.id : "guest"}`) }
+                        onBtnClick={ () => 
+                            !userHeader
+                                ? setClosedNoUserPopup(false)
+                                : navigate(`/user/${userHeader?.id ? userHeader?.id : "guest"}`) 
+                        }
                     />
                     <Button 
                         content="Create +"
-                        onBtnClick={ () => { setCreateOptionsIsClosed(false) } }
+                        onBtnClick={ () =>  
+                            !userHeader
+                                ? setClosedNoUserPopup(false)
+                                : setCreateOptionsIsClosed(false) 
+                        }
                     />
                 </div>
                 <div className="user-events">
