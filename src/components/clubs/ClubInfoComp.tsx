@@ -58,10 +58,12 @@ export default function ClubInfoComp({ club, editClubBtn, deleteClubBtn }: ClubI
                 <h6>Description</h6>
                 <p>{ club?.description || "No Description" }</p>
             </div>
-            <div className="club-info-section">
-                <h6>Club Location</h6>
-                { club?.location && <LocationIconComp location={ club?.location }/> }
-            </div>
+            { club?.location &&
+                <div className="club-info-section">
+                    <h6>Club Location</h6>
+                    <LocationIconComp location={ club?.location }/>
+                </div>
+            }
             <div className="club-info-section">
                 <h6>Owner</h6>
                 { owner && <UserHeaderMiniComp userHeader={ owner } /> }

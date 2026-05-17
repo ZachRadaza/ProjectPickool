@@ -19,7 +19,6 @@
 html, body{
     height: 100%; 
     font-size: 16px;
-    background: var(--color-bg);
     padding: 0px;
     margin: 0px;
     overflow-x: hidden;
@@ -65,12 +64,7 @@ main{
     overflow: hidden;
     min-height: 105vh;
     height: 100%;
-}
-
-main > *{ 
-    z-index: 1; 
-    overflow: scroll;
-    height: 100%;
+    background: var(--color-bg);
 }
 
 .bg-icon{
@@ -197,4 +191,22 @@ button.red:hover{ background: var(--color-accent); }
 
 .popups-cont > *{
     pointer-events: auto;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-text) var(--color-bg);
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-text);
+    border-radius: 999px;
 }

@@ -28,6 +28,8 @@
     position: relative;
     transition: transform 400ms ease-in-out;
     display: inline-block;
+    overflow: hidden;
+    border-radius: 2rem;
 }
 
 .popup-wrapper.max-width{
@@ -56,7 +58,7 @@
     align-items: center;
     min-width: min(80vw, 400px);
     max-height: calc(100vh - 5rem);
-    overflow-y: scroll;
+    overflow-y: auto;
     transition: transform 400ms ease-in-out;
     position: relative;
 }
@@ -100,6 +102,7 @@
         width: 100%;
         margin: 0;
         height: 95vh;
+        border-radius: 3rem;
 
         position: absolute;
         bottom: 0;

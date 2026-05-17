@@ -69,13 +69,14 @@ export default function User(){
         async function getUserOpened(){
             try{
                 setIsLoading(true);
+                
+                if(!userHeader)
+                    setClosedNoUserPopup(false);
+                
                 if(id?.trim() === "guest" || !id){
                     setIsLoading(false);
                     return;
                 }
-
-                if(!userHeader)
-                    setClosedNoUserPopup(false);
 
                 const data = await ExtensionService.UserService.getUser(id);
 
