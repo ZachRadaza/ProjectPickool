@@ -232,24 +232,38 @@ export type Notifications = {
 
 export type Posts = {
     id: string;
-    club_id: string;
-    user_id: string;
+    club_id?: string;
+    club?: ClubHeader;
+    user_id?: string;
+    user?: UserHeader;
     title: string;
     description: string;
-    images: string[];
-    likes: Likes[];
-    numComments: number;
+    images?: Post_Images[];
+    like_count?: number;
+    liked_by_user?: boolean;
+    comment_count?: number;
 };
 
-export type Comment = {
+export type Post_Images = {
+    post_id?: string;
+    image?: string;
+    image_path?: string;
+    image_file?: File;
+}
+
+export type Comments = {
     id: string;
     post_id: Posts;
     comment: string;
-    user: Users;
+    user: UserHeader;
+    parent_comment_id: string | null;
+    created_at: string;
 };
 
 export type Likes = {
     post_id: string;
-    user_id: string;
+    user_id?: string;
+    user?: UserHeader;
     type: LikeType;
+    created_at: string;
 };

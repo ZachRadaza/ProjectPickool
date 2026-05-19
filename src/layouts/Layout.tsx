@@ -102,10 +102,10 @@ export default function Layout(){
     }, [location]);
 
     if(isLoading)
-        return <Loading />
+        return <Loading />;
 
     if(error)
-        return <ErrorPage error={ error }/>
+        return <ErrorPage error={ error }/>;
 
     return (
         <>
