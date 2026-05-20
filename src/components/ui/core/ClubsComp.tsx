@@ -16,7 +16,9 @@ export default function ClubsComp({ userClub, club, changeFavorite, userRequest,
     const navigate = useNavigate();
 
     function openClub(){
-        navigate(`?club=${club.id}`);
+        const params = new URLSearchParams(location.search);
+        params.set("club", club.id ?? "");
+        navigate(`${location.pathname}?${params.toString()}`);
     }
 
     return (
@@ -44,8 +46,10 @@ export default function ClubsComp({ userClub, club, changeFavorite, userRequest,
                     <img className="profile-pic" src={ club?.profile_pic || import.meta.env.VITE_DEFAULT_CLUB_PIC } />
                     <div className="titles">
                         <h5 className="club-name">{ club?.name }</h5>
-                        <h6 className="club-role">{ userClub?.role ?? "_" }</h6>
-                        { userRequest && <p className="attribute-tag accent">Requested</p> }
+                        { userRequest
+                            ? <p className="attribute-tag accent">Requested</p>
+                            : <h6 className="club-role">{ userClub?.role ?? "_" }</h6>
+                        }
                     </div>
                 </div>
                 <div className="attributes">

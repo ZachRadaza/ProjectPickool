@@ -137,6 +137,8 @@ button.bg.active{ background: var(--color-primary); }
 button.red{ background: var(--color-red); }
 button.red:hover{ background: var(--color-accent); }
 
+img{ background: #DCFCE7; }
+
 .input-pair{
     border: 0.1rem solid var(--color-text);
     border-radius: 1rem;

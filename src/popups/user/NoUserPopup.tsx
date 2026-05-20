@@ -11,7 +11,7 @@ type NoUserPopupProp = {
 
 export default function NoUserPopup({ setIsClosed, setClosedSignIn, setClosedSignUp }: NoUserPopupProp){
     return (
-        <div className="popup no-user-popup">
+        <div className="popup no-user-popup mobile-short">
             <CloseButton setIsClosed={ setIsClosed }/>
             <h3 className="title">We Notice You Dont Have an Account</h3>
             <div className="sign-buttons">

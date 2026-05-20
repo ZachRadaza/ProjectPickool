@@ -8,7 +8,7 @@ type ContentPopupProp = {
 
 export default function ContentPopup({ title, body, isRed }: ContentPopupProp){
     return (
-        <div className="content-popup popup">
+        <div className="content-popup popup mobile-short">
             <h3 className={ isRed ? "red" : "" }>{ title }</h3>
             { body && <p>body</p> }
         </div>

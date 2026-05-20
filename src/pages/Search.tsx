@@ -80,7 +80,7 @@ export default function Search(){
             let res: { data: Clubs[], hasMore: boolean };
 
             const query = searchInput.trim();
-            const hasUser = Boolean(userHeader);
+            const hasUser = Boolean(userHeader?.location);
             const nearMe = filters.showNearMe && hasUser;
 
             if(query && nearMe)
@@ -110,7 +110,7 @@ export default function Search(){
             let res: { data: Events[], hasMore: boolean };
 
             const query = searchInput.trim();
-            const hasUser = Boolean(userHeader);
+            const hasUser = Boolean(userHeader?.location);
             const nearMe = filters.showNearMe && hasUser;
 
             if(query && nearMe)

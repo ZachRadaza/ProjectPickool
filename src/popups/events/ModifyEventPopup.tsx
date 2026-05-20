@@ -237,7 +237,7 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                 ></textarea>
             </div>
             <div className="additional-info">
-                <div className="time-cont">
+                <div>
                     <h6>Date</h6>
                     <input
                         type="date"
@@ -267,7 +267,7 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                         }}
                     />
                 </div>
-                <div className="time-cont">
+                <div>
                     <h6>Start Time</h6>
                     <input
                         type="time"
@@ -300,7 +300,7 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                         }}
                     />
                 </div>
-                <div className="time-cont">
+                <div>
                     <h6>End Time</h6>
                     <input
                         type="time"
@@ -331,7 +331,7 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                         }}
                     />
                 </div>
-                <div className="time-cont recurring choosers">
+                <div className="choosers chooser-1">
                     <h6>Recurring </h6>
                     <RecurringChooser 
                         recurring={ event?.recurring ?? Recurring.NONE }
@@ -389,14 +389,14 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                         })}
                     />
                 </div>
-                <div className="choosers">
+                <div className="choosers chooser-2">
                     <h6>Sex</h6>
                     <SexChooser 
                         sex={ event?.sex ?? Sex.MIXED }
                         setSex={ (sex) => setEvent((ev) => ev ? { ...ev, sex } : ev) }
                     />
                 </div>
-                <div className="choosers">
+                <div className="choosers chooser-3">
                     <h6>Level</h6>
                     <LevelChooser 
                         isPlayer={ false }
@@ -404,7 +404,7 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                         setLevel={ (level: Level) => setEvent((ev) => ev ? { ...ev, level: level } : ev) }
                     />
                 </div>
-                <div className="choosers">
+                <div className="choosers chooser-4">
                     <h6>Event Type</h6>
                     <EventTypeChooser
                         event_type={ event?.event_type ?? EventType.CASUAL }

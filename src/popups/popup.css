@@ -103,6 +103,8 @@
         margin: 0;
         height: 95vh;
         border-radius: 3rem;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
 
         position: absolute;
         bottom: 0;
@@ -123,5 +125,14 @@
         border-radius: 3rem;
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
+    }
+
+    .container:has(.popup.mobile-short){
+        background: color-mix(in srgb, var(--color-text) 20%, transparent);
+    }
+
+    .popup.mobile-short{
+        height: min-content;
+        padding-bottom: 2rem;
     }
 }

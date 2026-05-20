@@ -26,7 +26,7 @@ export default function TwoOptionPopup({
     setIsClosed
 }: TwoOptionPopupProp){
     return (
-        <div className="two-option-popup popup">
+        <div className="two-option-popup popup mobile-short">
             <CloseButton setIsClosed={ setIsClosed } />
             <h3>{ title }</h3>
             <p>{ body }</p>
