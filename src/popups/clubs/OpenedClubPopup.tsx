@@ -288,7 +288,7 @@ export default function OpenedClubPopup({
                 </div>
             </div>
             <div className="club-tab-cont width-bound">
-                <div className="tabs">
+                <div className="tabs club-tabs">
                     <Button
                         onBtnClick={ () => setCurrentTab(TabType.EVENTS) }
                         content="Events"

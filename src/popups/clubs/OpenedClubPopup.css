@@ -157,9 +157,8 @@
     flex-direction: row;
     align-self: center;
     justify-self: center;
-    margin-top: 1rem;
     gap: 0.5rem;
-    padding: 0.5rem;
+    padding: 0.5rem 2rem;
     width: 100%;
     overflow-x: scroll;
     overflow-y: hidden;
@@ -172,12 +171,20 @@
     border-top: 0.1rem solid var(--color-text);
 }
 
-@media (max-width: 640px){
+@media (max-width: 1240px) {
     .opened-club .content .profile-pic{ 
-        top: -100%;
+        top: -110%;
         left: 1rem;
     }
+}
 
+@media (max-width: 1024px){
+    .opened-club .content .profile-pic{ 
+        top: -150%;
+    }
+}
+
+@media (max-width: 640px){
     .opened-club .content .modify-club-cont{ 
         margin: -0.5rem;
     }
@@ -193,6 +200,12 @@
         width: 99%;
         min-height: min(200px, 30vh);
         max-height: min(200px, 30vh);
+    }
+
+    .opened-club .club-tab-cont .club-tabs{
+        width: 100vw;
+        box-sizing: border-box;
+    
     }
 }
 
