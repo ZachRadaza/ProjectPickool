@@ -231,7 +231,7 @@ export type Notifications = {
 };
 
 export type Posts = {
-    id: string;
+    id?: string;
     club_id?: string;
     club?: ClubHeader;
     user_id?: string;
@@ -242,6 +242,9 @@ export type Posts = {
     like_count?: number;
     liked_by_user?: boolean;
     comment_count?: number;
+    comments?: Comments[][];
+    hasMoreComments?: boolean;
+    commentPage?: number;
 };
 
 export type Post_Images = {
@@ -249,15 +252,20 @@ export type Post_Images = {
     image?: string;
     image_path?: string;
     image_file?: File;
+    temp_id?: string;
 }
 
 export type Comments = {
-    id: string;
-    post_id: Posts;
+    id?: string;
+    post_id: string;
     comment: string;
-    user: UserHeader;
+    user?: UserHeader;
+    user_id?: string;
     parent_comment_id: string | null;
-    created_at: string;
+    created_at?: string;
+    parent_comment_user?: UserHeader | null;
+    hasReplies?: boolean
+    replyPage?: number
 };
 
 export type Likes = {

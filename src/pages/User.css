@@ -59,6 +59,8 @@
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
+    border-bottom: 0.1rem solid var(--color-text);
+    padding: 0.5rem;
 }
 
 .user-page .user-content-cont .tabs .content{

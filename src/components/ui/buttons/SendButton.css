@@ -1,0 +1,12 @@
+.send-btn{
+    padding: none;
+    line-height: 0;
+    padding: 0.3rem 0.8rem;
+    height: min-content;
+}
+
+.send-btn svg{
+    color: var(--color-text);
+    width: 1.2rem;
+    height: auto;
+}

@@ -1,7 +1,7 @@
 import { ClubMemberService } from "./extension-service/ClubMemberService";
 import { ClubRequestService } from "./extension-service/ClubRequestService";
 import { ClubService } from "./extension-service/ClubService";
-import { CommentService } from "./extension-service/CommentServoce";
+import { CommentService } from "./extension-service/CommentService";
 import { EventService } from "./extension-service/EventService";
 import { HostService } from "./extension-service/HostService";
 import { LikeService } from "./extension-service/LikeService";

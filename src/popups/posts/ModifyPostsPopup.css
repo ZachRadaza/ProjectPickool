@@ -1,0 +1,102 @@
+.modify-posts-popup > .inner-width{
+    max-width: 60ch;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.modify-posts-popup .post-text-input{
+    border: none;
+}
+
+.modify-posts-popup .post-text-input.invalid,
+.modify-posts-popup .post-text-input.invalid::placeholder{
+    color: var(--color-red);
+}
+
+.modify-posts-popup .title{
+    font-size: clamp(1.4rem, 2.5vw, 2.5rem);;
+    font-family: var(--font-heading);
+}
+
+.modify-posts-popup .desc{
+    opacity: 0.8;
+}
+
+.modify-posts-popup .images-cont{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.modify-posts-popup .images-cont .images{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100%;
+}
+
+.modify-posts-popup .images-cont .post-image{
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.modify-posts-popup .images-cont .post-image img{
+    height: 100%;
+    width: auto;
+    display: block;
+}
+
+.modify-posts-popup .images-cont .post-image .post-image-delete{
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+}
+
+.modify-posts-popup .images-cont .post-image .post-image-delete .delete-icon{
+    fill: var(--color-red);
+}
+
+.modify-posts-popup .images-cont .upload-images-btn{
+    display: inline-flex;
+    flex-direction: column;
+    min-height: 200px;
+    min-width: 200px;
+    box-sizing: border-box;
+    background: var(--color-primary);
+    border-radius: 1rem;
+    border: 0.1rem solid var(--color-text);
+    padding: 1rem;
+    align-items: center;
+    justify-content: center;
+    transition: 200ms ease background;
+}
+
+.modify-posts-popup .images-cont .upload-images-btn:hover{ background: var(--color-accent); }
+
+.modify-posts-popup .images-cont .upload-images-btn > h5{ text-align: center;}
+
+.modify-posts-popup .images-cont .upload-images-btn > input{ display: none; }
+
+.modify-posts-popup .images-cont .dots-cont{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+@media (max-width: 640px) {
+    .modify-posts-popup .images-cont .post-image{
+        height: 300px;
+    }
+    .modify-posts-popup .images-cont .upload-images-btn{
+        min-height: 300px;
+        min-width: 300px;
+    }
+}

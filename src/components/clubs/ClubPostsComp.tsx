@@ -1,21 +1,35 @@
-import { useEffect, useState } from "react";
-import { type Posts, type UserHeader } from "../../utils/schemas";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
+import { type Club_Members, type Posts, type UserHeader } from "../../utils/schemas";
 import Button from "../ui/buttons/Button";
 import { ExtensionService } from "../../utils/ExtensionService";
+import PopupWrapper from "../../popups/PopupWrapper";
+import ModifyPostsPopup from "../../popups/posts/ModifyPostsPopup";
+import PostsComp from "../ui/core/PostsComp";
+import Loading from "../../pages/Loading";
+import ErrorPage from "../../pages/Error";
+import "./ClubPostsComp.css";
 
 type ClubPostsCompProp = {
     userHeader: UserHeader | null;
     club_id: string | null;
+    userClubMember: Club_Members | null;
+    setClosedNoUserPopup: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function ClubPostsComp({ userHeader, club_id }: ClubPostsCompProp){
+export default function ClubPostsComp({ userHeader, club_id, userClubMember, setClosedNoUserPopup }: ClubPostsCompProp){
     const [posts, setPosts] = useState<Posts[]>([]);
-    const [currentPostPage, setCurrentPostPage] = useState<number>(0);
+    const [currentPostPage, setCurrentPostPage] = useState<number>(1);
     const [hasMorePosts, setHasMorePosts] = useState<boolean>(true);
+    const [modifyPostIsClosed, setModifyPostIsClosed] = useState<boolean>(true);
+    const [modifyPostId, setModifyPostId] = useState<string | null>(null);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     
+    function setIndividualPost(post_id: string, updates: Posts){
+        setPosts((posts) => posts.map((post) => post.id === post_id ? updates : post));
+    }
+
     async function getPosts(){
         try{
             if(!club_id){
@@ -48,15 +62,57 @@ export default function ClubPostsComp({ userHeader, club_id }: ClubPostsCompProp
         }
     }, []);
 
-    return (
-        <div>
-            { userHeader &&
+    let content;
+
+    if(isLoading)
+        content = <Loading />;
+    else if(error)
+        content = <ErrorPage error={ error } />;
+    else
+        content = <>
+            { (userHeader && userClubMember) &&
                 <Button 
                     content="Create Post"
-                    onBtnClick={ () => {} }
+                    onBtnClick={ () => { setModifyPostId(null); setModifyPostIsClosed(false); } }
                     additionalClasses="create-post-btn"
                 />
             }
-        </div>
+            { posts.length > 0
+                ? <div className="posts-cont">
+                    { posts.map((post) => 
+                        <PostsComp 
+                            post={ post } 
+                            userHeader={ userHeader } 
+                            userClubMember={ userClubMember }
+                            setPost={ (updated) => setIndividualPost(updated.id!, updated) }
+                            setModifyPostIsClosed={ setModifyPostIsClosed }
+                            setModifyPostId={ setModifyPostId }
+                            setClosedNoUserPopup={ setClosedNoUserPopup }
+                            setPosts={ setPosts }
+                            key={ post.id }
+                        />
+                    )}
+                </div>
+                : <h6>Club has no posts</h6>
+            }
+            { hasMorePosts && <Button content="Load More" onBtnClick={ () => getPosts() }/> }
+        </>
+    return (
+        <>
+            <div className="club-posts-cont">
+                { content }
+            </div>
+            <PopupWrapper
+                isClosed={ modifyPostIsClosed }
+                popupComp={
+                    <ModifyPostsPopup 
+                        userHeader={ userHeader }
+                        setIsClosed={ setModifyPostIsClosed }
+                        post_id={ modifyPostId }
+                        club_id={ club_id }
+                    />
+                }
+            />
+        </>
     );
 }

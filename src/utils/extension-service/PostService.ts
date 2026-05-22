@@ -9,7 +9,7 @@ const postBody = `
         name,
         profile_pic
     ),
-    user:users(
+    user:users!posts_user_id_fkey(
         id,
         username,
         profile_pic
@@ -80,7 +80,7 @@ export const PostService = {
             if(error)
                 throw new Error(error.message);
 
-            return this.convertToPost(data);
+            return this.convertToPost(data[0]);
         } catch(error){
             console.error("error", error);
             throw error;
@@ -163,8 +163,11 @@ export const PostService = {
             description: data.description,
             images: data.images,
             comment_count: data.comment_count,
+            like_count: data.like_count,
+            liked_by_user: data.liked_by_user,
+            hasMoreComments: true,
+            commentPage: 1,
         };
-
         return post;
     },
 

@@ -29,7 +29,7 @@ export default function User(){
     const {
         userHeader,
         setClosedEditUser,
-        setClosedNoUserPopup,
+        setClosedNoUserPopup
     } = useOutletContext<UserContext>();
     const { id } = useParams();
 
@@ -42,7 +42,7 @@ export default function User(){
 
     const tabMap = {
         [TabType.CLUBS]: <UserTabClubsComp user={ openedUser } />,
-        [TabType.POSTS]: <UserTabPostsComp />,
+        [TabType.POSTS]: <UserTabPostsComp user={ openedUser } userHeader={ userHeader }/>,
     };
 
     const isSelf = useMemo(() => {
@@ -126,13 +126,11 @@ export default function User(){
                         content="Clubs"
                         additionalClasses={ tabClasses(TabType.CLUBS) }
                     />
-                    { /*
                     <Button
                         onBtnClick={ () => setCurrentTab(TabType.POSTS) }
                         content="Posts"
                         additionalClasses={ tabClasses(TabType.POSTS) }                   
                     />
-                    */ }
                 </div>
                 <div className="content">
                     { currentTab ? tabMap[currentTab] : null }

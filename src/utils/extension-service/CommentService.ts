@@ -11,6 +11,7 @@ const commentBody = `
     ),
     parent_comment_id,
     comment,
+    replies:comments!parent_comment_id(count),
     created_at
 `;
 
@@ -25,7 +26,7 @@ export const CommentService = {
                 .from("comments")
                 .select(commentBody)
                 .eq("post_id", post_id)
-                .eq("parent_comment_id", null)
+                .is("parent_comment_id", null)
                 .order("created_at", { ascending: false })
                 .range(from, to + 1);
 
@@ -53,7 +54,7 @@ export const CommentService = {
                 .from("comments")
                 .select(commentBody)
                 .eq("parent_comment_id", parent_comment_id)
-                .order("created_at", { ascending: false })
+                .order("created_at", { ascending: true })
                 .range(from, to + 1);
 
             if(error)
@@ -62,7 +63,7 @@ export const CommentService = {
             const hasMore = data.length > pageSize;
             const trimmedData = data.slice(0, pageSize);
             const comments: Comments[] = this.convertListOfComment(trimmedData);
-
+            
             return { data: comments, hasMore }; 
         } catch(error){
             console.error(error);
@@ -72,9 +73,10 @@ export const CommentService = {
 
     async addComment(comment: Comments){
         try{
+            const { parent_comment_user, ...commentUpload } = comment;
             const { data, error } = await supabase
                 .from("comments")
-                .insert([comment])
+                .insert([commentUpload])
                 .select(commentBody)
                 .maybeSingle();
 
@@ -116,10 +118,12 @@ export const CommentService = {
             user: data.user,
             parent_comment_id: data.parent_comment_id,
             created_at: data.created_at,
-            comment: data.comment
+            comment: data.comment,
+            hasReplies: data.replies[0].count > 0,
+            replyPage: 1
         };
 
-        return comment
+        return comment;
     },
 
     convertListOfComment(data: any[]){
