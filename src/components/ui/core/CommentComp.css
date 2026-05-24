@@ -1,0 +1,69 @@
+.comment-comp-cont{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: start;
+    position: relative;
+}
+
+.comment-comp-cont.reply{
+    margin-left: 2rem;
+}
+
+.comment-comp-cont .profile-pic{
+    border: 0.1rem solid var(--color-text);
+    min-width: 2rem;
+    max-width: 2rem;
+    min-height: 2rem;
+    max-height: 2rem;
+    aspect-ratio: 1 / 1;
+    border-radius: 999px;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.comment-comp-cont .right-side{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.2rem;
+}
+
+.comment-comp-cont .right-side .header{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.comment-comp-cont .right-side .header .username{
+    font-size: (0.8rem, 0.8rem + 0.4vw, 1rem);
+}
+
+.comment-comp-cont .right-side .header .date{
+    opacity: 0.6;
+    font-size: (0.6rem, 0.6rem + 0.4vw, 0.8rem);
+}
+
+.comment-comp-cont .right-side .footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comment-comp-cont .right-side .footer > p{
+    opacity: 0;
+}
+
+.comment-comp-cont .right-side .footer .reply{
+    opacity: 0.7;
+    font-size: clamp(0.8rem, 0.8rem + 0.4vw, 1rem);
+    transition: all 100ms ease;
+    padding: 0px;
+}
+
+.comment-comp-cont .right-side .footer .reply:hover{
+    color: var(--color-accent);
+    opacity: 1;
+}

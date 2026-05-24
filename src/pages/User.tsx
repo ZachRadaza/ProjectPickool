@@ -23,6 +23,7 @@ type UserContext = {
     previewUserId: string | null;
     setClosedNoUserPopup: Dispatch<SetStateAction<boolean>>;
     setClosedEditUser: Dispatch<SetStateAction<boolean>>;
+    setClosedModifyPost: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function User(){
@@ -30,6 +31,7 @@ export default function User(){
         userHeader,
         setClosedEditUser,
         setClosedNoUserPopup,
+        setClosedModifyPost
     } = useOutletContext<UserContext>();
     const { id } = useParams();
 
@@ -42,7 +44,7 @@ export default function User(){
 
     const tabMap = {
         [TabType.CLUBS]: <UserTabClubsComp user={ openedUser } />,
-        [TabType.POSTS]: <UserTabPostsComp />,
+        [TabType.POSTS]: <UserTabPostsComp user={ openedUser } userHeader={ userHeader } setClosedModifyPosts={ setClosedModifyPost }/>,
     };
 
     const isSelf = useMemo(() => {
@@ -126,13 +128,11 @@ export default function User(){
                         content="Clubs"
                         additionalClasses={ tabClasses(TabType.CLUBS) }
                     />
-                    { /*
                     <Button
                         onBtnClick={ () => setCurrentTab(TabType.POSTS) }
                         content="Posts"
                         additionalClasses={ tabClasses(TabType.POSTS) }                   
                     />
-                    */ }
                 </div>
                 <div className="content">
                     { currentTab ? tabMap[currentTab] : null }

@@ -1,0 +1,11 @@
+.create-options-popup .btns-cont{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.create-options-popup .btns-cont button{
+    height: 100px;
+}

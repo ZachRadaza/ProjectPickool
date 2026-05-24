@@ -1,0 +1,15 @@
+.comment-thread-comp-cont{ 
+    position: relative; 
+    gap: 1rem;
+    margin: 0.5rem;
+}
+
+.comment-thread-comp-cont:has(> :nth-child(2))::before{
+    content: "";
+    position: absolute;
+    left: 1rem;
+    top: 3rem;
+    width: 1px;
+    bottom: 1rem;
+    background: var(--color-text);
+}

@@ -13,6 +13,7 @@ Project Pickool is a web app for discovering, joining, and managing pickleball c
 - Favorite clubs
 - Event discovery based on nearby events and user clubs
 - Notifications for club and event activity
+- Ability to post on clubs
 - Responsive React UI
 
 ## Tech Stack
@@ -70,7 +71,7 @@ npm run preview
 
 ## Project Structure
 
-As of May 16, 2026
+As of May 23, 2026
 
 ```bash
 src/
@@ -79,6 +80,7 @@ src/
 │   ├── layout/
 │   ├── clubs/
 │   ├── events/
+│   ├── posts/
 │   ├── user/
 │   └── ui/
 ├── layouts/
@@ -92,7 +94,9 @@ src/
 │   ├── clubs
 │   ├── events
 │   ├── general
+│   ├── home
 │   ├── notifications
+│   ├── posts
 │   └── user
 ├── utils/
 │   ├── extension-service/

@@ -37,7 +37,7 @@ export const StorageService = {
     },
 
     async uploadPostImage(file: File, postId: string): Promise<UploadResult> {
-        const compressed = await this.compressImage(file);
+        const compressed = await this.compressImage(file, 600);
         const ext = this.getFileExtension(compressed.name);
         const fileName = `${crypto.randomUUID()}.${ext}`;
         const path = `posts/${postId}/${fileName}`;
@@ -66,6 +66,34 @@ export const StorageService = {
 
         if(error)
             throw new Error(`Failed to delete image: ${error.message}`);
+    },
+
+    async deleteFolder(path: string): Promise<void> {
+        const { data, error } = await supabase
+            .storage
+            .from(BUCKET)
+            .list(path);
+
+        if(error)
+            throw new Error(`Failed to get folder files: ${error.message}`);
+
+        if(!data || data.length === 0)
+            return;
+
+        const filePaths = data
+            .filter((file) => file.id !== null)
+            .map((file) => `${path}/${file.name}`);
+
+        if(filePaths.length === 0)
+            return;
+
+        const { error: deleteError } = await supabase
+            .storage
+            .from(BUCKET)
+            .remove(filePaths);
+
+        if(deleteError)
+            throw new Error(`Failed to delete folder: ${deleteError.message}`);
     },
 
     async compressImage(file: File, maxWidth = 1200, quality = 0.8): Promise<File> {

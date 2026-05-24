@@ -231,25 +231,47 @@ export type Notifications = {
 };
 
 export type Posts = {
-    id: string;
-    club_id: string;
-    user_id: string;
+    id?: string;
+    club_id?: string;
+    club?: ClubHeader;
+    user_id?: string;
+    user?: UserHeader;
     title: string;
     description: string;
-    images: string[];
-    likes: Likes[];
-    numComments: number;
+    images?: Post_Images[];
+    like_count?: number;
+    liked_by_user?: boolean;
+    comment_count?: number;
+    comments?: Comments[][];
+    hasMoreComments?: boolean;
+    commentPage?: number;
 };
 
-export type Comment = {
-    id: string;
-    post_id: Posts;
+export type Post_Images = {
+    post_id?: string;
+    image?: string;
+    image_path?: string;
+    image_file?: File;
+    temp_id?: string;
+}
+
+export type Comments = {
+    id?: string;
+    post_id: string;
     comment: string;
-    user: Users;
+    user?: UserHeader;
+    user_id?: string;
+    parent_comment_id: string | null;
+    created_at?: string;
+    parent_comment_user?: UserHeader | null;
+    hasReplies?: boolean
+    replyPage?: number
 };
 
 export type Likes = {
     post_id: string;
-    user_id: string;
+    user_id?: string;
+    user?: UserHeader;
     type: LikeType;
+    created_at: string;
 };

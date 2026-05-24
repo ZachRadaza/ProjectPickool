@@ -20,4 +20,5 @@
 .choose-clubs .club-comp-cont .titles{
     width: auto;
     margin: 0px;
+    align-items: start;
 }
