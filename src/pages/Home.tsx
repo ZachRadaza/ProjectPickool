@@ -8,25 +8,24 @@ import Loading from "./Loading";
 import ErrorPage from "./Error";
 import "./Home.css";
 import PopupWrapper from "../popups/PopupWrapper";
-import TwoOptionPopup from "../popups/general/TwoOptionPopup";
-import ClubSearchPopup from "../popups/clubs/ClubSearchPopup";
+import CreateOptionsPopup from "../popups/home/CreateOptionsPopup";
 
 type HomeContext = {
     userHeader: UserHeader | null;
     setClosedNoUserPopup: Dispatch<SetStateAction<boolean>>;
-    setClosedModifyClub:  Dispatch<SetStateAction<boolean>>;
-    setClosedModifyEvent:  Dispatch<SetStateAction<boolean>>;
+    setClosedModifyClub: Dispatch<SetStateAction<boolean>>;
+    setClosedModifyEvent: Dispatch<SetStateAction<boolean>>;
+    setClosedModifyPost: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function Home(){
-    const { userHeader, setClosedNoUserPopup, setClosedModifyClub, setClosedModifyEvent } = useOutletContext<HomeContext>();
+    const { userHeader, setClosedNoUserPopup, setClosedModifyClub, setClosedModifyEvent, setClosedModifyPost } = useOutletContext<HomeContext>();
     const navigate = useNavigate();
     
     const [events, setEvents] = useState<Events[]>([]);
     const [currentEventPage, setCurrentEventPage] = useState<number>(1);
     const [hasMoreEvents, setHasMoreEvents] = useState<boolean>(true);
     const [createOptionsIsClosed, setCreateOptionsIsClosed] = useState<boolean>(true);
-    const [clubSearchIsClosed, setClubSearchIsClosed] = useState<boolean>(true);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -112,28 +111,16 @@ export default function Home(){
                 </div>
             </div>
             <PopupWrapper 
-                popupComp={
-                    <TwoOptionPopup 
-                        setIsClosed={ setCreateOptionsIsClosed }
-                        title="Create a Club or Event"
-                        body="What would you like to create?"
-                        btn1Content="Club"
-                        btn1Click={ () => setClosedModifyClub(false) }
-                        btn2Content="Event"
-                        btn2Click={ () => setClubSearchIsClosed(false) }
-                    />
-                }
                 isClosed={ createOptionsIsClosed }
-            />
-            <PopupWrapper 
                 popupComp={
-                    <ClubSearchPopup 
+                    <CreateOptionsPopup
                         userHeader={ userHeader }
-                        setIsClosed={ setClubSearchIsClosed }
+                        setIsClosed={ setCreateOptionsIsClosed }
+                        setClosedModifyClub={ setClosedModifyClub }
                         setClosedModifyEvent={ setClosedModifyEvent }
+                        setClosedModifyPost={ setClosedModifyPost }
                     />
                 }
-                isClosed={ clubSearchIsClosed }
             />
         </>
     );

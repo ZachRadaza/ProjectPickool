@@ -16,6 +16,7 @@ import OpenedEventPopup from "../popups/events/OpenedEventPopup";
 import PopupWrapper from "../popups/PopupWrapper";
 import NotificationsPopup from "../popups/notifications/NotificationsPopup";
 import NoUserPopup from "../popups/user/NoUserPopup";
+import ModifyPostsPopup from "../popups/posts/ModifyPostsPopup";
 
 export default function Layout(){
     const [closedSignIn, setClosedSignIn] = useState<boolean>(true);
@@ -28,11 +29,13 @@ export default function Layout(){
     const [closedOpenedEvent, setClosedOpenedEvent] = useState<boolean>(true);
     const [closedNotifsPopup, setClosedNotifsPopup] = useState<boolean>(true);
     const [closedNoUserPopup, setClosedNoUserPopup] = useState<boolean>(true);
+    const [closedModifyPost, setClosedModifyPost] = useState<boolean>(true);
 
     const [userHeader, setUserHeader] = useState<UserHeader | null>(null);
     const [club_id, setClubId] = useState<string | null>(null);
     const [previewUserId, setPreviewUserId] = useState<string | null>(null);
     const [event_id, setEventId] = useState<string | null>(null);
+    const [post_id, setPostId] = useState<string | null>(null);
     const [numberNotifs, setNumberNotifs] = useState<number>(0);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -98,14 +101,20 @@ export default function Layout(){
     }, [searchParams.get("event")]);
 
     useEffect(() => {
+        const postId = searchParams.get("post");
+        setPostId(postId);
+
+    }, [searchParams.get("post")]);
+
+    useEffect(() => {
         setClosedNoUserPopup(true);
     }, [location]);
 
     if(isLoading)
-        return <Loading />
+        return <Loading />;
 
     if(error)
-        return <ErrorPage error={ error }/>
+        return <ErrorPage error={ error }/>;
 
     return (
         <>
@@ -120,6 +129,7 @@ export default function Layout(){
                             setIsEditClubClosed={ setClosedModifyClub }
                             setIsModifyEventClosed={ setClosedModifyEvent }
                             setClosedNoUserPopup={ setClosedNoUserPopup }
+                            setIsModifyPostClosed={ setClosedModifyPost }
                         />
                     }
                     isMaxWidth={ true }
@@ -155,6 +165,17 @@ export default function Layout(){
                             isEditing={ !closedOpenedEvent }
                             club_id={ club_id }
                             event_id={ event_id }
+                        />
+                    }
+                />
+                <PopupWrapper
+                    isClosed={ closedModifyPost }
+                    popupComp={
+                        <ModifyPostsPopup
+                            userHeader={ userHeader }
+                            setIsClosed={ setClosedModifyPost }
+                            post_id={ post_id }
+                            club_id={ club_id }
                         />
                     }
                 />
@@ -222,7 +243,8 @@ export default function Layout(){
                     context={{ 
                         userHeader, setClosedSignIn, setClosedSignUp, setClosedModifyClub, setClosedEditUser, 
                         setClosedNoUserPopup,
-                        setClosedModifyEvent
+                        setClosedModifyEvent,
+                        setClosedModifyPost
                     }}
                 />
             </main>

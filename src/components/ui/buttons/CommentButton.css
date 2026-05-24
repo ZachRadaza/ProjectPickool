@@ -1,0 +1,22 @@
+.comment-btn{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.comment-btn svg{
+    fill: var(--color-text);
+    width: 1.5rem;
+    height: 1.5rem;
+    transition: fill 100ms ease;
+}
+
+.comment-btn:hover svg{
+    color: var(--color-accent);
+}
+
+.comment-btn h6{
+    line-height: 1;
+}

@@ -1,0 +1,26 @@
+.like-btn{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.like-btn.liked svg{
+    fill: var(--color-primary);
+}
+
+.like-btn:hover svg{
+    fill: var(--color-accent);
+}
+
+.like-btn h6{
+    line-height: 1;
+}
+
+.like-btn svg{
+    fill: var(--color-text);
+    height: 1.5rem;
+    width: 1.5rem;
+    transition: fill 100ms ease;
+}
