@@ -36,21 +36,32 @@
     overflow-x: auto;
     overflow-y: hidden;
     width: 100%;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+}
+
+.modify-posts-popup .images-cont .images::-webkit-scrollbar{
+    display: none;
 }
 
 .modify-posts-popup .images-cont .post-image{
-    height: 200px;
+    display: flex;
+    max-height: 500px;
     overflow: hidden;
-    position: relative;
-    flex-shrink: 0;
     border-radius: 1rem;
+    position: relative;
     overflow: hidden;
+    align-items: center;
+    flex: 0 0 100%;
+    scroll-snap-align: start;
 }
 
 .modify-posts-popup .images-cont .post-image img{
-    height: 100%;
-    width: auto;
+    height: auto;
+    width: 100%;
     display: block;
+    object-fit: cover;
+    border-radius: 1rem;
 }
 
 .modify-posts-popup .images-cont .post-image .post-image-delete{
@@ -68,6 +79,8 @@
     flex-direction: column;
     min-height: 200px;
     min-width: 200px;
+    width: 100%;
+    flex: 0 0 100%;
     box-sizing: border-box;
     background: var(--color-primary);
     border-radius: 1rem;
@@ -75,6 +88,7 @@
     padding: 1rem;
     align-items: center;
     justify-content: center;
+    scroll-snap-align: start;
     transition: 200ms ease background;
 }
 
@@ -89,6 +103,10 @@
     flex-direction: row;
     gap: 0.5rem;
     align-items: center;
+}
+
+.modify-posts-popup .images-cont .dots-cont > p.active{
+    color: var(--color-primary);
 }
 
 @media (max-width: 640px) {

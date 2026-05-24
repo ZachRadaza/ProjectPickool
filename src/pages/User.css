@@ -96,3 +96,9 @@
 
     .user-page .user-info-cont .profile-pic{ width: min(80%, 300px);}
 }
+
+@media (max-width: 480px){
+    .user-page{
+        padding: 0px;
+    }
+}

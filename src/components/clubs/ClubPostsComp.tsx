@@ -2,8 +2,6 @@ import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import { type Club_Members, type Posts, type UserHeader } from "../../utils/schemas";
 import Button from "../ui/buttons/Button";
 import { ExtensionService } from "../../utils/ExtensionService";
-import PopupWrapper from "../../popups/PopupWrapper";
-import ModifyPostsPopup from "../../popups/posts/ModifyPostsPopup";
 import PostsComp from "../ui/core/PostsComp";
 import Loading from "../../pages/Loading";
 import ErrorPage from "../../pages/Error";
@@ -14,14 +12,13 @@ type ClubPostsCompProp = {
     club_id: string | null;
     userClubMember: Club_Members | null;
     setClosedNoUserPopup: Dispatch<SetStateAction<boolean>>;
+    setClosedModifyPost: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function ClubPostsComp({ userHeader, club_id, userClubMember, setClosedNoUserPopup }: ClubPostsCompProp){
+export default function ClubPostsComp({ userHeader, club_id, userClubMember, setClosedNoUserPopup, setClosedModifyPost }: ClubPostsCompProp){
     const [posts, setPosts] = useState<Posts[]>([]);
     const [currentPostPage, setCurrentPostPage] = useState<number>(1);
     const [hasMorePosts, setHasMorePosts] = useState<boolean>(true);
-    const [modifyPostIsClosed, setModifyPostIsClosed] = useState<boolean>(true);
-    const [modifyPostId, setModifyPostId] = useState<string | null>(null);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -73,7 +70,7 @@ export default function ClubPostsComp({ userHeader, club_id, userClubMember, set
             { (userHeader && userClubMember) &&
                 <Button 
                     content="Create Post"
-                    onBtnClick={ () => { setModifyPostId(null); setModifyPostIsClosed(false); } }
+                    onBtnClick={ () => setClosedModifyPost(false) }
                     additionalClasses="create-post-btn"
                 />
             }
@@ -85,8 +82,7 @@ export default function ClubPostsComp({ userHeader, club_id, userClubMember, set
                             userHeader={ userHeader } 
                             userClubMember={ userClubMember }
                             setPost={ (updated) => setIndividualPost(updated.id!, updated) }
-                            setModifyPostIsClosed={ setModifyPostIsClosed }
-                            setModifyPostId={ setModifyPostId }
+                            setModifyPostIsClosed={ setClosedModifyPost }
                             setClosedNoUserPopup={ setClosedNoUserPopup }
                             setPosts={ setPosts }
                             key={ post.id }
@@ -98,21 +94,8 @@ export default function ClubPostsComp({ userHeader, club_id, userClubMember, set
             { hasMorePosts && <Button content="Load More" onBtnClick={ () => getPosts() }/> }
         </>
     return (
-        <>
-            <div className="club-posts-cont">
-                { content }
-            </div>
-            <PopupWrapper
-                isClosed={ modifyPostIsClosed }
-                popupComp={
-                    <ModifyPostsPopup 
-                        userHeader={ userHeader }
-                        setIsClosed={ setModifyPostIsClosed }
-                        post_id={ modifyPostId }
-                        club_id={ club_id }
-                    />
-                }
-            />
-        </>
+        <div className="club-posts-cont">
+            { content }
+        </div>
     );
 }

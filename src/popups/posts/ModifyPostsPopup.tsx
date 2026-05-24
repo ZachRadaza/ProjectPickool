@@ -1,4 +1,4 @@
-import { useMemo, useState, type Dispatch, type SetStateAction } from "react";
+import { useEffect, useMemo, useState, type Dispatch, type SetStateAction } from "react";
 import { type Post_Images, type Posts, type UserHeader } from "../../utils/schemas";
 import CloseButton from "../../components/ui/buttons/CloseButton";
 import Loading from "../../pages/Loading";
@@ -7,6 +7,7 @@ import { ExtensionService } from "../../utils/ExtensionService";
 import Button from "../../components/ui/buttons/Button";
 import DeleteButton from "../../components/ui/buttons/DeleteButton";
 import "./ModifyPostsPopup.css";
+import { useNavigate } from "react-router-dom";
 
 type ModifyPostsPopupProp = {
     userHeader: UserHeader | null;
@@ -22,11 +23,13 @@ export default function ModifyPostsPopup({ userHeader, club_id, post_id, setIsCl
     const [validTitle, setValidTitle] = useState<boolean>(true);
     const [validDesc, setValidDesc] = useState<boolean>(true);
     const [btnLoading, setBtnLoading] = useState<boolean>(false);
+    const [currentImage, setCurrentImage] = useState<number>(0);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    const isEditing = useMemo(() => !!post_id, []);
+    const isEditing = useMemo<boolean>(() => !!post_id, []);
+    const navigate = useNavigate();
 
     function onDeleteImageClick(imageDelete: Post_Images){
         const filteredImages = postTemp?.images?.filter((image) => 
@@ -53,6 +56,26 @@ export default function ModifyPostsPopup({ userHeader, club_id, post_id, setIsCl
         }
 
         return true;
+    }
+
+    function closeModifyPost(close: boolean){
+        setIsClosed(close);
+
+        const params = new URLSearchParams(location.search);
+        params.delete("post");
+
+        navigate({
+            pathname: location.pathname,
+            search: params.toString(),
+        });
+    }
+
+    function handleScrollImages(e: React.UIEvent<HTMLDivElement>) {
+        const container = e.currentTarget;
+        const index = Math.round(
+            container.scrollLeft / container.clientWidth
+        );
+        setCurrentImage(index);
     }
 
     async function btnPressed(isNewUpload: boolean){
@@ -104,7 +127,7 @@ export default function ModifyPostsPopup({ userHeader, club_id, post_id, setIsCl
         }
     }
 
-    useState(() => {
+    useEffect(() => {
         getPost();
 
         async function getPost(){
@@ -141,7 +164,7 @@ export default function ModifyPostsPopup({ userHeader, club_id, post_id, setIsCl
                 setError("An Error has Occured")
             }
         }
-    });
+    }, [post_id]);
 
     let content;
 
@@ -170,7 +193,7 @@ export default function ModifyPostsPopup({ userHeader, club_id, post_id, setIsCl
                     maxLength={ 500 }
                 ></textarea>
                 <div className="images-cont inner-width">
-                    <div className="images">
+                    <div className="images" onScroll={ handleScrollImages }>
                         { postTemp?.images && 
                             postTemp.images.map((image) => 
                                 <div className="post-image" key={`${image.temp_id ? image.temp_id : image.image}`}>
@@ -215,9 +238,17 @@ export default function ModifyPostsPopup({ userHeader, club_id, post_id, setIsCl
                         }
                     </div>
                     <div className="dots-cont">
-                        { postTemp?.images?.map((image) =>
-                            <p key={`dot-${image.temp_id ? image.temp_id : image.image}`}>•</p>
+                        { postTemp?.images?.map((image, index) =>
+                            <p 
+                                key={`dot-${image.temp_id ? image.temp_id : image.image}`} 
+                                className={ index === currentImage ? "active" : "" }
+                            >
+                                •
+                            </p>
                         )}
+                       { ((!postTemp?.images || postTemp?.images?.length < 10) && !isEditing) && 
+                            <p className={ (postTemp?.images?.length || 0) === currentImage ? "active" : "" }>•</p>
+                       }
                     </div>
                 </div>
                 <Button 
@@ -231,7 +262,7 @@ export default function ModifyPostsPopup({ userHeader, club_id, post_id, setIsCl
 
     return (
         <div className="popup modify-posts-popup">
-            <CloseButton setIsClosed={ setIsClosed } />
+            <CloseButton setIsClosed={ closeModifyPost } />
             { content }
         </div>
     );

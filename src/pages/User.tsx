@@ -23,13 +23,15 @@ type UserContext = {
     previewUserId: string | null;
     setClosedNoUserPopup: Dispatch<SetStateAction<boolean>>;
     setClosedEditUser: Dispatch<SetStateAction<boolean>>;
+    setClosedModifyPost: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function User(){
     const {
         userHeader,
         setClosedEditUser,
-        setClosedNoUserPopup
+        setClosedNoUserPopup,
+        setClosedModifyPost
     } = useOutletContext<UserContext>();
     const { id } = useParams();
 
@@ -42,7 +44,7 @@ export default function User(){
 
     const tabMap = {
         [TabType.CLUBS]: <UserTabClubsComp user={ openedUser } />,
-        [TabType.POSTS]: <UserTabPostsComp user={ openedUser } userHeader={ userHeader }/>,
+        [TabType.POSTS]: <UserTabPostsComp user={ openedUser } userHeader={ userHeader } setClosedModifyPosts={ setClosedModifyPost }/>,
     };
 
     const isSelf = useMemo(() => {

@@ -38,6 +38,7 @@ type  OpenedClubPopupProp= {
     setIsEditClubClosed: (close: boolean) => void;
     setIsModifyEventClosed: (close: boolean) => void;
     setClosedNoUserPopup: Dispatch<SetStateAction<boolean>>;
+    setIsModifyPostClosed:  Dispatch<SetStateAction<boolean>>;
 };
 
 export default function OpenedClubPopup({ 
@@ -46,7 +47,8 @@ export default function OpenedClubPopup({
     setIsClosed, 
     setIsEditClubClosed, 
     setIsModifyEventClosed,
-    setClosedNoUserPopup
+    setClosedNoUserPopup,
+    setIsModifyPostClosed
 }: OpenedClubPopupProp){
     const [club, setClub] = useState<Clubs | null>(null);
     const [currentTab, setCurrentTab] = useState<TabType>(TabType.EVENTS);
@@ -61,7 +63,7 @@ export default function OpenedClubPopup({
 
     const tabMap = {
         [TabType.EVENTS]: <ClubEventsComp club_id={ club_id } setClosedModifyEvent={ setIsModifyEventClosed } userClubMember={ userClubMember }/>,
-        [TabType.POSTS]: <ClubPostsComp userHeader={ userHeader } club_id={ club_id } userClubMember={ userClubMember } setClosedNoUserPopup={ setClosedNoUserPopup }/>,
+        [TabType.POSTS]: <ClubPostsComp userHeader={ userHeader } club_id={ club_id } userClubMember={ userClubMember } setClosedNoUserPopup={ setClosedNoUserPopup } setClosedModifyPost={ setIsModifyPostClosed }/>,
         [TabType.MEMBERS]: <ClubMembersComp club_id={ club_id } />,
         [TabType.REQUESTS]: <ClubRequestsComp club_id={ club_id } setNumRequests={ setNumRequests }/>,
         [TabType.LEVEL]: <ClubLevelComp userHeader={ userHeader } userClubMember={ userClubMember } club_id={ club_id } setUserClubMember={ setUserClubMember }/>,

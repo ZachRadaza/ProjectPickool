@@ -11,6 +11,8 @@ import SendButton from "../buttons/SendButton";
 import Loading from "../../../pages/Loading";
 import CloseButton from "../buttons/CloseButton";
 import CommentThreadComp from "./CommentThreadComp";
+import { useNavigate } from "react-router-dom";
+import { wait } from "../../../utils/random";
 
 type PostCompProp = {
     post: Posts;
@@ -19,7 +21,6 @@ type PostCompProp = {
     setPost: (post: Posts) => void;
     setPosts?: Dispatch<SetStateAction<Posts[]>>;
     setModifyPostIsClosed: Dispatch<SetStateAction<boolean>>;
-    setModifyPostId?: Dispatch<SetStateAction<string | null>>;
     setClosedNoUserPopup?: Dispatch<SetStateAction<boolean>>;
 };
 
@@ -30,9 +31,9 @@ export default function PostsComp({
     setPost, 
     setPosts,
     setModifyPostIsClosed, 
-    setModifyPostId, 
     setClosedNoUserPopup 
 }: PostCompProp){
+    const [currentImage, setCurrentImage] = useState<number>(0);
     const [showComments, setShowComments] = useState<boolean>(false);
     const [comment, setComment] = useState<Comments>({
         post_id: post.id ?? "",
@@ -46,11 +47,40 @@ export default function PostsComp({
         comment.post_id && comment.comment && comment.user_id
     , [comment]);
 
-    function editBtnClicked(){
-        if(!setModifyPostId || !setModifyPostIsClosed || !post.id)
+    const navigate = useNavigate();
+
+    function setPostId(){
+        const params = new URLSearchParams(location.search);
+        params.set("post", post?.id ?? "");
+        navigate(`${location.pathname}?${params.toString()}`);
+    }
+
+    function openUserProfile(){
+        const params = new URLSearchParams(location.search);
+        params.set("previewuser", post.user?.id ?? "");
+        navigate(`${location.pathname}?${params.toString()}`);
+    }
+
+    function openClub(){
+        const params = new URLSearchParams(location.search);
+        params.set("club", post.club?.id ?? "");
+        navigate(`${location.pathname}?${params.toString()}`);
+    }
+
+    function handleScrollImages(e: React.UIEvent<HTMLDivElement>) {
+        const container = e.currentTarget;
+        const index = Math.round(
+            container.scrollLeft / container.clientWidth
+        );
+        setCurrentImage(index);
+    }
+
+    async function editBtnClicked(){
+        if(!setModifyPostIsClosed || !post.id)
             return;
 
-        setModifyPostId(post.id); 
+        setPostId();
+        await wait(50);
         setModifyPostIsClosed(false);
     }
 
@@ -210,7 +240,14 @@ export default function PostsComp({
                 <div className="header">
                     <div className="user-info">
                         <img className="profile-pic" src={ post.user?.profile_pic ?? import.meta.env.VITE_DEFAULT_PROFILE_PIC }/>
-                        <h6 className="username">{ post.user?.username }</h6>
+                        <div>
+                            <h6 className="username" onClick={ () => openUserProfile() }>
+                                { post.user?.username }
+                            </h6>
+                            <h6 className="club-name" onClick={ () => openClub() }>
+                                { post.club?.name }
+                            </h6>
+                        </div>
                     </div>
                     <div>
                         { userHeader?.id === post.user?.id &&
@@ -226,11 +263,15 @@ export default function PostsComp({
                 <p className="desc">{ post.description }</p>
                 { (post.images && post.images.length > 0) &&
                     <div className="images-cont">
-                        <div className="images">
-                            { post.images.map((img) => <img src={ img.image } key={ img.image }/>)}
+                        <div className="images" onScroll={ handleScrollImages }>
+                            { post.images.map((img) => <img src={ img.image } key={ img.image } draggable={ false }/>)}
                         </div>
                         <div className="dots-cont">
-                            { post.images.map((img) => <p key={ img.image }>•</p>)}
+                            { post.images.length > 1 && 
+                                post.images.map((img, index) => 
+                                    <p key={ img.image } className={ index === currentImage ? "active" : "" }>•</p>
+                                )
+                            }
                         </div>
                     </div>
                 }

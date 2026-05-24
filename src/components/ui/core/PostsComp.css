@@ -47,10 +47,21 @@
     border: 0.1rem solid var(--color-text);
 }
 
+.posts-comp .main-content .header .user-info > div{
+    display: flex;
+    flex-direction: column;
+}
+
+.posts-comp .main-content .header .user-info .club-name{ 
+    opacity: 0.6; 
+    font-size: clamp(1rem, 1.7vw, 1.3rem); 
+}
+.posts-comp .main-content .header .user-info > div *{ cursor: pointer; }
+.posts-comp .main-content .header .user-info > div *:hover{ color: var(--color-accent); }
+
 .posts-comp .main-content .images-cont{
     display: flex;
     flex-direction: column;
-    gap: 1rem;
     align-items: center;
     width: 100%;
 }
@@ -60,11 +71,20 @@
     flex-direction: row;
     gap: 0.5rem;
     overflow-x: auto;
+    overflow-y: hidden;
     align-items: center;
     justify-content: left;
     width: 100%;
+    max-height: 500px;
     margin: 0.5rem;
     border-radius: 1rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.posts-comp .main-content .images-cont .images::-webkit-scrollbar{
+    display: none;
 }
 
 .posts-comp .main-content .images-cont .images:has(> *:only-child){
@@ -74,16 +94,23 @@
 .posts-comp .main-content .images-cont .images img{
     border-radius: 1rem;
     max-width: calc(60ch - 2rem);
+    height: auto;
     width: 100%;
-    max-height: 400px;
-    width: auto;
     display: block;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    user-select: none;
+    pointer-events: none;
 }
 
 .posts-comp .main-content .images-cont .dots-cont{
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
+}
+
+.posts-comp .main-content .images-cont .dots-cont p.active{
+    color: var(--color-primary);
 }
 
 .posts-comp .bottom-bar{
@@ -123,7 +150,7 @@
 
 .posts-comp .comments-cont .reply-cont .reply-message span{
     font-family: var(--font-heading);
-    font-size: clamp(1.1rem, 1.7vw, 1.3rem);;
+    font-size: clamp(1.1rem, 1.7vw, 1.3rem);
 }
 
 .posts-comp .comments-cont .reply-cont .cancel-reply{
@@ -148,6 +175,30 @@
     width: 100%;
 }
 
-@media (max-width: 640px){
+@media (max-width: 480px){
+    .posts-comp > *:last-child{
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
 
+    .posts-comp .main-content{
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+        border-left: none;
+        border-right: none;
+        padding-bottom: 0px;
+    }
+
+    .posts-comp .main-content .header{
+        margin-bottom: 1rem;
+    }
+
+    .posts-comp .bottom-bar,
+    .posts-comp .comments-cont{
+        border: none;
+    }
+
+    .posts-comp .comments-cont .comments{
+        padding: 0.5rem;
+    }
 }

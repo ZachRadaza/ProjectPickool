@@ -25,3 +25,12 @@
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
 }
+
+@media (max-width: 480px){
+    .user-tab-posts-cont{
+        max-height: none;
+        overflow: auto;
+        gap: 0px;
+        padding: 0px;
+    }
+}

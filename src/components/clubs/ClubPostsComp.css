@@ -23,6 +23,12 @@
 
 @media (max-width: 640px){
     .club-posts-cont{
-        padding: 1rem ;
+        padding: 1rem 0px;
+        max-height: none;
+        overflow: auto;
+    }
+
+    .club-posts-cont .posts-cont{
+        gap: 0px;
     }
 }
