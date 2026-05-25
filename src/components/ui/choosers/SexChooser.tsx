@@ -23,6 +23,7 @@ export default function SexChooser({ sex, setSex }: SexChooserProp){
                 <button onClick={ () => dropdownClicked(Sex.MALE) }>Male</button>
                 <button onClick={ () => dropdownClicked(Sex.FEMALE) }>Female</button>
                 <button onClick={ () => dropdownClicked(Sex.MIXED) }>Mixed</button>
+                <button onClick={ () => dropdownClicked(Sex.ANY) }>Any</button>
             </div>
         </div>
     );

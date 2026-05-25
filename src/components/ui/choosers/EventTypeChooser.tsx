@@ -20,7 +20,7 @@ export default function EventTypeChooser({ event_type, setEventType }: EventType
         <div className="chooser">
             <Button content={ event_type } onBtnClick={ () => setIsDropdownOpen(!isDropdownOpen) } additionalClasses="current"/>
             <div className={`drop-down ${isDropdownOpen ? "active" : ""}`}>
-                <button onClick={ () => dropdownClicked(EventType.CASUAL) }>Casual</button>
+                <button onClick={ () => dropdownClicked(EventType.OPENPLAY) }>Open Play</button>
                 <button onClick={ () => dropdownClicked(EventType.TOURNAMENT) }>Tournament</button>
                 <button onClick={ () => dropdownClicked(EventType.DUPR) }>DUPR</button>
             </div>

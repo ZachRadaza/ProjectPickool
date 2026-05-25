@@ -46,6 +46,10 @@
     opacity: 0.7; 
 }
 
+.events-comp .left-side .type{
+    white-space: nowrap;
+}
+
 .events-comp .right-side{
     display: flex;
     flex-direction: column;

@@ -17,7 +17,8 @@ export type Level = (typeof Level)[keyof typeof Level];
 export const Sex = {
     MALE: "males",
     FEMALE: "females",
-    MIXED: "mixed"
+    MIXED: "mixed",
+    ANY: "any"
 } as const;
 export type Sex = (typeof Sex)[keyof typeof Sex];
 
@@ -31,7 +32,7 @@ export const Recurring = {
 export type Recurring = (typeof Recurring)[keyof typeof Recurring];
 
 export const EventType = {
-    CASUAL: "casual",
+    OPENPLAY: "open play",
     TOURNAMENT: "tournament",
     DUPR: "dupr"
 } as const;
@@ -188,6 +189,7 @@ export type Events = {
     recurring: Recurring;
     approve_window: number | null;
     series_id?: string | null;
+    current_players?: number | null;
 };
 
 export type EventHeader = {

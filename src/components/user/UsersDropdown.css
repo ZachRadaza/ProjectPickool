@@ -17,7 +17,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(3rem, 5rem));
     gap: 1rem;
-    place-items: center;
+    place-items: start;
     transition: height 200ms ease;
     padding: 0px 1rem;
 }

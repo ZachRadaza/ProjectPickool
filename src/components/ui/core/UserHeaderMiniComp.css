@@ -26,6 +26,8 @@
     height: auto;
 }
 
+.user-header-mini-cont .name{ text-align: center; }
+
 .user-header-mini-cont:hover .profile-pic{ border-color: var(--color-accent); }
 
 .user-header-mini-cont:hover .name{ color: var(--color-accent); }

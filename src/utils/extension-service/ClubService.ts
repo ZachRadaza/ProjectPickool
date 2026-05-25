@@ -161,7 +161,7 @@ export const ClubService = {
 
             const { data: clubRaw, error: clubRawError } = await supabase
                 .from("clubs")
-                .insert([club])
+                .insert([rest])
                 .select(clubBody)
                 .single();
 
@@ -172,21 +172,16 @@ export const ClubService = {
 
             const updatedClub: Partial<Clubs> = {};
 
-            if(profile_pic_file){
-                const upload = await StorageService.uploadClubProfilePic(profile_pic_file, clubRaw.id);
-                updatedClub.profile_pic_path = upload.path;
-                updatedClub.profile_pic = upload.publicUrl;
-            }
+            if(profile_pic_file)
+                updatedClub.profile_pic_file = profile_pic_file;
 
-            if(banner_file){
-                const upload = await StorageService.uploadClubBanner(banner_file, clubRaw.id);
-                updatedClub.banner_path = upload.path;
-                updatedClub.banner = upload.publicUrl;
-            }
+            if(banner_file)
+                updatedClub.banner_file = banner_file;
 
-            const newClub = await this.updateClub(clubRaw.id, updatedClub);
+            if(profile_pic_file || banner_file)
+                await this.updateClub(clubRaw.id, updatedClub);
 
-            return this.convertToClub(newClub);
+            return this.convertToClub(clubRaw);
         } catch(error){
             console.error("error", error);
             throw error;
@@ -224,7 +219,7 @@ export const ClubService = {
                 .update(rest)
                 .eq("id", id)
                 .select(clubBody)
-                .single();
+                .maybeSingle();
 
             if(error)
                 throw new Error(error.message);

@@ -132,4 +132,8 @@ input[type="number"]::-webkit-inner-spin-button {
         flex-direction: column;
         gap: 0px;
     }
+
+    .modify-event .additional-info .numbers-cont input{
+        width: 70px;
+    }
 }

@@ -49,7 +49,7 @@ export default function EventsComp({ event, player, showClub }: EventsCompProp){
                     </div>
                 </div>
                 <div className="other-info">
-                    <h6>{ event?.max_players } Players</h6>
+                    <h6>{ event?.current_players }/{ event?.max_players } Players</h6>
                     <h6>•</h6>
                     <h6>{ event?.price! > 0 ? `₱${event?.price} Entry` : "Free" }</h6>
                     { showClub &&
