@@ -30,6 +30,15 @@
     align-items: center;
 }
 
+.modify-posts-popup .images-cont .post-arrow-btn{
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+}
+
+.modify-posts-popup .images-cont .post-arrow-btn.btn-left{ left: 1rem; }
+.modify-posts-popup .images-cont .post-arrow-btn.btn-right{ right: 1rem; }
+
 .modify-posts-popup .images-cont .images{
     display: flex;
     flex-direction: row;
@@ -118,4 +127,9 @@
         min-height: 300px;
         min-width: 300px;
     }
+}
+
+@media (max-width: 480px) {
+    .modify-posts-popup .images-cont .post-arrow-btn{ display: none; }
+
 }

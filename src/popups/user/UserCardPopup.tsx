@@ -230,135 +230,23 @@ export default function UserCardPopup({ userHeader, userCardId, club_id, event_i
                 setIsLoading(true);
                 setIsClosed(false);
 
-                const userInCardData = await ExtensionService.UserService.getUserHeader(userCardId);
+                const data = await ExtensionService.UserService.getUserCardInfo(userCardId, userHeader?.id, club_id, event_id);
 
-                if(!userInCardData){
+                if(!data){
                     setError("Error in getting user");
                     return;
                 }
 
-                setUserInCard(userInCardData);
-
-                let clubId = club_id;
-
-                if(!club_id && event_id)
-                    clubId = await getClubIDFromEvent();
-
-                const request = await getClubRequest(clubId);
-
-                if(!request)
-                    await getClubMember(clubId);
-
-                await getUserClubMember(clubId);
-                await getUserHost();
-                await getPlayer();
-                await getHost();
+                setUserInCard(data.user_header);
+                setUserClubRequests(data.club_request);
+                setClubMember(data.club_request ? null : data.club_member);
+                setUserClubMember(data.current_user_club_member);
+                setPlayer(data.player);
+                setIsCardHost(data.is_card_host);
+                setIsUserHost(data.is_current_user_host);
+                setEventSeriesId(data.event_series_id);
 
                 setIsLoading(false);
-            } catch(error){
-                setError("Error in Fetching Profile Info");
-                setIsLoading(false);
-            }
-        }
-
-        async function getClubIDFromEvent(){
-            try{
-                if(!event_id)
-                    return null;
-
-                const event = await ExtensionService.EventService.getEvent(event_id);
-
-                if(!event)
-                    return null;
-
-                return event.club?.id ? event.club.id : null;
-            } catch(error){
-                setError("Error in Fetching Profile Info");
-                setIsLoading(false);
-                return null;
-            }
-        }
-
-        async function getClubRequest(clubId: string | null){
-            try{
-                if(!clubId || !userCardId)
-                    return;
-
-                const clubReq = await ExtensionService.ClubRequestService.getUserClubRequest(userCardId, clubId);
-
-                setUserClubRequests(clubReq ?? null);
-                return clubReq
-            } catch(error){
-                setError("Error in Fetching Profile Info");
-                setIsLoading(false);
-            }
-        }
-
-        async function getClubMember(clubId: string | null){
-            try{
-                if(!clubId || !userCardId)
-                    return;
-                
-                const clubMember = await ExtensionService.ClubMemberService.getBasicClubMember(clubId, userCardId);
-
-                setClubMember(clubMember ?? null);
-            } catch(error){
-                setError("Error in Fetching Profile Info");
-                setIsLoading(false); 
-            }
-        }
-
-        async function getUserClubMember(clubId: string | null){
-            try{
-                if(!userHeader || !clubId)
-                    return;
-
-                const userMember = await ExtensionService.ClubMemberService.getBasicClubMember(clubId, userHeader.id);
-
-                setUserClubMember(userMember ?? null);
-            } catch(error){
-                setError("Error in Fetching Profile Info");
-                setIsLoading(false);
-            }
-        }
-
-        async function getPlayer(){
-            try{
-                if(!userCardId || !event_id)
-                    return;
-
-                const player = await ExtensionService.PlayerService.getPlayer(event_id, userCardId);
-
-                setPlayer(player ?? null);
-            } catch(error){
-                setError("Error in Fetching Profile Info");
-                setIsLoading(false);
-            }
-        }
-
-        async function getHost(){
-            try{
-                if(!event_id || !userCardId)
-                    return;
-                
-                const host = await ExtensionService.HostService.getHost(event_id, userCardId);
-                const event = await ExtensionService.EventService.getEvent(event_id);
-
-                setIsCardHost(host !== null);
-                setEventSeriesId(event?.series_id || null);
-            } catch(error){
-                setError("Error in Fetching Profile Info");
-                setIsLoading(false);
-            }
-        }
-
-        async function getUserHost(){
-            try{
-                if(!event_id || !userHeader)
-                    return
-                
-                const host = await ExtensionService.HostService.getHost(event_id, userHeader.id);
-                setIsUserHost(host !== null);
             } catch(error){
                 setError("Error in Fetching Profile Info");
                 setIsLoading(false);

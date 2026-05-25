@@ -1,4 +1,4 @@
-import type { Club_Members, Comments, UserHeader } from "../../../utils/schemas";
+import type { Comments, UserHeader } from "../../../utils/schemas";
 import CommentComp from "./CommentComp";
 import "./CommentThreadComp.css";
 
@@ -7,15 +7,15 @@ type CommentThreadComp = {
     replies: Comments[];
     onReplyClick: (comment_id: string, comment_user: UserHeader) => void;
     onShowReplyClick: (comment: Comments) => void;
-    userClubMember?: Club_Members | null;
+    canComment: boolean;
 }
 
-export default function CommentThreadComp({ parentComment, replies, userClubMember, onReplyClick, onShowReplyClick }: CommentThreadComp){
+export default function CommentThreadComp({ parentComment, replies, canComment, onReplyClick, onShowReplyClick }: CommentThreadComp){
     return (
         <div className="comment-thread-comp-cont">
             <CommentComp
                 comment={ parentComment }
-                userClubMember={ userClubMember }
+                canComment={ canComment }
                 isParent={ true }
                 onReplyClick={ onReplyClick }
                 onShowReplyClick={ onShowReplyClick }
@@ -23,7 +23,7 @@ export default function CommentThreadComp({ parentComment, replies, userClubMemb
             { replies.map((comment) => 
                 <CommentComp 
                     comment={ comment }
-                    userClubMember={ userClubMember }
+                    canComment={ canComment }
                     isParent={ false }
                     onReplyClick={ onReplyClick }
                     onShowReplyClick={ onShowReplyClick }

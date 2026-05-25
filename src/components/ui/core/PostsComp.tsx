@@ -1,4 +1,4 @@
-import { useMemo, useState, type Dispatch, type SetStateAction } from "react";
+import { useMemo, useRef, useState, type Dispatch, type SetStateAction } from "react";
 import { LikeType, Role, type Club_Members, type Comments, type Posts, type UserHeader } from "../../../utils/schemas";
 import CommentButton from "../buttons/CommentButton";
 import LikeButton from "../buttons/LikeButton";
@@ -12,7 +12,8 @@ import Loading from "../../../pages/Loading";
 import CloseButton from "../buttons/CloseButton";
 import CommentThreadComp from "./CommentThreadComp";
 import { useNavigate } from "react-router-dom";
-import { wait } from "../../../utils/random";
+import { timeAgo, wait } from "../../../utils/random";
+import PostArrowsButton from "../buttons/PostArrowsButton";
 
 type PostCompProp = {
     post: Posts;
@@ -33,7 +34,7 @@ export default function PostsComp({
     setModifyPostIsClosed, 
     setClosedNoUserPopup 
 }: PostCompProp){
-    const [currentImage, setCurrentImage] = useState<number>(0);
+    const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
     const [showComments, setShowComments] = useState<boolean>(false);
     const [comment, setComment] = useState<Comments>({
         post_id: post.id ?? "",
@@ -47,6 +48,7 @@ export default function PostsComp({
         comment.post_id && comment.comment && comment.user_id
     , [comment]);
 
+    const imagesRef = useRef<HTMLDivElement | null>(null);
     const navigate = useNavigate();
 
     function setPostId(){
@@ -72,7 +74,21 @@ export default function PostsComp({
         const index = Math.round(
             container.scrollLeft / container.clientWidth
         );
-        setCurrentImage(index);
+        setCurrentImageIndex(index);
+    }
+
+    function moveImage(scrollLeft: boolean){
+        if(!imagesRef.current) 
+            return;
+
+        const tagrgetIndex = scrollLeft 
+            ? Math.max(currentImageIndex - 1, 0) 
+            : Math.min(currentImageIndex + 1, post.images?.length! - 1);
+
+        imagesRef.current.scrollTo({
+            left: imagesRef.current.clientWidth * tagrgetIndex,
+            behavior: "smooth"
+        });
     }
 
     async function editBtnClicked(){
@@ -91,7 +107,7 @@ export default function PostsComp({
                 return;
             }
 
-            if(!post || !userClubMember)
+            if(!post || !post.can_like)
                 return;
 
             const liked = post.liked_by_user ?? false;
@@ -112,6 +128,8 @@ export default function PostsComp({
 
     async function loadComments(){
         try{
+            console.log(post.created_at);
+
             if(!post.id || !post.hasMoreComments || post.commentPage === undefined)
                 return;
 
@@ -177,7 +195,7 @@ export default function PostsComp({
 
     async function addComment(){
         try{
-            if(!post.id || !userHeader?.id || !userClubMember)
+            if(!post.id || !userHeader?.id || !post.can_like)
                 return;
 
             if(!commentIsValid)
@@ -265,13 +283,26 @@ export default function PostsComp({
                 <p className="desc">{ post.description }</p>
                 { (post.images && post.images.length > 0) &&
                     <div className="images-cont">
-                        <div className="images" onScroll={ handleScrollImages }>
+                        { currentImageIndex > 0 &&
+                            <PostArrowsButton 
+                                additionalClasses="btn-left"
+                                onBtnClick={ () => moveImage(true) }
+                            />
+                        }
+                        { currentImageIndex < post.images.length - 1 &&
+                            <PostArrowsButton 
+                                additionalClasses="btn-right"
+                                onBtnClick={ () => moveImage(false) }
+                                isRight={ true }
+                            />
+                        }
+                        <div className="images" onScroll={ handleScrollImages } ref={ imagesRef }>
                             { post.images.map((img) => <img src={ img.image } key={ img.image } draggable={ false }/>)}
                         </div>
                         <div className="dots-cont">
                             { post.images.length > 1 && 
                                 post.images.map((img, index) => 
-                                    <p key={ img.image } className={ index === currentImage ? "active" : "" }>•</p>
+                                    <p key={ img.image } className={ index === currentImageIndex ? "active" : "" }>•</p>
                                 )
                             }
                         </div>
@@ -279,19 +310,22 @@ export default function PostsComp({
                 }
             </div>
             <div className="bottom-bar">
-                <LikeButton 
-                    onBtnClick={ likePost }
-                    like_count={ post.like_count || 0 }
-                    isLiked={ post.liked_by_user || false }
-                />
-                <CommentButton 
-                    comment_count={ post.comment_count || 0}
-                    onBtnClick={ loadComments }
-                />
+                <div className="action-section">
+                    <LikeButton 
+                        onBtnClick={ likePost }
+                        like_count={ post.like_count || 0 }
+                        isLiked={ post.liked_by_user || false }
+                    />
+                    <CommentButton 
+                        comment_count={ post.comment_count || 0}
+                        onBtnClick={ loadComments }
+                    />
+                </div>
+                <p className="date">{ timeAgo(post.created_at ? post.created_at : "") }</p>
             </div>
             { showComments &&
                 <div className="comments-cont">
-                    { userClubMember && <>
+                    { post.can_like && <>
                         { comment.parent_comment_user && 
                             <div className="reply-cont">
                                 <p className="reply-message">Replying to <span>{ comment.parent_comment_user.username }</span></p> 
@@ -319,7 +353,7 @@ export default function PostsComp({
                                 rows={ 1 }
                             ></textarea>
                             <SendButton 
-                                isDisabled={ !userClubMember || !userHeader }
+                                isDisabled={ !post.can_like || !userHeader }
                                 onBtnCLick={ addComment }
                             />
                         </div></>
@@ -333,7 +367,7 @@ export default function PostsComp({
                                         <CommentThreadComp 
                                             parentComment={ comment[0] }
                                             replies={ comment.slice(1) }
-                                            userClubMember={ userClubMember }
+                                            canComment={ !!post.can_like }
                                             onReplyClick={ (com_id, com_user) => setComment((com) => 
                                                 ({ ...com, parent_comment_id: com_id, parent_comment_user: com_user })
                                             )}

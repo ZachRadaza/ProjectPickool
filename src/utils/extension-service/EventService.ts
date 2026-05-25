@@ -75,7 +75,7 @@ export const EventService = {
 
     async getPossibleUserEvents(user_id: string, page: number){
         try{
-            const { data: dataClub, hasMore: hasMoreClub } = await this.getPossileUserClubEvents(user_id, page);
+            const { data: dataClub, hasMore: hasMoreClub } = await this.getPossibleUserClubEvents(user_id, page);
             const { data: dataClose, hasMore: hasMoreClose } = await this.getNearUserEvents(user_id, page);
 
             const hasMore = hasMoreClub || hasMoreClose;
@@ -92,7 +92,7 @@ export const EventService = {
         }
     },
 
-    async getPossileUserClubEvents(user_id: string, page: number){
+    async getPossibleUserClubEvents(user_id: string, page: number){
         const pageSize = 10;
         const from = (page - 1) * pageSize;
         const to = from + pageSize - 1;

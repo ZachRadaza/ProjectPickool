@@ -36,7 +36,7 @@ export default function UserTabPostsComp({ userHeader, user, setClosedModifyPost
                 return;
 
             const page = currentPostPage;
-            const { data: postData, hasMore }= await ExtensionService.PostService.getUserPosts(user?.id, userHeader?.id || null, page);
+            const { data: postData, hasMore } = await ExtensionService.PostService.getUserPosts(user?.id, userHeader?.id || null, page);
 
             setPosts([...posts, ...postData]);
             setCurrentPostPage(page + 1);

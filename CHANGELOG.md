@@ -1,13 +1,14 @@
 # Changelog
 
-## [0.2.1] - 2026-05-23
+## [0.2.2] - 2026-05-24
 
 ### Added
- - Posts.
+ - Time ago on `PostsComp.tsx`
+ - Arrows for image navigation on `PostsComp.tsx` and `ModifyPostsComp.tsx`
 
 ### Fixed
- - Creating an event on `Home.tsx` is can now only be done by the admin or owner.
- - Visual bug on `ClubComp.tsx` in `ClubSearchPopup.tsx`.
+ - `LocationIcon.tsx` did not correctly overflow on `ClubInfoComp.tsx`
 
 ### Changed
- - Added ability to create event from `Home.tsx`.
+ - Users can now like posts on Users Page
+ - `UserCardPopup.tsx` now uses an rpc function for fetching info, saving load times.
