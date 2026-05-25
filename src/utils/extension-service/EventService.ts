@@ -40,7 +40,15 @@ export const EventService = {
             if(error)
                 throw new Error(error.message);
 
-            return this.convertToEvent(data);
+            const { count } = await supabase
+                .from("players")
+                .select("*", { count: "exact", head: true })
+                .eq("event_id", id)
+                .eq("approved", true);
+
+            const withNumPlayers = { ...data, current_players: count };
+
+            return this.convertToEvent(withNumPlayers);
         } catch(error){
             console.error("error", error);
             throw error;
@@ -50,14 +58,11 @@ export const EventService = {
     async getClubEvents(club_id: string, page: number){
         try{
             const pageSize = 10;
-            const from = (page - 1) * pageSize;
-            const to = from + pageSize - 1;
-            const { data, error } = await supabase
-                .from("events")
-                .select(eventBody)
-                .eq("club_id", club_id)
-                .order("created_at", { ascending: false })
-                .range(from, to + 1);
+            const { data, error } = await supabase.rpc("get_club_events_with_player_count", {
+                p_club_id: club_id,
+                page_size: pageSize,
+                page_number: page
+            });
 
             if(error)
                 throw new Error(error.message);
@@ -94,28 +99,11 @@ export const EventService = {
 
     async getPossibleUserClubEvents(user_id: string, page: number){
         const pageSize = 10;
-        const from = (page - 1) * pageSize;
-        const to = from + pageSize - 1;
-
-        const { data: clubData, error: clubError } = await supabase
-            .from("club_members")
-            .select("club_id")
-            .eq("user_id", user_id);
-
-        if(clubError)
-            throw new Error(clubError.message);
-
-        const club_ids = clubData.map((club) => club.club_id);
-
-        if(club_ids.length === 0)
-            return { data: [], hasMore: false };
-
-        const { data, error } = await supabase
-            .from("events")
-            .select(eventBody)
-            .in("club_id", club_ids)
-            .order("created_at", { ascending: false })
-            .range(from, to + 1);
+        const { data, error } = await supabase.rpc("get_possible_user_club_events",{
+            p_user_id: user_id,
+            page_size: 10,
+            page_number: page
+        });        
 
         if(error)
             throw new Error(error.message);
@@ -157,15 +145,11 @@ export const EventService = {
                 return { data: [], hasMore: false };
 
             const pageSize = 10;
-            const from = (page - 1) * pageSize;
-            const to = from + pageSize - 1;
-
-            const { data, error } = await supabase
-                .from("events")
-                .select(eventBody)
-                .ilike("name", `%${query.trim()}%`)
-                .order("created_at", { ascending: false })
-                .range(from, to + 1);
+            const { data, error } = await supabase.rpc("search_events",{
+                p_query: query,
+                p_page: page,
+                p_page_size: 10
+            });
 
             if(error)
                 throw new Error(error.message);
@@ -366,6 +350,7 @@ export const EventService = {
             sex: data.sex,
             level: data.level,
             max_players: data.max_players,
+            current_players: data.current_players,
             recurring: data.recurring,
             approve_window: data.approve_window,
             series_id: data.series_id

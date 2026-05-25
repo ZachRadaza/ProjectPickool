@@ -118,7 +118,7 @@ export default function User(){
                         <LocationIconComp location={ openedUser?.location ?? null }/>
                     </div>
                 </div>
-                { (isSelf && userHeader) && <Button content={ !isLoggingOut ? "Log Out" : "Loggin Out" } onBtnClick={ logoutClicked }/> }
+                { (isSelf && userHeader) && <Button content={ !isLoggingOut ? "Log Out" : "Logging Out" } onBtnClick={ logoutClicked }/> }
                 { !userHeader && <Button content="Sign In" onBtnClick={ () => setClosedNoUserPopup(false) }/> }
             </div>
             <div className="user-content-cont">

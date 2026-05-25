@@ -181,13 +181,13 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                         start_time: new Date().toISOString(),
                         end_time: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
                         price: 0,
-                        sex: Sex.MIXED,
+                        sex: Sex.ANY,
                         level: Level.ALL,
                         max_players: 10,
                         recurring: Recurring.NONE,
                         is_singles: true,
                         is_auto_approve: true,
-                        event_type: EventType.CASUAL,
+                        event_type: EventType.OPENPLAY,
                         approve_window: 10
                     };
 
@@ -300,28 +300,32 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                         }}
                     />
                 </div>
-                <div>
-                    <h6>End Time</h6>
+                <div className="numbers-cont">
+                    <h6>Duration (in hours)</h6>
                     <input
-                        type="time"
-                        value={ event?.end_time ? toLocalTimeValue(event.end_time) : ""}
-                        onChange={ (e) => {
-                            const time = e.target.value;
-                            if(!time)
-                                return;
-
-                            const [hours, minutes] = time.split(":").map(Number);
+                        type="number"
+                        min={ 1 }
+                        step={ 0.5 }
+                        placeholder="Duration (hours)"
+                        value={ event?.start_time && event?.end_time
+                            ? ((new Date(event.end_time).getTime() - new Date(event.start_time).getTime()) / 3600000)
+                            : ""
+                        }
+                        onChange={(e) => {
+                            const durationHours = Number(e.target.value);
 
                             setEvent((ev) => {
-                                if(!ev) 
+                                if (!ev || !ev.start_time)
                                     return ev;
 
-                                const base = ev.end_time ? new Date(ev.end_time) : new Date();
-                                if(Number.isNaN(base.getTime())) 
+                                const start = new Date(ev.start_time);
+
+                                if (Number.isNaN(start.getTime()))
                                     return ev;
 
-                                const end = new Date(base);
-                                end.setHours(hours, minutes, 0, 0);
+                                const end = new Date(
+                                    start.getTime() + durationHours * 3600000
+                                );
 
                                 return {
                                     ...ev,
@@ -407,7 +411,7 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                 <div className="choosers chooser-4">
                     <h6>Event Type</h6>
                     <EventTypeChooser
-                        event_type={ event?.event_type ?? EventType.CASUAL }
+                        event_type={ event?.event_type ?? EventType.OPENPLAY }
                         setEventType={ (event_type) => setEvent((ev) => ev ? { ...ev, event_type } : ev) }
                     />
                 </div>

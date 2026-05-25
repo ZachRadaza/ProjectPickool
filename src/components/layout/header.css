@@ -91,7 +91,10 @@ header .profile-section{
     border-bottom-color: transparent !important;
 }
 
-header .profile-section h5{ opacity: 0.8; }
+header .profile-section h5{ 
+    opacity: 0.8; 
+    white-space: nowrap;
+}
 
 header .profile-section img{
     width: 2.5rem;
