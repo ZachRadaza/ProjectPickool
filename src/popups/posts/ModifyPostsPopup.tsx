@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type Dispatch, type SetStateAction } from "react";
+import { useEffect, useMemo, useRef, useState, type Dispatch, type SetStateAction } from "react";
 import { type Post_Images, type Posts, type UserHeader } from "../../utils/schemas";
 import CloseButton from "../../components/ui/buttons/CloseButton";
 import Loading from "../../pages/Loading";
@@ -8,6 +8,7 @@ import Button from "../../components/ui/buttons/Button";
 import DeleteButton from "../../components/ui/buttons/DeleteButton";
 import "./ModifyPostsPopup.css";
 import { useNavigate } from "react-router-dom";
+import PostArrowsButton from "../../components/ui/buttons/PostArrowsButton";
 
 type ModifyPostsPopupProp = {
     userHeader: UserHeader | null;
@@ -23,11 +24,12 @@ export default function ModifyPostsPopup({ userHeader, club_id, post_id, setIsCl
     const [validTitle, setValidTitle] = useState<boolean>(true);
     const [validDesc, setValidDesc] = useState<boolean>(true);
     const [btnLoading, setBtnLoading] = useState<boolean>(false);
-    const [currentImage, setCurrentImage] = useState<number>(0);
+    const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    const imagesRef = useRef<HTMLDivElement | null>(null);
     const isEditing = useMemo<boolean>(() => !!post_id, []);
     const navigate = useNavigate();
 
@@ -75,7 +77,21 @@ export default function ModifyPostsPopup({ userHeader, club_id, post_id, setIsCl
         const index = Math.round(
             container.scrollLeft / container.clientWidth
         );
-        setCurrentImage(index);
+        setCurrentImageIndex(index);
+    }
+
+    function moveImage(scrollLeft: boolean){
+        if(!imagesRef.current) 
+            return;
+
+        const tagrgetIndex = scrollLeft 
+            ? Math.max(currentImageIndex - 1, 0) 
+            : Math.min(currentImageIndex + 1, postTemp!.images?.length!);
+
+        imagesRef.current.scrollTo({
+            left: imagesRef.current.clientWidth * tagrgetIndex,
+            behavior: "smooth"
+        });
     }
 
     async function btnPressed(isNewUpload: boolean){
@@ -193,7 +209,20 @@ export default function ModifyPostsPopup({ userHeader, club_id, post_id, setIsCl
                     maxLength={ 500 }
                 ></textarea>
                 <div className="images-cont inner-width">
-                    <div className="images" onScroll={ handleScrollImages }>
+                    { currentImageIndex > 0 &&
+                        <PostArrowsButton 
+                            additionalClasses="btn-left"
+                            onBtnClick={ () => moveImage(true) }
+                        />
+                    }
+                    { currentImageIndex < (postTemp?.images ? postTemp?.images?.length! : 0) &&
+                        <PostArrowsButton
+                            additionalClasses="btn-right"
+                            onBtnClick={ () => moveImage(false) }
+                            isRight={ true }
+                        />
+                    }
+                    <div className="images" onScroll={ handleScrollImages } ref={ imagesRef }>
                         { postTemp?.images && 
                             postTemp.images.map((image) => 
                                 <div className="post-image" key={`${image.temp_id ? image.temp_id : image.image}`}>
@@ -241,13 +270,13 @@ export default function ModifyPostsPopup({ userHeader, club_id, post_id, setIsCl
                         { postTemp?.images?.map((image, index) =>
                             <p 
                                 key={`dot-${image.temp_id ? image.temp_id : image.image}`} 
-                                className={ index === currentImage ? "active" : "" }
+                                className={ index === currentImageIndex ? "active" : "" }
                             >
                                 •
                             </p>
                         )}
                        { ((!postTemp?.images || postTemp?.images?.length < 10) && !isEditing) && 
-                            <p className={ (postTemp?.images?.length || 0) === currentImage ? "active" : "" }>•</p>
+                            <p className={ (postTemp?.images?.length || 0) === currentImageIndex ? "active" : "" }>•</p>
                        }
                     </div>
                 </div>

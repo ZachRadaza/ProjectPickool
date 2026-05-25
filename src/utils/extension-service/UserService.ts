@@ -1,4 +1,4 @@
-import { SignUpMessageType, type UserClubs, type UserHeader, type Users } from "../schemas";
+import { SignUpMessageType, type Club_Members, type Club_Requests, type Players, type UserClubs, type UserHeader, type Users } from "../schemas";
 import { supabase } from "../supabase";
 import { LocationService } from "./LocationService";
 import { StorageService } from "./StorageService";
@@ -76,6 +76,38 @@ export const UserService = {
             throw error;
         }
     },
+
+    async getUserCardInfo(userCardId: string, user_id?: string | null, club_id?: string | null, event_id?: string | null){
+        try{
+            const { data, error } = await supabase
+                .rpc("get_user_card_info", {
+                    p_user_card_id: userCardId,
+                    p_current_user_id: user_id ?? null,
+                    p_club_id: club_id ?? null,
+                    p_event_id: event_id ?? null,
+                })
+                .single<{
+                    user_header: UserHeader;
+                    club_id: string | null;
+                    club_request: Club_Requests | null;
+                    club_member: Club_Members | null;
+                    current_user_club_member: Club_Members | null;
+                    player: Players | null;
+                    is_card_host: boolean;
+                    is_current_user_host: boolean;
+                    event_series_id: string | null;
+                }>();
+
+            if(error)
+                throw new Error(error.message);
+
+            return data;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
     async addUser(userRaw: Users, password: string){
         try{
             const email = userRaw.email;

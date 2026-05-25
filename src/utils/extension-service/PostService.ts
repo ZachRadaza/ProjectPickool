@@ -165,7 +165,9 @@ export const PostService = {
             like_count: data.like_count,
             liked_by_user: data.liked_by_user,
             hasMoreComments: true,
+            can_like: data.can_like,
             commentPage: 1,
+            created_at: data.created_at
         };
         return post;
     },

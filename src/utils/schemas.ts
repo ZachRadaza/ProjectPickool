@@ -245,6 +245,8 @@ export type Posts = {
     comments?: Comments[][];
     hasMoreComments?: boolean;
     commentPage?: number;
+    can_like?: boolean;
+    created_at?: string;
 };
 
 export type Post_Images = {
