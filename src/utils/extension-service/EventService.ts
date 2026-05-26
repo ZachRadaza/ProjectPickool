@@ -13,7 +13,7 @@ const eventBody = `
     ),
     start_time,
     end_time,
-    location:locations(*),
+    location:locations!events_location_id_fkey(*),
     price,
     description,
     is_auto_approve,
@@ -230,14 +230,13 @@ export const EventService = {
                 const locationNew = await LocationService.locationExists(location);
                 eventUpdatedLoc = { ...eventNoLoc,  location_id: locationNew.id };
             }
-
             let addedEvent;
             if(eventUpdatedLoc.recurring !== Recurring.NONE)
                 addedEvent = await EventSeriesService.addEventSeries(eventUpdatedLoc);
             else {
                 const { data, error } = await supabase
                     .from("events")
-                    .insert([event])
+                    .insert([eventUpdatedLoc])
                     .select(eventBody)
                     .single();
 

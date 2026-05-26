@@ -9,6 +9,7 @@ import ErrorPage from "./Error";
 import "./Home.css";
 import PopupWrapper from "../popups/PopupWrapper";
 import CreateOptionsPopup from "../popups/home/CreateOptionsPopup";
+import ClubSearchPopup from "../popups/clubs/ClubSearchPopup";
 
 type HomeContext = {
     userHeader: UserHeader | null;
@@ -25,7 +26,8 @@ export default function Home(){
     const [events, setEvents] = useState<Events[]>([]);
     const [currentEventPage, setCurrentEventPage] = useState<number>(1);
     const [hasMoreEvents, setHasMoreEvents] = useState<boolean>(true);
-    const [createOptionsIsClosed, setCreateOptionsIsClosed] = useState<boolean>(true);
+    const [closedCreateOptions, setClosedCreateOptions] = useState<boolean>(true);
+    const [closedClubSearch, setClosedClubSearch] = useState<boolean>(true);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -81,7 +83,7 @@ export default function Home(){
                         onBtnClick={ () => navigate("/clubs") }
                     />
                     <Button
-                        content="My Account"
+                        content="Profile"
                         onBtnClick={ () => 
                             !userHeader
                                 ? setClosedNoUserPopup(false)
@@ -89,11 +91,15 @@ export default function Home(){
                         }
                     />
                     <Button 
+                        content="Events"
+                        onBtnClick={ () => navigate("/events") }
+                    />
+                    <Button 
                         content="Create +"
                         onBtnClick={ () =>  
                             !userHeader
                                 ? setClosedNoUserPopup(false)
-                                : setCreateOptionsIsClosed(false) 
+                                : setClosedCreateOptions(false) 
                         }
                     />
                 </div>
@@ -101,6 +107,9 @@ export default function Home(){
                     <CalendarComp 
                         events={ events }
                         userHeader={ userHeader }
+                        setClosedModifyEvent={ setClosedModifyEvent }
+                        openClubSearchOnClick={ true }
+                        setClosedClubSearch={ setClosedClubSearch }
                     />
                     { hasMoreEvents && 
                         <Button 
@@ -111,16 +120,27 @@ export default function Home(){
                 </div>
             </div>
             <PopupWrapper 
-                isClosed={ createOptionsIsClosed }
+                isClosed={ closedCreateOptions }
                 popupComp={
                     <CreateOptionsPopup
                         userHeader={ userHeader }
-                        setIsClosed={ setCreateOptionsIsClosed }
+                        setIsClosed={ setClosedCreateOptions }
                         setClosedModifyClub={ setClosedModifyClub }
                         setClosedModifyEvent={ setClosedModifyEvent }
                         setClosedModifyPost={ setClosedModifyPost }
                     />
                 }
+            />
+            <PopupWrapper 
+                popupComp={
+                    <ClubSearchPopup 
+                        userHeader={ userHeader }
+                        setIsClosed={ setClosedClubSearch }
+                        setClosedModifyEvent={ setClosedModifyEvent }
+                        creatingEvent={ true }
+                    />
+                }
+                isClosed={ closedClubSearch }
             />
         </>
     );

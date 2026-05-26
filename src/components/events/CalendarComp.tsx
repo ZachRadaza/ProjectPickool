@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import type { EventPlayer, Events, Players, UserHeader } from "../../utils/schemas";
 import EventsComp from "../ui/core/EventsComp";
 import Button from "../ui/buttons/Button";
@@ -11,9 +11,11 @@ type CalendarCompProp = {
     setClosedModifyEvent?: (closed: boolean) => void;
     showClub?: boolean;
     userHeader?: UserHeader | null;
+    openClubSearchOnClick?: boolean;
+    setClosedClubSearch?: Dispatch<SetStateAction<boolean>>;
 };
 
-export default function CalendarComp({ events, setClosedModifyEvent, showClub, userHeader }: CalendarCompProp){
+export default function CalendarComp({ events, setClosedModifyEvent, showClub, userHeader, openClubSearchOnClick, setClosedClubSearch }: CalendarCompProp){
     const [eventsSorted, setEventsSorted] = useState<Map<string, EventPlayer[]>>(new Map());
     const [pastEventsSorted, setPastEventsSorted] = useState<Map<string, EventPlayer[]>>(new Map());
     const [isEventsSorted, setIsEventSorted] = useState<boolean>(true);
@@ -25,6 +27,16 @@ export default function CalendarComp({ events, setClosedModifyEvent, showClub, u
     function parseLocalDate(key: string){
         const [y, m, d] = key.split("-").map(Number);
         return new Date(y, m - 1, d);
+    }
+
+    function addEventClicked(){
+        if(openClubSearchOnClick){
+            if(setClosedClubSearch)
+                setClosedClubSearch(false);
+        } else {
+            if(setClosedModifyEvent)
+                setClosedModifyEvent(false);
+        }
     }
 
     useEffect(() => {
@@ -107,7 +119,7 @@ export default function CalendarComp({ events, setClosedModifyEvent, showClub, u
                 { setClosedModifyEvent &&
                     <Button
                         content="+ Add Event"
-                        onBtnClick={ () => setClosedModifyEvent(false) }
+                        onBtnClick={ addEventClicked }
                     />
                 }
             </div>

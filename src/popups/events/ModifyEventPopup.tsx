@@ -304,8 +304,10 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                     <h6>Duration (in hours)</h6>
                     <input
                         type="number"
+                        inputMode="numeric"
                         min={ 1 }
                         step={ 0.5 }
+                        max={ 48 }
                         placeholder="Duration (hours)"
                         value={ event?.start_time && event?.end_time
                             ? ((new Date(event.end_time).getTime() - new Date(event.start_time).getTime()) / 3600000)
@@ -361,6 +363,7 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                     <h6>Max Number of Players</h6>
                     <input
                         type="number"
+                        inputMode="numeric"
                         min={ 2 }
                         max={ 100 }
                         step="1"
@@ -425,7 +428,7 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                         additionalClasses={ event?.is_singles ? "active" : "" }
                     />
                     <Button 
-                        content="Double"
+                        content="Doubles"
                         onBtnClick={() => setEvent((ev) => ev ? { ...ev, is_singles: false } : ev) }
                         additionalClasses={ !event?.is_singles ? "active" : "" }
                     />
@@ -448,6 +451,7 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                             <h6>Number of Hours to Pay</h6>
                             <input 
                                 type="number"
+                                inputMode="numeric"
                                 min={ 0 }
                                 max={ 240 }
                                 step="1"

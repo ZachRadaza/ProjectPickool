@@ -7,7 +7,7 @@
 
 .home-cont .main-btns{
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
     max-width: 150ch;
     margin: auto;
@@ -15,7 +15,7 @@
 }
 
 .home-cont .main-btns > *{
-    min-height: 300px;
+    min-height: 100px;
 }
 
 .home-cont .user-events{
@@ -27,7 +27,7 @@
 
 @media (max-width: 640px) {
     .home-cont .main-btns > *{
-        min-height: 150px;
+        min-height: 80x;
     }
 }
 
@@ -39,6 +39,6 @@
     }
 
     .home-cont .main-btns > *{
-        min-height: 100px;
+        min-height: 70px;
     }
 }

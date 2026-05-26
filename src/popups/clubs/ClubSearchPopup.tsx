@@ -35,14 +35,14 @@ export default function ClubSearchPopup({
     const navigate = useNavigate();
 
     async function onClubClick(){
-        if(!setClosedModifyEvent || !setClosedModifyPost || !setClosedCreateOptions)
-            return;
-
-        const setClosed = creatingEvent ? setClosedModifyEvent : setClosedModifyPost;
         await wait(200);
-        setClosed(false);
+        if(creatingEvent)
+            setClosedModifyEvent && setClosedModifyEvent(false)
+        else
+            setClosedModifyPost && setClosedModifyPost(false);
+        
         setIsClosed(true);
-        setClosedCreateOptions(true);
+        setClosedCreateOptions && setClosedCreateOptions(true);
     }
 
     useEffect(() => {
