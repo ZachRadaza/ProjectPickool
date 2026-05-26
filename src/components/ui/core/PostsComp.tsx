@@ -128,8 +128,6 @@ export default function PostsComp({
 
     async function loadComments(){
         try{
-            console.log(post.created_at);
-
             if(!post.id || !post.hasMoreComments || post.commentPage === undefined)
                 return;
 

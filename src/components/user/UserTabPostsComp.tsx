@@ -78,7 +78,7 @@ export default function UserTabPostsComp({ userHeader, user, setClosedModifyPost
                     )}
                     { hasMorePosts && <Button content="Load More" onBtnClick={ () => getPosts() }/> }
                 </>
-                : <h6>{ userHeader?.username ?? "Guest" }</h6> 
+                : <h6>{ user?.username ?? "Guest" } has no posts</h6> 
             }
         </div>
     );

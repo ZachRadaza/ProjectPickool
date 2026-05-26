@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import CalendarComp from "../components/events/CalendarComp";
 import type { Events, UserHeader } from "../utils/schemas";
 import Loading from "./Loading";
@@ -7,18 +7,22 @@ import { useOutletContext } from "react-router-dom";
 import { ExtensionService } from "../utils/ExtensionService";
 import "./Events.css";
 import Button from "../components/ui/buttons/Button";
+import PopupWrapper from "../popups/PopupWrapper";
+import ClubSearchPopup from "../popups/clubs/ClubSearchPopup";
 
 type EventContext = {
     userHeader: UserHeader | null;
+    setClosedModifyEvent: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function Events(){
-    const { userHeader } = useOutletContext<EventContext>();
+    const { userHeader, setClosedModifyEvent } = useOutletContext<EventContext>();
 
     const [events, setEvents] = useState<Events[]>([]);
     const [currentEventPage, setCurrentEventPage] = useState<number>(1);
     const [hasMoreEvents, setHasMoreEvents] = useState<boolean>(true);
     const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+    const [closedClubSearch, setClosedClubSearch] = useState<boolean>(true);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -60,15 +64,35 @@ export default function Events(){
         return <ErrorPage error={ error } />;
 
     return (
-        <div className="events-cont">
-            <h1 className="title">Events</h1>
-            <CalendarComp events={ events } showClub={ true } userHeader={ userHeader }/>
-            { hasMoreEvents &&
-                <Button 
-                    content={ buttonLoading ? "Loading More..." : "Load More"}
-                    onBtnClick={ () => getEvents(false) }
+        <>
+            <div className="events-cont">
+                <h1 className="title">Events</h1>
+                <CalendarComp 
+                    events={ events } 
+                    showClub={ true } 
+                    userHeader={ userHeader } 
+                    setClosedModifyEvent={ setClosedModifyEvent } 
+                    openClubSearchOnClick={ true }
+                    setClosedClubSearch={ setClosedClubSearch }
                 />
-            }
-        </div>
+                { hasMoreEvents &&
+                    <Button 
+                        content={ buttonLoading ? "Loading More..." : "Load More"}
+                        onBtnClick={ () => getEvents(false) }
+                    />
+                }
+            </div>
+            <PopupWrapper 
+                popupComp={
+                    <ClubSearchPopup 
+                        userHeader={ userHeader }
+                        setIsClosed={ setClosedClubSearch }
+                        setClosedModifyEvent={ setClosedModifyEvent }
+                        creatingEvent={ true }
+                    />
+                }
+                isClosed={ closedClubSearch }
+            />
+        </>
     );
 }
