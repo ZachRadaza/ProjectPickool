@@ -10,7 +10,7 @@
 }
 
 .user-header-cont:hover{
-    border-color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-accent) 20%, transparent);;
 }
 
 .user-header-cont .user-profile-pic{

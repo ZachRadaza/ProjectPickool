@@ -1,6 +1,7 @@
 import type { Posts } from "../schemas";
 import { supabase } from "../supabase";
 import { PostImageService } from "./PostImageService";
+import { PostTagService } from "./PostTagService";
 import { StorageService } from "./StorageService";
 
 const postBody = `
@@ -90,7 +91,7 @@ export const PostService = {
 
     async addPost(user_id: string, post: Posts){
         try{
-            const { images, ...postToAdd } = post;
+            const { images, post_tags, ...postToAdd } = post;
             const { data, error } = await supabase
                 .from("posts")
                 .insert([postToAdd])
@@ -102,6 +103,11 @@ export const PostService = {
 
             if(post.images)
                 await PostImageService.addPostImages(data?.id, post.images);
+
+            if(post.post_tags){
+                const withPostIds = post_tags?.map((tag) => ({ user_id: tag.user_id, post_id: data?.id }))
+                await PostTagService.addPostTags(withPostIds || []);
+            }
 
             return await this.getPost(data?.id, user_id);
         } catch(error){
@@ -161,6 +167,7 @@ export const PostService = {
             title: data.title,
             description: data.description,
             images: data.images,
+            post_tags: data.post_tags,
             comment_count: data.comment_count,
             like_count: data.like_count,
             liked_by_user: data.liked_by_user,

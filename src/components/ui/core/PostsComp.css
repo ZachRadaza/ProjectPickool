@@ -59,6 +59,16 @@
 .posts-comp .main-content .header .user-info > div *{ cursor: pointer; }
 .posts-comp .main-content .header .user-info > div *:hover{ color: var(--color-accent); }
 
+.posts-comp .main-content .desc .tagged{
+    font-family: var(--font-heading);
+    font-size: clamp(1.2rem, 1.7vw, 1.5rem); 
+    cursor: pointer;
+}
+
+.posts-comp .main-content .desc .tagged:hover{
+    color: var(--color-accent);
+}
+
 .posts-comp .main-content .images-cont{
     display: flex;
     flex-direction: column;

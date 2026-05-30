@@ -12,7 +12,14 @@ type UserHeaderCompProp = {
     approveContent?: string | null;
 };
 
-export default function UserHeaderComp({ userHeader, clubInfoHeader, disableBtns, approveClicked, denyClicked, approveContent }: UserHeaderCompProp){
+export default function UserHeaderComp({ 
+    userHeader, 
+    clubInfoHeader, 
+    disableBtns, 
+    approveClicked, 
+    denyClicked, 
+    approveContent, 
+}: UserHeaderCompProp){
     const navigate = useNavigate();
     const location = useLocation();
 

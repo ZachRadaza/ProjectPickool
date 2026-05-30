@@ -9,6 +9,7 @@ import DeleteButton from "../../components/ui/buttons/DeleteButton";
 import "./ModifyPostsPopup.css";
 import { useNavigate } from "react-router-dom";
 import PostArrowsButton from "../../components/ui/buttons/PostArrowsButton";
+import PostTagSelector from "../../components/posts/PostTagSelector";
 
 type ModifyPostsPopupProp = {
     userHeader: UserHeader | null;
@@ -203,11 +204,20 @@ export default function ModifyPostsPopup({ userHeader, club_id, post_id, setIsCl
                 <textarea
                     className={ `desc post-text-input inner-width ${!validDesc && 'invalid'}` }
                     value={ postTemp?.description }
-                    onChange={ (event) => setPostTemp((post) => post ? { ...post, description: event.target.value } : post) }
+                    onChange={ (event) => {
+                        event.currentTarget.style.height = "auto";
+                        event.currentTarget.style.height = `${event.currentTarget.scrollHeight}px`;
+
+                        setPostTemp((post) => post ? { ...post, description: event.target.value } : post) 
+                    }}
                     placeholder="Write somthing here..."
-                    rows={ 4 }
                     maxLength={ 500 }
                 ></textarea>
+                <PostTagSelector 
+                    club_id={ club_id }
+                    post={ postTemp }
+                    setPost={ setPostTemp }
+                />
                 <div className="images-cont inner-width">
                     { currentImageIndex > 0 &&
                         <PostArrowsButton 

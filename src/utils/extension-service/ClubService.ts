@@ -238,13 +238,13 @@ export const ClubService = {
                 .delete()
                 .eq("id", club_id)
                 .select(clubBody)
-                .single();
+                .maybeSingle();
 
             if(error)
                 throw new Error(error.message);
 
-            if(data.profile_pic_path) StorageService.deleteImage(data.profile_pic_path);
-            if(data.banner_path) StorageService.deleteImage(data.banner_path);
+            if(data?.profile_pic_path) StorageService.deleteImage(data.profile_pic_path);
+            if(data?.banner_path) StorageService.deleteImage(data.banner_path);
 
             return data;
         } catch(error){

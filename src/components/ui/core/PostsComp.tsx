@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, type Dispatch, type SetStateAction } from "react";
+import { useMemo, useRef, useState, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import { LikeType, Role, type Club_Members, type Comments, type Posts, type UserHeader } from "../../../utils/schemas";
 import CommentButton from "../buttons/CommentButton";
 import LikeButton from "../buttons/LikeButton";
@@ -57,9 +57,9 @@ export default function PostsComp({
         navigate(`${location.pathname}?${params.toString()}`);
     }
 
-    function openUserProfile(){
+    function openUserProfile(user_id: string){
         const params = new URLSearchParams(location.search);
-        params.set("previewuser", post.user?.id ?? "");
+        params.set("previewuser", user_id ?? "");
         navigate(`${location.pathname}?${params.toString()}`);
     }
 
@@ -89,6 +89,45 @@ export default function PostsComp({
             left: imagesRef.current.clientWidth * tagrgetIndex,
             behavior: "smooth"
         });
+    }
+
+    function descriptionWithTags() {
+        let parts: ReactNode[] = [post.description ?? ""];
+
+        for(const tag of post.post_tags ?? []){
+            if(!tag.username)
+                continue;
+
+            const nextParts: ReactNode[] = [];
+
+            for(const part of parts){
+                if(typeof part !== "string"){
+                    nextParts.push(part);
+                    continue;
+                }
+
+                const splitParts = part.split(`@${tag.username}`);
+                splitParts.forEach((text, index) => {
+                    nextParts.push(text);
+                    if(index < splitParts.length - 1)
+                        nextParts.push(
+                            <span
+                                key={`${tag.id}-${index}`}
+                                className="tagged"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    openUserProfile(tag.id ?? "");
+                                }}
+                            >
+                                @{tag.username}
+                            </span>
+                        );
+                });
+            }
+            parts = nextParts;
+        }
+
+        return parts;
     }
 
     async function editBtnClicked(){
@@ -259,7 +298,7 @@ export default function PostsComp({
                     <div className="user-info">
                         <img className="profile-pic" src={ post.user?.profile_pic ?? import.meta.env.VITE_DEFAULT_PROFILE_PIC }/>
                         <div>
-                            <h6 className="username" onClick={ () => openUserProfile() }>
+                            <h6 className="username" onClick={ () => openUserProfile(post.user?.id ?? "") }>
                                 { post.user?.username }
                             </h6>
                             <h6 className="club-name" onClick={ () => openClub() }>
@@ -278,7 +317,7 @@ export default function PostsComp({
                     </div>
                 </div>
                 <h4 className="title">{ post.title }</h4>
-                <p className="desc">{ post.description }</p>
+                <div className="desc"><p>{ descriptionWithTags() }</p></div>
                 { (post.images && post.images.length > 0) &&
                     <div className="images-cont">
                         { currentImageIndex > 0 &&

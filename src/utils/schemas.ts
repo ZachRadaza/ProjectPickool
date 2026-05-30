@@ -248,6 +248,7 @@ export type Posts = {
     hasMoreComments?: boolean;
     commentPage?: number;
     can_like?: boolean;
+    post_tags?: Post_Tags[];
     created_at?: string;
 };
 
@@ -279,3 +280,12 @@ export type Likes = {
     type: LikeType;
     created_at: string;
 };
+
+export type Post_Tags = {
+    post_id?: string;
+    user_id: string;
+    username?: string;
+    id?: string;
+    profile_pic?: string;
+    created_at?: string;
+}
