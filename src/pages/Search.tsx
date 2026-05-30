@@ -204,7 +204,7 @@ export default function Search(){
             { filters?.showEvents &&
                 <div className="search-content">
                     <h2>Events</h2>
-                    <CalendarComp events={ events } showClub={ true } userHeader={ userHeader }/>
+                    <CalendarComp events={ events } showClub={ true } userHeader={ userHeader } setClosedNoUserPopup={ setClosedNoUserPopup }/>
                     { hasMoreClubs &&
                         <Button
                             content="Load More Events"
