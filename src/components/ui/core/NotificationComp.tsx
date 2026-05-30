@@ -42,6 +42,8 @@ export default function NotificationComp({ notification, closeNotifClicked, setI
                 })}.</span>
             case NotificationType.EVENT_REQUEST:
                 return <span><span className="heading-font">{notification.event?.name}</span> has new requests.</span>;
+            case NotificationType.POST_TAGGED:
+                return <span>A new post on <span className="heading-font">{ notification.club?.name }</span> has tagged you.</span>
         }
     }
 
@@ -51,6 +53,7 @@ export default function NotificationComp({ notification, closeNotifClicked, setI
             case NotificationType.CLUB_ADMIN:
             case NotificationType.CLUB_LEVEL_APPROVED:
             case NotificationType.CLUB_REQUEST:
+            case NotificationType.POST_TAGGED:
                 if(!notification.club?.id)
                     return;
 

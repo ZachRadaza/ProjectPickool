@@ -56,7 +56,8 @@ export const NotificationType = {
     EVENT_HOST: "event_host",
     EVENT_REQUEST: "event_request",
     EVENT_ACCEPTED: 'event_accepted',
-    EVENT_REMINDER: "event_reminder"
+    EVENT_REMINDER: "event_reminder",
+    POST_TAGGED: "post_tagged"
 } as const;
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];
 
