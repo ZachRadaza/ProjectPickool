@@ -13,9 +13,18 @@ type CalendarCompProp = {
     userHeader?: UserHeader | null;
     openClubSearchOnClick?: boolean;
     setClosedClubSearch?: Dispatch<SetStateAction<boolean>>;
+    setClosedNoUserPopup: Dispatch<SetStateAction<boolean>>;
 };
 
-export default function CalendarComp({ events, setClosedModifyEvent, showClub, userHeader, openClubSearchOnClick, setClosedClubSearch }: CalendarCompProp){
+export default function CalendarComp({ 
+    events, 
+    setClosedModifyEvent, 
+    showClub, 
+    userHeader, 
+    openClubSearchOnClick, 
+    setClosedClubSearch, 
+    setClosedNoUserPopup 
+}: CalendarCompProp){
     const [eventsSorted, setEventsSorted] = useState<Map<string, EventPlayer[]>>(new Map());
     const [pastEventsSorted, setPastEventsSorted] = useState<Map<string, EventPlayer[]>>(new Map());
     const [isEventsSorted, setIsEventSorted] = useState<boolean>(true);
@@ -30,6 +39,11 @@ export default function CalendarComp({ events, setClosedModifyEvent, showClub, u
     }
 
     function addEventClicked(){
+        if(!userHeader){
+            setClosedNoUserPopup(false);
+            return;
+        }
+        
         if(openClubSearchOnClick){
             if(setClosedClubSearch)
                 setClosedClubSearch(false);

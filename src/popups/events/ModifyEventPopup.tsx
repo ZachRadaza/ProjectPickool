@@ -348,7 +348,9 @@ export default function ModifyEventPopup({ setIsClosed, userHeader, isEditing, c
                     <h6>Price</h6>
                     <input
                         type="number"
+                        inputMode="numeric"
                         min={ 0 }
+                        max={ 999999 }
                         step="0.01"
                         value={ event?.price ?? "" }
                         disabled={ isEditing }

@@ -48,6 +48,7 @@ export default function PostsComp({
         comment.post_id && comment.comment && comment.user_id
     , [comment]);
 
+    const commentTextAreaRef = useRef<HTMLTextAreaElement | null>(null);
     const imagesRef = useRef<HTMLDivElement | null>(null);
     const navigate = useNavigate();
 
@@ -187,6 +188,7 @@ export default function PostsComp({
 
             setPost(updatedPost);
             setCommentLoading(false);
+            commentTextAreaRef.current?.focus();
         } catch(error: any){
             throw new Error(error);
         }
@@ -388,6 +390,7 @@ export default function PostsComp({
                                     }
                                 }}
                                 rows={ 1 }
+                                ref={ commentTextAreaRef }
                             ></textarea>
                             <SendButton 
                                 isDisabled={ !post.can_like || !userHeader }

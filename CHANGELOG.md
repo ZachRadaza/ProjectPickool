@@ -1,16 +1,14 @@
 # Changelog
 
-## [0.2.4] - 2026-05-26
+## [0.2.5] - 2026-05-29
 
 ### Added
- - Navigation to events on `Home.tsx`.
- - `Add Event` button on `Event.tsx` and `Home.tsx`.
+ - Users can now Tag club members on posts.
+ - Notifications for posts.
 
 ### Fixed
- - `UserTabPostsComp.tsx` showed user's username instead of viewing user's username when there are no posts.
- - Cannot create event with a location.
+ - `Add Event` button on `CalendarComp.tsx` would open despite having no user account.
 
 ### Changed
- - Showing the tags on mobile on `EventComp.tsx`.
- - `Double` to `Doubles` on `SexChooser.tsx`.
- - Whole number inputs on `ModifyEventPopup.tsx` are not scroll wheel. Maybe?
+ - Focus when opening comments on `PostsComp.tsx`.
+ - Number only on price in `ModifyEventPopup.tsx`.

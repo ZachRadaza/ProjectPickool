@@ -110,6 +110,7 @@ export default function Home(){
                         setClosedModifyEvent={ setClosedModifyEvent }
                         openClubSearchOnClick={ true }
                         setClosedClubSearch={ setClosedClubSearch }
+                        setClosedNoUserPopup={ setClosedNoUserPopup }
                     />
                     { hasMoreEvents && 
                         <Button 
