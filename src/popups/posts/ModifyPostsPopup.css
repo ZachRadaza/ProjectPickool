@@ -20,7 +20,9 @@
 
 .modify-posts-popup .desc{
     opacity: 0.8;
-    min-height: 30px;
+    min-height: 50px;
+    overflow: hidden;
+    resize: none;
 }
 
 .modify-posts-popup .images-cont{

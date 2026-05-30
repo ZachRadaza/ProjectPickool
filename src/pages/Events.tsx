@@ -13,10 +13,11 @@ import ClubSearchPopup from "../popups/clubs/ClubSearchPopup";
 type EventContext = {
     userHeader: UserHeader | null;
     setClosedModifyEvent: Dispatch<SetStateAction<boolean>>;
+    setClosedNoUserPopup: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function Events(){
-    const { userHeader, setClosedModifyEvent } = useOutletContext<EventContext>();
+    const { userHeader, setClosedModifyEvent, setClosedNoUserPopup } = useOutletContext<EventContext>();
 
     const [events, setEvents] = useState<Events[]>([]);
     const [currentEventPage, setCurrentEventPage] = useState<number>(1);
@@ -74,6 +75,7 @@ export default function Events(){
                     setClosedModifyEvent={ setClosedModifyEvent } 
                     openClubSearchOnClick={ true }
                     setClosedClubSearch={ setClosedClubSearch }
+                    setClosedNoUserPopup={ setClosedNoUserPopup }
                 />
                 { hasMoreEvents &&
                     <Button 

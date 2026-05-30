@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import { Role, type Club_Members, type Events } from "../../utils/schemas";
 import Loading from "../../pages/Loading";
 import ErrorPage from "../../pages/Error";
@@ -11,9 +11,10 @@ type ClubsEventCompProp = {
     club_id: string | null;
     setClosedModifyEvent?: (closed: boolean) => void;
     userClubMember?: Club_Members | null;
+    setClosedNoUserPopup: Dispatch<SetStateAction<boolean>>;
 };
 
-export default function ClubEventsComp({ club_id, setClosedModifyEvent, userClubMember }: ClubsEventCompProp){
+export default function ClubEventsComp({ club_id, setClosedModifyEvent, userClubMember, setClosedNoUserPopup }: ClubsEventCompProp){
     const [events, setEvents] = useState<Events[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [hasMoreEvents, setHasMoreEvents] = useState<boolean>(true);
@@ -61,8 +62,17 @@ export default function ClubEventsComp({ club_id, setClosedModifyEvent, userClub
     else
         content = <>
             { userClubMember?.role === Role.ADMIN || userClubMember?.role === Role.OWNER
-                ? <CalendarComp events={ events } setClosedModifyEvent={ setClosedModifyEvent } userHeader={ userClubMember.user }/>
-                : <CalendarComp events={ events } userHeader={ userClubMember?.user ?? null } />
+                ? <CalendarComp 
+                    events={ events } 
+                    setClosedModifyEvent={ setClosedModifyEvent } 
+                    userHeader={ userClubMember.user } 
+                    setClosedNoUserPopup={ setClosedNoUserPopup}
+                />
+                : <CalendarComp 
+                    events={ events } 
+                    userHeader={ userClubMember?.user ?? null } 
+                    setClosedNoUserPopup={ setClosedNoUserPopup} 
+                />
             }
             { hasMoreEvents && 
                 <Button

@@ -56,7 +56,8 @@ export const NotificationType = {
     EVENT_HOST: "event_host",
     EVENT_REQUEST: "event_request",
     EVENT_ACCEPTED: 'event_accepted',
-    EVENT_REMINDER: "event_reminder"
+    EVENT_REMINDER: "event_reminder",
+    POST_TAGGED: "post_tagged"
 } as const;
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];
 
@@ -248,6 +249,7 @@ export type Posts = {
     hasMoreComments?: boolean;
     commentPage?: number;
     can_like?: boolean;
+    post_tags?: Post_Tags[];
     created_at?: string;
 };
 
@@ -279,3 +281,12 @@ export type Likes = {
     type: LikeType;
     created_at: string;
 };
+
+export type Post_Tags = {
+    post_id?: string;
+    user_id: string;
+    username?: string;
+    id?: string;
+    profile_pic?: string;
+    created_at?: string;
+}

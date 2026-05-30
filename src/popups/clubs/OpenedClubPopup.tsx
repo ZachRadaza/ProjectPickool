@@ -62,11 +62,27 @@ export default function OpenedClubPopup({
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const tabMap = {
-        [TabType.EVENTS]: <ClubEventsComp club_id={ club_id } setClosedModifyEvent={ setIsModifyEventClosed } userClubMember={ userClubMember }/>,
-        [TabType.POSTS]: <ClubPostsComp userHeader={ userHeader } club_id={ club_id } userClubMember={ userClubMember } setClosedNoUserPopup={ setClosedNoUserPopup } setClosedModifyPost={ setIsModifyPostClosed }/>,
+        [TabType.EVENTS]: <ClubEventsComp 
+            club_id={ club_id } 
+            setClosedModifyEvent={ setIsModifyEventClosed } 
+            userClubMember={ userClubMember } 
+            setClosedNoUserPopup={ setClosedNoUserPopup }
+        />,
+        [TabType.POSTS]: <ClubPostsComp 
+            userHeader={ userHeader } 
+            club_id={ club_id } 
+            userClubMember={ userClubMember } 
+            setClosedNoUserPopup={ setClosedNoUserPopup } 
+            setClosedModifyPost={ setIsModifyPostClosed }
+        />,
         [TabType.MEMBERS]: <ClubMembersComp club_id={ club_id } />,
         [TabType.REQUESTS]: <ClubRequestsComp club_id={ club_id } setNumRequests={ setNumRequests }/>,
-        [TabType.LEVEL]: <ClubLevelComp userHeader={ userHeader } userClubMember={ userClubMember } club_id={ club_id } setUserClubMember={ setUserClubMember }/>,
+        [TabType.LEVEL]: <ClubLevelComp 
+            userHeader={ userHeader } 
+            userClubMember={ userClubMember } 
+            club_id={ club_id } 
+            setUserClubMember={ setUserClubMember }
+        />,
         [TabType.INFO]: <ClubInfoComp club={ club } editClubBtn={ editClubBtn } deleteClubBtn={ deleteClubBtn }/>
     };
 
