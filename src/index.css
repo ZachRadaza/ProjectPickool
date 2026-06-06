@@ -3,6 +3,7 @@
     --color-primary-hover: #16A34A;
     --color-secondary: #14B8A6;
     --color-accent: #FB923C;
+    --color-accent-darker: #C2410C;
     --color-red: #C1121F;
     --color-bg: #F0FDF4;
     --color-text: #052E16;
@@ -182,9 +183,9 @@ img{ background: #DCFCE7; }
 }
 
 .attribute-tag.accent{
-    border-color: var(--color-accent);
+    border-color: var(--color-accent-darker);
     background: color-mix(in srgb, var(--color-accent) 20%, transparent);
-    color: var(--color-accent);
+    color: var(--color-accent-darker);
 }
 
 .popups-cont{
