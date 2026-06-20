@@ -1,4 +1,5 @@
 import { ClubMemberService } from "./extension-service/ClubMemberService";
+import { ClubMessageService } from "./extension-service/ClubMessageService";
 import { ClubRequestService } from "./extension-service/ClubRequestService";
 import { ClubService } from "./extension-service/ClubService";
 import { CommentService } from "./extension-service/CommentService";
@@ -23,5 +24,6 @@ export const ExtensionService = {
     PostService,
     LikeService,
     CommentService,
-    
+    ClubMessageService,
+
 };

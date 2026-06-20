@@ -289,4 +289,13 @@ export type Post_Tags = {
     id?: string;
     profile_pic?: string;
     created_at?: string;
-}
+};
+
+export type Club_Messages = {
+    id?: string;
+    user_id?: string;
+    user?: UserHeader;
+    club_id: string;
+    created_at: string;
+    message?: string;
+};

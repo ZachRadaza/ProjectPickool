@@ -1,0 +1,44 @@
+.club-message-comp{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+}
+
+.club-message-comp .no-messages{
+    text-align: center;
+    padding: 4rem 0px;
+}
+
+.club-message-comp .messages-cont{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: scroll;
+    padding: 1rem;
+    gap: 0px
+}
+
+.club-message-comp .messages-cont .load-more{
+    align-self: center;
+}
+
+.club-message-comp .send-message-cont{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: start;
+    justify-content: center;
+    padding: 0.5rem;
+    gap: 1rem;
+    border-top: 0.1rem solid var(--color-text);
+    box-sizing: border-box;
+}
+
+.club-message-comp .send-message-cont .send-message-input{
+    width: 100%;
+    max-width: 500px;
+    min-height: calc(1rem + 0.5rem);
+}

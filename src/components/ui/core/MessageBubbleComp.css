@@ -1,0 +1,61 @@
+.message-bubble-comp{
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+    gap: 1rem;
+    justify-content: start;
+    margin: 0.3rem 0px;
+}
+ 
+.message-bubble-comp.is-self{
+    flex-direction: row-reverse;
+    justify-content: end;
+}
+
+.message-bubble-comp .profile-pic{
+    border: 0.1rem solid var(--color-text);
+    min-width: 2rem;
+    max-width: 2rem;
+    min-height: 2rem;
+    max-height: 2rem;
+    aspect-ratio: 1 / 1;
+    border-radius: 999px;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.message-bubble-comp .message-content-cont{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: end;
+}
+
+.message-bubble-comp.is-self .message-content-cont{
+    flex-direction: row-reverse;
+}
+
+.message-bubble-comp .message{
+    background: color-mix(in srgb, var(--color-accent) 20%, transparent);
+    border: 0.1rem solid var(--color-text);
+    border-radius: 1rem;
+    border-bottom-left-radius: 0.5rem;
+    padding: 0.5rem;
+    max-width: min(500px, 75vw);
+}
+
+.message-bubble-comp.is-self .message{
+    border-radius: 1rem;
+    border-bottom-right-radius: 0.5rem;
+    background: color-mix(in srgb, var(--color-primary) 20%, transparent);
+}
+
+.message-bubble-comp .date{
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: opacity 100ms ease;
+}
+
+.message-bubble-comp:hover .date{
+    opacity: 0.6;
+}

@@ -294,6 +294,6 @@ export const ClubMemberService = {
         const members: any[] = data.map((member) => this.convertToClubMembers(member));
         const cleared: Club_Members[] = members.filter((mem) => mem !== null);
 
-        return cleared
+        return cleared;
     }
 };

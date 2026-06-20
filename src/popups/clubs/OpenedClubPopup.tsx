@@ -19,10 +19,12 @@ import Button from "../../components/ui/buttons/Button";
 import { capitalizeWords } from "../../utils/random";
 import FavoriteButton from "../../components/ui/buttons/FavoriteButton";
 import ClubInfoComp from "../../components/clubs/ClubInfoComp";
+import ClubMessageComp from "../../components/clubs/ClubMessageComp";
 
 export const TabType = {
     EVENTS: "events",
     POSTS: "posts",
+    MESSAGE: "message",
     MEMBERS: "members",
     REQUESTS: "requests",
     LEVEL: "level",
@@ -75,6 +77,7 @@ export default function OpenedClubPopup({
             setClosedNoUserPopup={ setClosedNoUserPopup } 
             setClosedModifyPost={ setIsModifyPostClosed }
         />,
+        [TabType.MESSAGE]: <ClubMessageComp userHeader={ userHeader } club_id={ club_id }/>,
         [TabType.MEMBERS]: <ClubMembersComp club_id={ club_id } />,
         [TabType.REQUESTS]: <ClubRequestsComp club_id={ club_id } setNumRequests={ setNumRequests }/>,
         [TabType.LEVEL]: <ClubLevelComp 
@@ -317,6 +320,13 @@ export default function OpenedClubPopup({
                         content="Posts"
                         additionalClasses={ tabClasses(TabType.POSTS) }
                     />
+                    { userClubMember?.role &&
+                        <Button
+                            onBtnClick={ () => setCurrentTab(TabType.MESSAGE) }
+                            content="Message"
+                            additionalClasses={ tabClasses(TabType.MESSAGE) }
+                        />
+                    }
                     <Button
                         onBtnClick={ () => setCurrentTab(TabType.MEMBERS) }
                         content="Members"
