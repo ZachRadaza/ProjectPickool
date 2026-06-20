@@ -18,7 +18,8 @@
     max-height: 80vh;
     overflow-y: scroll;
     padding: 1rem;
-    gap: 0px
+    gap: 0px;
+    box-sizing: border-box;
 }
 
 .club-message-comp .messages-cont .load-more{
