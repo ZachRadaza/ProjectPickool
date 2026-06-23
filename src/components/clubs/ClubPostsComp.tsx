@@ -85,6 +85,7 @@ export default function ClubPostsComp({ userHeader, club_id, userClubMember, set
                             setModifyPostIsClosed={ setClosedModifyPost }
                             setClosedNoUserPopup={ setClosedNoUserPopup }
                             setPosts={ setPosts }
+                            showPin={ true }
                             key={ post.id }
                         />
                     )}

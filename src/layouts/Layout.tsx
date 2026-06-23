@@ -17,6 +17,7 @@ import PopupWrapper from "../popups/PopupWrapper";
 import NotificationsPopup from "../popups/notifications/NotificationsPopup";
 import NoUserPopup from "../popups/user/NoUserPopup";
 import ModifyPostsPopup from "../popups/posts/ModifyPostsPopup";
+import { supabase } from "../utils/supabase";
 
 export default function Layout(){
     const [closedSignIn, setClosedSignIn] = useState<boolean>(true);
@@ -53,16 +54,36 @@ export default function Layout(){
                 
                 const userFetch = await ExtensionService.UserService.getCurrentUser();
 
-                if(userFetch){
+                if(userFetch)
                     setUserHeader(userFetch);
-                    getNotificationNumber(userFetch.id);
-                }
+                
                 setIsLoading(false);
             } catch(error){
                 setIsLoading(false);
                 setError("Error in Getting User");
             }
         }
+    }, []);
+
+    useEffect(() => {
+        if(!userHeader)
+            return;
+
+        getNotificationNumber(userHeader.id);
+
+        const channel = supabase
+            .channel(`notifications:${userHeader.id}`)
+            .on(
+                "postgres_changes",
+                {
+                    event: "INSERT",
+                    schema: "public",
+                    table: "notifications",
+                    filter: `user_id=eq.${userHeader.id}`,
+                },
+                () => getNotificationNumber(userHeader.id)
+            )
+            .subscribe();
 
         async function getNotificationNumber(user_id: string){
             try{
@@ -77,7 +98,11 @@ export default function Layout(){
                 setError("Error in Getting Number of notificaitons");
             }
         }
-    }, []);
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }, [userHeader]);
 
     useEffect(() => {
         const club = searchParams.get("club");

@@ -14,6 +14,7 @@ import CommentThreadComp from "./CommentThreadComp";
 import { useNavigate } from "react-router-dom";
 import { timeAgo, wait } from "../../../utils/random";
 import PostArrowsButton from "../buttons/PostArrowsButton";
+import PinButton from "../buttons/PinButton";
 
 type PostCompProp = {
     post: Posts;
@@ -23,6 +24,7 @@ type PostCompProp = {
     setPosts?: Dispatch<SetStateAction<Posts[]>>;
     setModifyPostIsClosed: Dispatch<SetStateAction<boolean>>;
     setClosedNoUserPopup?: Dispatch<SetStateAction<boolean>>;
+    showPin?: boolean;
 };
 
 export default function PostsComp({ 
@@ -32,7 +34,8 @@ export default function PostsComp({
     setPost, 
     setPosts,
     setModifyPostIsClosed, 
-    setClosedNoUserPopup 
+    setClosedNoUserPopup,
+    showPin
 }: PostCompProp){
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
     const [showComments, setShowComments] = useState<boolean>(false);
@@ -129,6 +132,23 @@ export default function PostsComp({
         }
 
         return parts;
+    }
+
+    async function pinnedBtnClicked(){
+        try{
+            if(!post.id || !userHeader)
+                return;
+
+            const newPin = !post.pinned;
+            setPost({ ...post, pinned: newPin });
+
+            const updatedPost = await ExtensionService.PostService.updatePost(post.id, userHeader.id, { pinned: newPin });
+            
+            if(updatedPost)
+                setPost(updatedPost);
+        } catch(error: any){
+            throw new Error(error);
+        }        
     }
 
     async function editBtnClicked(){
@@ -309,12 +329,19 @@ export default function PostsComp({
                         </div>
                     </div>
                     <div>
+                        { showPin &&
+                            <PinButton 
+                                onBtnClick={ pinnedBtnClicked } 
+                                isPinned={ post.pinned } 
+                                disabled={ !(userClubMember?.role === Role.ADMIN || userClubMember?.role === Role.OWNER) } 
+                            />
+                        }
                         { userHeader?.id === post.user?.id &&
-                            <EditButton onBtnClick={ () => editBtnClicked() }/>
+                            <EditButton onBtnClick={ editBtnClicked }/>
                         }
                         { ((userHeader?.id === post.user?.id) ||
                             (userClubMember?.role === Role.ADMIN || userClubMember?.role === Role.OWNER)) &&
-                            <DeleteButton onBtnClick={ () => deletePost() } />
+                            <DeleteButton onBtnClick={ deletePost } />
                         }
                     </div>
                 </div>

@@ -164,7 +164,8 @@ export default function ModifyPostsPopup({ userHeader, club_id, post_id, setIsCl
                         user_id: userHeader.id,
                         title: "",
                         description: "",
-                        images: []
+                        images: [],
+                        pinned: false
                     };
 
                 if(!postData){

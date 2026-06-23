@@ -251,6 +251,7 @@ export type Posts = {
     can_like?: boolean;
     post_tags?: Post_Tags[];
     created_at?: string;
+    pinned: boolean;
 };
 
 export type Post_Images = {
@@ -298,4 +299,6 @@ export type Club_Messages = {
     club_id: string;
     created_at: string;
     message?: string;
+    replying_to_id?: string;
+    replying_to?: { id: string, message: string, user_id: string }; 
 };

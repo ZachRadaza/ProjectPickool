@@ -98,11 +98,20 @@ export default function OpenedClubPopup({
         return `bg ${tabType === currentTab ? "active" : ""}`;
     }
 
+    function setClubTab(type: TabType){
+        setCurrentTab(type);
+
+        const params = new URLSearchParams(location.search);
+        params.set("clubtab", type);
+        navigate(`${location.pathname}?${params.toString()}`);
+    }
+
     function closeClubPopup(closed: boolean){
         setIsClosed(closed);
 
         const params = new URLSearchParams(location.search);
         params.delete("club");
+        params.delete("clubtab");
 
         navigate({
             pathname: location.pathname,
@@ -178,6 +187,7 @@ export default function OpenedClubPopup({
 
     useEffect(() => {
         getUserClubMember();
+        readClubTabUrl();
 
         async function getUserClubMember(){
             try{
@@ -238,6 +248,12 @@ export default function OpenedClubPopup({
 
             if(userRequested)
                 setRequested(true);
+        }
+
+        function readClubTabUrl(){
+            const params = new URLSearchParams(location.search).get("clubtab");
+            const tabToOpen = params as TabType;
+            setClubTab(tabToOpen ? tabToOpen : TabType.EVENTS);
         }
     }, [requested, userHeader, club_id]);
 
@@ -311,42 +327,42 @@ export default function OpenedClubPopup({
             <div className="club-tab-cont width-bound">
                 <div className="tabs club-tabs">
                     <Button
-                        onBtnClick={ () => setCurrentTab(TabType.EVENTS) }
+                        onBtnClick={ () => setClubTab(TabType.EVENTS) }
                         content="Events"
                         additionalClasses={ tabClasses(TabType.EVENTS) }
                     />
                     <Button
-                        onBtnClick={ () => setCurrentTab(TabType.POSTS) }
+                        onBtnClick={ () => setClubTab(TabType.POSTS) }
                         content="Posts"
                         additionalClasses={ tabClasses(TabType.POSTS) }
                     />
                     { userClubMember?.role &&
                         <Button
-                            onBtnClick={ () => setCurrentTab(TabType.MESSAGE) }
+                            onBtnClick={ () => setClubTab(TabType.MESSAGE) }
                             content="Message"
                             additionalClasses={ tabClasses(TabType.MESSAGE) }
                         />
                     }
                     <Button
-                        onBtnClick={ () => setCurrentTab(TabType.MEMBERS) }
+                        onBtnClick={ () => setClubTab(TabType.MEMBERS) }
                         content="Members"
                         additionalClasses={ tabClasses(TabType.MEMBERS) }
                     />
                     <Button 
-                        onBtnClick={ () => setCurrentTab(TabType.INFO) }
+                        onBtnClick={ () => setClubTab(TabType.INFO) }
                         content="Info"
                         additionalClasses={ tabClasses(TabType.INFO) }
                     />
                     { (userClubMember?.role === Role.OWNER || userClubMember?.role === Role.ADMIN) &&
                         <Button
-                            onBtnClick={ () => setCurrentTab(TabType.REQUESTS) }
+                            onBtnClick={ () => setClubTab(TabType.REQUESTS) }
                             content={ `Requests (${numRequests})` }
                             additionalClasses={ tabClasses(TabType.REQUESTS) }              
                         />
                     }
                     { userClubMember?.role &&
                         <Button
-                            onBtnClick={ () => setCurrentTab(TabType.LEVEL) }
+                            onBtnClick={ () => setClubTab(TabType.LEVEL) }
                             content="Club Level"
                             additionalClasses={ tabClasses(TabType.LEVEL) }
                         />

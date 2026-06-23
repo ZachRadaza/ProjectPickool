@@ -6,14 +6,13 @@ Project Pickool is a web app for discovering, joining, and managing pickleball c
 
 - User authentication with Supabase
 - User profiles with location and profile details
-- Browse and search clubs
-- Browse and search events
+- Browse and search clubs and events
 - Location-based “near me” search
 - Club membership and requests
-- Favorite clubs
 - Event discovery based on nearby events and user clubs
 - Notifications for club and event activity
 - Ability to post on clubs
+- Ability to real time message in club
 - Responsive React UI
 
 ## Tech Stack
@@ -108,10 +107,6 @@ src/
 ├── index.css
 └── main.tsx
 ```
-
-## Status
-
-Project Pickool is in its early stages of development.
 
 ## Author
 

@@ -10,7 +10,12 @@ const clubMessageBody = `
     ),
     club_id,
     created_at,
-    message
+    message,
+    replying_to:replying_to_id (
+        id,
+        message,
+        user_id
+    )
 `;
 
 export const ClubMessageService = {
@@ -34,7 +39,7 @@ export const ClubMessageService = {
 
     async getClubMessages(club_id: string, page: number){
         try{
-            const pageSize = 20;
+            const pageSize = 25;
             const from = (page - 1) * pageSize;
             const to = from + pageSize - 1;
 
@@ -59,11 +64,11 @@ export const ClubMessageService = {
         }
     },
 
-    async addClubMessage(user_id: string, club_id: string, message: string){
+    async addClubMessage(user_id: string, club_id: string, message: string, replying_to_id?: string | null){
         try{
             const { data, error } = await supabase
                 .from("club_messages")
-                .insert([{ user_id, club_id, message }])
+                .insert([{ user_id, club_id, message, replying_to_id }])
                 .select(clubMessageBody)
                 .maybeSingle();
 
@@ -86,7 +91,8 @@ export const ClubMessageService = {
             club_id: data.club_id,
             user: data.user,
             created_at: data.created_at,
-            message: data.message || ""
+            message: data.message || "",
+            replying_to: data.replying_to
         };
 
         return message;

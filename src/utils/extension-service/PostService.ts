@@ -18,6 +18,7 @@ const postBody = `
     ),
     title,
     description,
+    pinned,
     created_at
 `;
 
@@ -166,6 +167,7 @@ export const PostService = {
             user: data.user,
             title: data.title,
             description: data.description,
+            pinned: data.pinned,
             images: data.images,
             post_tags: data.post_tags,
             comment_count: data.comment_count,

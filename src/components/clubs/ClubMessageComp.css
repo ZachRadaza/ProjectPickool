@@ -26,6 +26,39 @@
     align-self: center;
 }
 
+.club-message-comp .messages-cont .date-separators{
+    text-align: center;
+    opacity: 0.6;
+    padding: 1rem 0px;
+    margin: 0px auto;
+}
+
+.club-message-comp .replying-to-cont{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    padding: 0.5rem;
+}
+
+.club-message-comp .replying-to-cont .close{
+    position: relative;
+    top: 0;
+    right: 0;
+}
+
+.club-message-comp .replying-to-cont .content{
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    align-items: start;
+}
+
+.club-message-comp .replying-to-cont .content .replying-to-text{
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
 .club-message-comp .send-message-cont{
     display: flex;
     flex-direction: row;
@@ -42,4 +75,11 @@
     width: 100%;
     max-width: 500px;
     min-height: calc(1rem + 0.5rem);
+}
+
+@media (max-width: 640px){
+    .club-message-comp .messages-cont{
+        scrollbar-width: none;
+        padding: 0px;
+    }
 }

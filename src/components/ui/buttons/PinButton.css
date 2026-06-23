@@ -1,0 +1,19 @@
+.pin-btn svg{
+    width: 1.5rem;
+    height: auto;
+    fill: var(--color-text);
+    stroke: var(--color-text);
+}
+
+.pin-btn.pinned svg, .pin-btn:hover svg{
+    fill: var(--color-primary);
+    stroke: var(--color-primary);
+}
+
+.pin-btn.disabled{
+    opacity: 0;
+}
+
+.pin-btn.disabled.pinned{
+    opacity: 1;
+}
