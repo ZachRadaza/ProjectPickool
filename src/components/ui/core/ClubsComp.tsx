@@ -10,9 +10,10 @@ type ClubsCompProp = {
     club: Clubs;
     changeFavorite?: (club_id: string, is_favorite: boolean) => Promise<void>;
     showFavorite?: boolean;
+    isMini?: boolean;
 }
 
-export default function ClubsComp({ userClub, club, changeFavorite, userRequest, showFavorite }: ClubsCompProp){
+export default function ClubsComp({ userClub, club, changeFavorite, userRequest, showFavorite, isMini }: ClubsCompProp){
     const navigate = useNavigate();
 
     function openClub(){
@@ -23,7 +24,7 @@ export default function ClubsComp({ userClub, club, changeFavorite, userRequest,
 
     return (
         <div 
-            className={ `club-comp-cont ${userRequest ? "waiting" : ""}` }
+            className={ `club-comp-cont ${userRequest ? "waiting" : ""} ${isMini ? "mini" : ""}` }
             onClick={ () => openClub() }
         >
             <svg className="club-icon" xmlns="http://www.w3.org/2000/svg" viewBox="-5 -10 110 135">

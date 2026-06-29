@@ -43,6 +43,7 @@ export default function Header({ userHeader, numberNotifs, setClosedNotifsPopup 
                     <NavLink to="/clubs" className={ navClass } onClick={ () => setMenuClosed(true) }><h5>Clubs</h5></NavLink>
                     <NavLink to="/events" className={ navClass } onClick={ () => setMenuClosed(true) }><h5>Events</h5></NavLink>
                     <NavLink to="/search" className={ navClass } onClick={ () => setMenuClosed(true) }><h5>Explore</h5></NavLink>
+                    <NavLink to="/courts" className={ navClass } onClick={ () => setMenuClosed(true) }><h5>Courts</h5></NavLink>
                     <NavLink 
                         to={ `/user/${userHeader?.id || "guest"}` } 
                         className={`profile-section ${navClass}`}

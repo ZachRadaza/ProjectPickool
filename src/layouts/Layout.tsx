@@ -266,7 +266,7 @@ export default function Layout(){
                 </svg>
                 <Outlet 
                     context={{ 
-                        userHeader, setClosedSignIn, setClosedSignUp, setClosedModifyClub, setClosedEditUser, 
+                        userHeader, club_id, setClosedSignIn, setClosedSignUp, setClosedModifyClub, setClosedEditUser, 
                         setClosedNoUserPopup,
                         setClosedModifyEvent,
                         setClosedModifyPost

@@ -77,6 +77,31 @@ export const UserService = {
         }
     },
 
+    async getUserHeadersList(user_ids: string[]){
+        try{
+            const { data, error } = await supabase
+                .from("users")
+                .select(`
+                    id,
+                    username,
+                    profile_pic,
+                    location:locations(*)
+                `)
+                .in("id", user_ids);
+
+            if(error)
+                throw new Error(error.message);
+
+            const users = data.map((user) => this.convertToUserHeader(user));
+            const usersFiltered = users.filter((user) => user !== null);
+
+            return usersFiltered;
+        } catch(error){
+            console.error("error", error);
+            throw error;
+        }
+    },
+
     async getUserCardInfo(userCardId: string, user_id?: string | null, club_id?: string | null, event_id?: string | null){
         try{
             const { data, error } = await supabase

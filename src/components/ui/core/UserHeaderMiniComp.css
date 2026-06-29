@@ -31,3 +31,28 @@
 .user-header-mini-cont:hover .profile-pic{ border-color: var(--color-accent); }
 
 .user-header-mini-cont:hover .name{ color: var(--color-accent); }
+
+.user-header-mini-cont .close{
+    position: absolute;
+    top: -0.5rem;
+    left: -0.5rem;
+    background: var(--color-bg);
+    width: min-content;
+    padding: none;
+    border-radius: 999px;
+    border: 0.1rem solid var(--color-red);
+}
+
+.user-header-mini-cont .close:hover{
+    background: var(--color-bg);
+}
+
+.user-header-mini-cont .close svg{
+    width: 1rem;
+    height: auto;
+    stroke: var(--color-red);
+}
+
+.user-header-mini-cont .close:hover svg{
+    stroke: var(--color-red);
+}

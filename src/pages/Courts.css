@@ -1,0 +1,90 @@
+.courts-cont{
+    display: grid;
+    grid-template-columns: 4fr 6fr;
+    gap: 1rem;
+    width: 100%;
+    padding: 3rem;
+    box-sizing: border-box;
+    max-width: 2000px;
+}
+
+.courts-cont .general-info-cont{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.courts-cont .general-info-cont .court-info-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 1rem;
+    align-items: center;
+}
+
+.courts-cont .general-info-cont .court-info-row .court-num-cont{
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    align-items: center;
+}
+
+.courts-cont .general-info-cont .court-info-row .court-num-cont .court-num-inputs{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.courts-cont .general-info-cont .court-info-row .is-singles-cont{
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.courts-cont .general-info-cont .court-info-row .is-singles-cont button{
+    padding: 1rem 3rem;
+    background: var(--color-bg);
+}
+
+.courts-cont .general-info-cont .court-info-row .is-singles-cont button.active{ background: var(--color-primary); }
+
+.courts-cont .tab-cont{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.courts-cont .general-info-cont .use-club-wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.courts-cont .general-info-cont .use-club-cont{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border: 0.1rem solid var(--color-text);
+    border-radius: 1rem;
+    background: var(--color-bg);
+}
+
+.courts-cont .general-info-cont .use-club-cont .btn-cont{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+.courts-cont .general-info-cont .use-club-cont .btn-cont button{ background: var(--color-bg); }
+.courts-cont .general-info-cont .use-club-cont .btn-cont button.active{ background: var(--color-primary); }
+
+.courts-cont .tab-cont .court-tab-row{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}

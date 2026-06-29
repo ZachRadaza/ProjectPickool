@@ -1,7 +1,7 @@
 .dropdown-btn{
     border: none;
     border-radius: 0px;
-    background: var(--color-bg);
+    background: transparent;
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
@@ -11,7 +11,7 @@
 
 .dropdown-btn:hover{
     color: var(--color-accent);
-    background: var(--color-bg);
+    background: transparent;
 }
 
 .dropdown-btn .arrow{

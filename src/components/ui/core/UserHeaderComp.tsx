@@ -24,7 +24,7 @@ export default function UserHeaderComp({
     const location = useLocation();
 
     function openUserProfile(){
-        if(disableBtns)
+        if(disableBtns || userHeader?.id.includes("guest"))
             return;
 
         const params = new URLSearchParams(location.search);
