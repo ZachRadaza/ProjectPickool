@@ -4,7 +4,7 @@ import ErrorPage from "./Error";
 import CourtOpenPlayComp from "../components/courts/CourtOpenPlayComp";
 import CourtTournamentComp from "../components/courts/CourtTournamentComp";
 import Button from "../components/ui/buttons/Button";
-import { type Clubs, type UserHeader } from "../utils/schemas";
+import { EventType, type Clubs, type UserHeader } from "../utils/schemas";
 import "./Courts.css";
 import UsersDropdown from "../components/user/UsersDropdown";
 import PopupWrapper from "../popups/PopupWrapper";
@@ -15,13 +15,6 @@ import { ExtensionService } from "../utils/ExtensionService";
 import ClubsComp from "../components/ui/core/ClubsComp";
 import UserSearchPopup from "../popups/clubs/UserSearchPopup";
 import AddGuestPopup from "../popups/courts/AddGuestPopup";
-
-export const CourtTabType = {
-    OPENPLAY: "open play",
-    TOURNAMENT: "tournament"
-} as const;
-
-export type CourtTabType = (typeof CourtTabType)[keyof typeof CourtTabType];
 
 type CourtsContext = {
     userHeader: UserHeader | null;
@@ -43,17 +36,18 @@ export default function Courts(){
     const [numCourts, setNumCourts] = useState<number>(1);
     const [players, setPlayers] = useState<UserHeader[]>([]);
     const [isSingles, setIsSingles] = useState<boolean>(true);
-    const [currentTab, setCurrentTab] = useState<CourtTabType>(CourtTabType.OPENPLAY);
+    const [currentTab, setCurrentTab] = useState<EventType>(EventType.OPENPLAY);
 
     const navigate = useNavigate();
     const location = useLocation();
 
     const tabMap = {
-        [CourtTabType.OPENPLAY]: <CourtOpenPlayComp />,
-        [CourtTabType.TOURNAMENT]: <CourtTournamentComp />,
+        [EventType.OPENPLAY]: <CourtOpenPlayComp />,
+        [EventType.TOURNAMENT]: <CourtTournamentComp />,
+        [EventType.DUPR]: <CourtTournamentComp />,
     };
 
-    function currentTabClass(tabType: CourtTabType){
+    function currentTabClass(tabType: EventType){
         return `bg ${tabType === currentTab ? "active" : ""}`;
     }
 
@@ -63,6 +57,13 @@ export default function Courts(){
 
     function removePlayer(userId: string){
         setPlayers((ps) => ps.filter((player) => player.id !== userId));
+    }
+
+    function resetAll(){
+        setNumCourts(1);
+        setPlayers([]);
+        setCurrentClub(null);
+        setIsSingles(true);
     }
 
     async function addClubPlayer(user_id: string){
@@ -123,18 +124,23 @@ export default function Courts(){
         const paramsClubId = params.get("clubid");
         const paramsPlayers = params.getAll("player");
         const paramsCourtNum = params.get("numcourts");
+        const paramsEventType = params.get("eventtype");
 
         setIsSingles(paramsIsSingles ? paramsIsSingles?.trim().toLowerCase() === "true" : true);
         getClub(paramsClubId || "");
         getPlayers(paramsPlayers);
         setNumCourts(Number(paramsCourtNum) || 1);
+        setCurrentTab(paramsEventType as EventType);
 
         setIsLoading(false);
     }, []);
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
-        params.set("clubid", currentClub?.id ?? "");
+        currentClub?.id
+            ? params.set("clubid", currentClub?.id)
+            : params.delete("clubid");
+
         navigate(`${location.pathname}?${params.toString()}`);
     }, [currentClub]);
     
@@ -145,7 +151,7 @@ export default function Courts(){
         for(const player of players){
             params.append("player", player.id);
         }
-
+        
         navigate(`${location.pathname}?${params.toString()}`);
     }, [players]);
 
@@ -180,6 +186,12 @@ export default function Courts(){
             });
         }
     }, [club_id]);
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        params.set("eventtype", currentTab);
+        navigate(`${location.pathname}?${params.toString()}`);
+    }, [currentTab]);
 
     if(isLoading)
         return <Loading/>;
@@ -261,17 +273,22 @@ export default function Courts(){
                     <div className="court-tab-row">
                         <Button 
                             content="Open Play" 
-                            onBtnClick={ () => setCurrentTab(CourtTabType.OPENPLAY) } 
-                            additionalClasses={ currentTabClass(CourtTabType.OPENPLAY) } 
+                            onBtnClick={ () => setCurrentTab(EventType.OPENPLAY) } 
+                            additionalClasses={ currentTabClass(EventType.OPENPLAY) } 
                         />
                         <Button 
                             content="Tournament" 
-                            onBtnClick={ () => setCurrentTab(CourtTabType.TOURNAMENT) }
-                            additionalClasses={ currentTabClass(CourtTabType.TOURNAMENT) }    
+                            onBtnClick={ () => setCurrentTab(EventType.TOURNAMENT) }
+                            additionalClasses={ currentTabClass(EventType.TOURNAMENT) }    
                         />
                     </div>
                     <div className="tab-content">{ currentTab ? tabMap[currentTab] : null }</div>
                 </div>
+                <Button 
+                    content="Reset All"
+                    onBtnClick={ resetAll }
+                    additionalClasses="red"
+                />
             </div>
             <PopupWrapper 
                 popupComp={
