@@ -74,3 +74,37 @@ export function timeAgo(date: string | number | Date): string {
 
     return rtf.format(-Math.floor(diffSeconds / 31536000), 'year');
 }
+
+type CacheItem<T> = {
+    value: T;
+    expiresAt: number;
+};
+
+export function saveToCache<T>(key: string, value: T, hoursToLive = 1) {
+    const cacheItem: CacheItem<T> = {
+        value,
+        expiresAt: Date.now() + hoursToLive * 60 * 60 * 1000,
+    };
+
+    localStorage.setItem(key, JSON.stringify(cacheItem));
+}
+
+export function getFromCache<T>(key: string): T | null {
+    const cachedValue = localStorage.getItem(key);
+
+    if (!cachedValue)
+        return null;
+
+    const cacheItem = JSON.parse(cachedValue) as CacheItem<T>;
+
+    if (Date.now() > cacheItem.expiresAt) {
+        localStorage.removeItem(key);
+        return null;
+    }
+
+    return cacheItem.value;
+}
+
+export function deleteFromCache(key: string) {
+    localStorage.removeItem(key);
+}

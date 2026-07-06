@@ -4,13 +4,13 @@ import ErrorPage from "./Error";
 import CourtOpenPlayComp from "../components/courts/CourtOpenPlayComp";
 import CourtTournamentComp from "../components/courts/CourtTournamentComp";
 import Button from "../components/ui/buttons/Button";
-import { EventType, type Clubs, type UserHeader } from "../utils/schemas";
+import { EventType, type Clubs, type CourtPlayer, type UserHeader } from "../utils/schemas";
 import "./Courts.css";
 import UsersDropdown from "../components/user/UsersDropdown";
 import PopupWrapper from "../popups/PopupWrapper";
 import ClubSearchPopup from "../popups/clubs/ClubSearchPopup";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
-import { wait } from "../utils/random";
+import { deleteFromCache, getFromCache, saveToCache, wait } from "../utils/random";
 import { ExtensionService } from "../utils/ExtensionService";
 import ClubsComp from "../components/ui/core/ClubsComp";
 import UserSearchPopup from "../popups/clubs/UserSearchPopup";
@@ -34,15 +34,17 @@ export default function Courts(){
 
     const [currentClub, setCurrentClub] = useState<Clubs | null>(null);
     const [numCourts, setNumCourts] = useState<number>(1);
-    const [players, setPlayers] = useState<UserHeader[]>([]);
     const [isSingles, setIsSingles] = useState<boolean>(true);
     const [currentTab, setCurrentTab] = useState<EventType>(EventType.OPENPLAY);
+
+    const [players, setPlayers] = useState<UserHeader[]>([]); //used for url and base user info
+    const [courtPlayers, setCourtPlayers] = useState<CourtPlayer[]>([]); // used in tabs comps
 
     const navigate = useNavigate();
     const location = useLocation();
 
     const tabMap = {
-        [EventType.OPENPLAY]: <CourtOpenPlayComp />,
+        [EventType.OPENPLAY]: <CourtOpenPlayComp courtPlayers={ courtPlayers } isSingles={ isSingles } numCourts={ numCourts } />,
         [EventType.TOURNAMENT]: <CourtTournamentComp />,
         [EventType.DUPR]: <CourtTournamentComp />,
     };
@@ -57,13 +59,52 @@ export default function Courts(){
 
     function removePlayer(userId: string){
         setPlayers((ps) => ps.filter((player) => player.id !== userId));
+        deleteFromCache(`court-player-${userId}`);
     }
 
     function resetAll(){
+        players.forEach((p) => deleteFromCache(`court-player-${p.id}`))
+
         setNumCourts(1);
         setPlayers([]);
         setCurrentClub(null);
         setIsSingles(true);
+    }
+
+    function createNewCourtPlayer(player: UserHeader){
+        const courtPlayer: CourtPlayer = {
+            userHeader: player,
+            wins: 0,
+            gamesPlayed: 0
+        };
+        
+        saveToCache(`court-player-${player.id}`, courtPlayer, 48);
+
+        return courtPlayer;
+    }
+
+    function checkPlayer(player: UserHeader){
+        for(const courtPlayer of courtPlayers){
+            if(player.id === courtPlayer.userHeader.id){
+                return courtPlayer;
+            }
+        }
+        
+        return handleNewPlayer(player);
+    }
+
+    function handleNewPlayer(player: UserHeader){
+        let newPlayer: CourtPlayer | null = checkNewPlayerCache(player);
+        if(!newPlayer)
+            newPlayer = createNewCourtPlayer(player);
+
+        return newPlayer;
+    }
+
+    function checkNewPlayerCache(player: UserHeader){
+        const cachedCourtPlayer = getFromCache<CourtPlayer>(`court-player-${player.id}`);
+
+        return cachedCourtPlayer;
     }
 
     async function addClubPlayer(user_id: string){
@@ -193,6 +234,15 @@ export default function Courts(){
         navigate(`${location.pathname}?${params.toString()}`);
     }, [currentTab]);
 
+    useEffect(() => {
+        const tempCourtPlayers: CourtPlayer[] = [];
+        for(const player of players){
+            tempCourtPlayers.push(checkPlayer(player));
+        }
+
+        setCourtPlayers(tempCourtPlayers);
+    }, [players]);
+
     if(isLoading)
         return <Loading/>;
 
@@ -268,6 +318,11 @@ export default function Courts(){
                         onAddBtnClick={ () => { currentClub ? setClosedPlayerSearch(false) : setClosedAddGuest(false) } }
                         denyClicked={ removePlayer }
                     />
+                    <Button 
+                        content="Reset All"
+                        onBtnClick={ resetAll }
+                        additionalClasses="red"
+                    />
                 </div>
                 <div className="tab-cont">
                     <div className="court-tab-row">
@@ -284,11 +339,6 @@ export default function Courts(){
                     </div>
                     <div className="tab-content">{ currentTab ? tabMap[currentTab] : null }</div>
                 </div>
-                <Button 
-                    content="Reset All"
-                    onBtnClick={ resetAll }
-                    additionalClasses="red"
-                />
             </div>
             <PopupWrapper 
                 popupComp={

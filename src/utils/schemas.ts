@@ -302,3 +302,23 @@ export type Club_Messages = {
     replying_to_id?: string;
     replying_to?: { id: string, message: string, user_id: string }; 
 };
+
+export type CourtPlayer = {
+    userHeader: UserHeader;
+    wins: number;
+    gamesPlayed: number;
+    usersNotPlayed?: string[];
+};
+
+export type CourtTeam = {
+    id: string;
+    teamPlayers: CourtPlayer[];
+    teamName: string | null;
+    teamsNotPlayed?: string[];
+};
+
+export type CourtMatch = {
+    id: string;
+    teamOne: CourtTeam;
+    teamTwo: CourtTeam;
+};
