@@ -221,7 +221,7 @@ export default function CourtOpenPlayComp({ courtPlayers, isSingles, numCourts }
     }
 
     function splitCourtTeams(cTeams: Map<string, CourtTeam>){
-        for(const [cId, courtTeam] of cTeams){
+        for(const courtTeam of cTeams.values()){
             if(!courtTeam.teamPlayers[1])
                 continue;
 
