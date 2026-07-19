@@ -253,7 +253,7 @@ export default function Courts(){
         <>
             <div className="courts-cont">
                 <div className="general-info-cont">
-                    <h1 className="title">Courts</h1>
+                    <h1 className="title">Courts <span>Beta</span></h1>
                     <div className="court-info-row">
                         <div className="court-num-cont">
                             <div className="court-num-inputs">

@@ -1,7 +1,7 @@
 export default function CourtTournamentComp(){
     return (
         <div>
-            tournament
+            <h5>Coming Soon</h5>
         </div>
     );
 }
