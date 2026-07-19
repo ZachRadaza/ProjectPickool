@@ -14,6 +14,7 @@ Project Pickool is a web app for discovering, joining, and managing pickleball c
 - Ability to post on clubs
 - Ability to real time message in club
 - Responsive React UI
+- Use of cache, URLs, and other methods to pass information
 
 ## Tech Stack
 
@@ -70,7 +71,7 @@ npm run preview
 
 ## Project Structure
 
-As of May 23, 2026
+As of July 18, 2026
 
 ```bash
 src/
@@ -78,6 +79,7 @@ src/
 ├── components/
 │   ├── layout/
 │   ├── clubs/
+│   ├── courts/
 │   ├── events/
 │   ├── posts/
 │   ├── user/
@@ -85,12 +87,16 @@ src/
 ├── layouts/
 ├── pages/
 │   ├── Clubs.tsx
+│   ├── Courts.tsx
+│   ├── Error.tsx
 │   ├── Events.tsx
 │   ├── Home.tsx
+│   ├── Loading.tsx
 │   ├── Search.tsx
 │   └── User.tsx
 ├── popups/
 │   ├── clubs
+│   ├── courts
 │   ├── events
 │   ├── general
 │   ├── home
@@ -100,6 +106,7 @@ src/
 ├── utils/
 │   ├── extension-service/
 │   ├── ExtensionService.ts
+│   ├── Random.ts
 │   ├── schemas.ts
 │   └── supabase.ts
 ├── App.tsx
