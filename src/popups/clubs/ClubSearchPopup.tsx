@@ -96,6 +96,7 @@ export default function ClubSearchPopup({
                                     userClub={ club }
                                     club={ club.club }
                                     showFavorite={ true }
+                                    isMini={ true }
                                 />
                             </div>
                         )}

@@ -111,10 +111,11 @@
         left: 0;
 
         box-sizing: border-box;
+        overflow: visible;
     }
 
     .popup{
-        border-width: 0.1rem;
+        border-width: 0.3rem;
         border-bottom: 0px;
         padding: 1rem 1.5rem;
         width: calc(100vw - 3rem);

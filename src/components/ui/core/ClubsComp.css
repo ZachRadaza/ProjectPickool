@@ -117,6 +117,27 @@
     color: var(--color-red);
 }
 
+.club-comp-cont.mini{
+    max-width: none;
+}
+
+.club-comp-cont.mini .banner{
+    display: none;
+}
+
+.club-comp-cont.mini .profile-pic{
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 3rem;
+}
+
+.club-comp-cont.mini .titles{
+    width: auto;
+    margin: 0px;
+    align-items: start;
+}
+
 @media (max-width: 1024px) {
     .club-comp-cont .titles{
         width: 50%;

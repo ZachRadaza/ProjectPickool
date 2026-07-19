@@ -6,6 +6,7 @@ import Search from './pages/Search';
 import Clubs from './pages/Clubs';
 import Events from './pages/Events';
 import Home from './pages/Home';
+import Courts from './pages/Courts';
 
 export default function App(){
     return (
@@ -17,6 +18,7 @@ export default function App(){
                     <Route path="/events" element={ <Events /> } />
                     <Route path="/user/:id" element={ <User /> } />
                     <Route path="/search" element={ <Search /> } />
+                    <Route path="/courts" element={ <Courts /> } />
 
                     <Route path="*" element={ <Home /> } />
                 </Route>

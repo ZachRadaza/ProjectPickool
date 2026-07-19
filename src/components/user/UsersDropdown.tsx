@@ -47,7 +47,7 @@ export default function UsersDropdown({
             setCompHeight(ref.current.scrollHeight);
         else
             setCompHeight(0);
-    }, [isClosed]);
+    }, [isClosed, users]);
 
     return (
         <div className="users-dropdown-cont">
@@ -64,7 +64,13 @@ export default function UsersDropdown({
                 >
                     { users.map((user) => 
                         isMini
-                            ? <UserHeaderMiniComp userHeader={ user } showUnpaid={ !user.paid && showUnpaid } key={ user.id } />
+                            ? <UserHeaderMiniComp 
+                                userHeader={ user } 
+                                showUnpaid={ !user.paid && showUnpaid } 
+                                crossBtn={ !!denyClicked }
+                                crossBtnClicked={ () => denyClicked && denyClicked(user.id) }
+                                key={ user.id } 
+                            />
                             : <UserHeaderComp 
                                 userHeader={ user } 
                                 approveClicked={ () => appovedClicked && appovedClicked(user.id) }  

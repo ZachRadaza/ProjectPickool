@@ -1,17 +1,21 @@
 # Changelog
 
-## [0.3.3] - 2026-06-22
+## [0.4.1] - 2026-07-18
 
 ### Added
- - Ability to pin posts with in clubs, with admins and owner having the ability to do so.
- - `ClubMessageComp` can now reply to other messages.
- - `MessageBubbleComp` now shows date sent in time ago.  
+ - `Courts`(beta) page, for users to keep track or open play and tournaments sessions.
+ - `AddGuestPopup.tsx` to add guests with no user account to `Courts` page.
+ - Ability to import players and event information to `Courts` page.
+ - Deny button on `UserHeaderMini.tsx`.
+ - API to call a list of `UserHeader`'s from IDs.
+ - Save temporary info on `Courts` page players through cache. 
 
 ### Fixed
- - 
+ - `UserSearchPopup.tsx` getting stuck on loading after first search.
+ - `UsersDropdown.tsx` not adjusting to proper height when loading users
+ - Popup modals on mobile(<=480px) have their top border cut off
 
 ### Changed
- - Notification number on `Layout.tsx` now reacts to real time changes.
- - `OpenedClubPopup` now incorperates the current tab opened into the url.
- - Removed padding on mobile for `ClubMessageComp`.
- - User's profile picture on `ClubMessageComp` doesnt show repeatedly when user sends several messages in a row. 
+ - `UsersDropdown.tsx` now has a transparent background, rather than white
+ - `ClubsComp.tsx` now has a built in mini version, can be used by passing boolean variable
+ - `UserHeaderComp.tsx` not handle guest IDs differently

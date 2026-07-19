@@ -16,6 +16,7 @@ import EventParticipantsComp from "../../components/events/EventParticipantsComp
 import EventButtonComp from "../../components/events/EventButtonsComp";
 import TwoOptionPopup from "../general/TwoOptionPopup";
 import HostSearchPopup from "../../components/events/HostSearchPopup";
+import Button from "../../components/ui/buttons/Button";
 
 type OpenedEventPopupProp = {
     setIsClosed: Dispatch<SetStateAction<boolean>>;
@@ -72,6 +73,17 @@ export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModif
         return false;
     }, [hosts, userMember]);
 
+    const userIsApprovedPlayer = useMemo(() => {
+        if(!userMember || playersApproved.length === 0)
+            return false;
+
+        for(const player of playersApproved)
+            if(player.user?.id === userMember.user.id)
+                return true;
+
+        return false;
+    }, [playersApproved, userMember]);
+
     const deleteConfirmationPopupContents = event?.recurring === Recurring.NONE || !event?.series_id 
         ? {
             title: "Delete Event",
@@ -107,6 +119,22 @@ export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModif
         closeEventPopup(true);
 
         navigate(`?club=${event.club.id}`);
+    }
+
+    function importToCourts(){
+        closeEventPopup(true);
+
+        const params = new URLSearchParams(location.search);
+
+        params.set("clubid", event?.club?.id ?? "");
+        params.set("issingles", event?.is_singles ? "true" : "false");
+        params.set("eventtype", event?.event_type ?? "");
+
+        for(const player of playersApproved){
+            player.user?.id && params.append("player", player.user?.id);
+        }
+
+        navigate(`/courts?${params.toString()}`);
     }
 
     async function deleteEvent(){
@@ -270,6 +298,12 @@ export default function OpenedEventPopup({ setIsClosed, event_id, setClosedModif
                 setPlayersNotApproved={ setPlayersNotApproved }
                 setError={ setError }
             />
+            { (userMember?.role === Role.ADMIN || userMember?.role === Role.OWNER || userIsHost || userIsApprovedPlayer) &&
+                <Button
+                    content="Import to Courts"
+                    onBtnClick={ importToCourts }
+                />
+            }
         </>;
 
     return (

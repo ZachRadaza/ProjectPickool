@@ -1,16 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import type { UserHeader } from "../../../utils/schemas";
 import ".//UserHeaderMiniComp.css";
+import CloseButton from "../buttons/CloseButton";
 
 type UserHeaderMiniCompProp = {
     userHeader: UserHeader;
     showUnpaid?: boolean;
+    crossBtn?: boolean;
+    crossBtnClicked?: () => void;
 };
 
-export default function UserHeaderMiniComp({ userHeader, showUnpaid }: UserHeaderMiniCompProp){
+export default function UserHeaderMiniComp({ userHeader, showUnpaid, crossBtn, crossBtnClicked }: UserHeaderMiniCompProp){
     const navigate = useNavigate();
 
     function openUserProfile(){
+        if(userHeader.id.includes("guest"))
+            return;
+
         const params = new URLSearchParams(location.search);
         params.set("previewuser", userHeader?.id ?? "");
         navigate(`${location.pathname}?${params.toString()}`);
@@ -21,6 +27,9 @@ export default function UserHeaderMiniComp({ userHeader, showUnpaid }: UserHeade
             className="user-header-mini-cont"
             onClick={ () => openUserProfile() }    
         >
+            { (crossBtn === true && crossBtnClicked) &&
+                <CloseButton setIsClosed={ crossBtnClicked } />
+            }
             { showUnpaid === true &&
                 <p className="attribute-tag unpaid">Unpaid</p>
             }

@@ -20,6 +20,7 @@ type UserSearchPopup = {
 
 export default function UserSearchPopup({ club_id, canApprove, setIsClosed, approveClicked, approveContent, usersApproved }: UserSearchPopup){
     const [searchInput, setSearchInput] = useState<string>("");
+    const [lastSearch, setLastSearch] = useState<string>("");
     const [searchedMembers, setSearchedMembers] = useState<Club_Members[]>([]);
     const [message, setMessage] = useState<string | null>("Search Club Members");
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -33,6 +34,7 @@ export default function UserSearchPopup({ club_id, canApprove, setIsClosed, appr
     async function searchUser(loadMore: boolean){
         try{
             setIsLoading(true);
+            let page = currentPage;
 
             if(!club_id){
                 setIsLoading(false);
@@ -46,10 +48,15 @@ export default function UserSearchPopup({ club_id, canApprove, setIsClosed, appr
                 return;
             }
 
-            if(!hasMorePages)
+            if(!hasMorePages && searchInput === lastSearch){
+                setIsLoading(false);
                 return;
+            } else if(searchInput !== lastSearch){
+                setCurrentPage(1);
+                page = 1;
+            }
 
-            let { data: members, hasMore } = await ExtensionService.ClubMemberService.getQueryClubMembers(club_id, searchInput, currentPage);
+            let { data: members, hasMore } = await ExtensionService.ClubMemberService.getQueryClubMembers(club_id, searchInput, page);
             
             if(usersApproved){
                 const approvedIds = new Set(usersApproved.map(user => user.id));
@@ -69,6 +76,7 @@ export default function UserSearchPopup({ club_id, canApprove, setIsClosed, appr
             setMessage(!searchInput ? "Search Club Members" : `No Club Members For "${searchInput}"`);
             setCurrentPage(currentPage + 1);
             setHasMorePages(hasMore);
+            setLastSearch(searchInput);
 
             setIsLoading(false);
         } catch(error){
