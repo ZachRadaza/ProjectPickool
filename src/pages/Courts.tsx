@@ -45,8 +45,8 @@ export default function Courts(){
 
     const tabMap = {
         [EventType.OPENPLAY]: <CourtOpenPlayComp courtPlayers={ courtPlayers } isSingles={ isSingles } numCourts={ numCourts } />,
-        [EventType.TOURNAMENT]: <CourtTournamentComp />,
-        [EventType.DUPR]: <CourtTournamentComp />,
+        [EventType.TOURNAMENT]: <CourtTournamentComp courtPlayers={ courtPlayers } isSingles={ isSingles } />,
+        [EventType.DUPR]: <CourtTournamentComp courtPlayers={ courtPlayers } isSingles={ isSingles } />,
     };
 
     function currentTabClass(tabType: EventType){

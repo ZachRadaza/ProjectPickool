@@ -1,0 +1,31 @@
+.court-mini-comp{
+    display: flex;
+    position: relative;
+    border: 0.1rem solid var(--color-text);
+    border-radius: 1rem;
+    background: var(--color-bg);
+    cursor: pointer;
+    width: min-content;
+}
+
+.court-mini-comp .info-cont{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.court-mini-comp .info-cont >div{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+.court-mini-comp .court-comp-wrapper{
+    position: absolute;
+    top: 0;
+    left: 110%;
+    min-width: 300px;
+}

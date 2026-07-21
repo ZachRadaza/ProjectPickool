@@ -4,6 +4,7 @@
     border: 0.1rem solid var(--color-text);
     border-radius: 1rem;
     overflow: hidden;
+    background: var(--color-bg);
 }
 
 .court-comp >*{ padding: 1rem; }
